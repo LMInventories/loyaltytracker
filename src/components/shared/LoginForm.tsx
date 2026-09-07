@@ -31,7 +31,7 @@ export function LoginForm({
     setIsSubmitting(false);
 
     if (result?.error) {
-      setError("Invalid email or password.");
+      setError("That email and password don't match.");
       return;
     }
 
@@ -42,7 +42,7 @@ export function LoginForm({
   return (
     <form onSubmit={handleSubmit} className="flex w-full max-w-sm flex-col gap-4">
       <div className="flex flex-col gap-1">
-        <label htmlFor="email" className="text-sm font-medium text-zinc-700">
+        <label htmlFor="email" className="text-sm font-medium text-ink-soft">
           Email
         </label>
         <input
@@ -51,11 +51,11 @@ export function LoginForm({
           required
           value={email}
           onChange={(e) => setEmail(e.target.value)}
-          className="rounded-md border border-zinc-300 px-3 py-2 text-sm outline-none focus:border-zinc-500"
+          className="rounded-sm border border-line bg-surface px-3 py-2 text-sm text-ink outline-none focus:border-stamp"
         />
       </div>
       <div className="flex flex-col gap-1">
-        <label htmlFor="password" className="text-sm font-medium text-zinc-700">
+        <label htmlFor="password" className="text-sm font-medium text-ink-soft">
           Password
         </label>
         <input
@@ -64,21 +64,21 @@ export function LoginForm({
           required
           value={password}
           onChange={(e) => setPassword(e.target.value)}
-          className="rounded-md border border-zinc-300 px-3 py-2 text-sm outline-none focus:border-zinc-500"
+          className="rounded-sm border border-line bg-surface px-3 py-2 text-sm text-ink outline-none focus:border-stamp"
         />
       </div>
-      {error && <p className="text-sm text-red-600">{error}</p>}
+      {error && <p className="text-sm text-red-700">{error}</p>}
       <button
         type="submit"
         disabled={isSubmitting}
-        className="rounded-md bg-zinc-900 px-4 py-2 text-sm font-medium text-white transition-colors hover:bg-zinc-700 disabled:opacity-50"
+        className="rounded-sm bg-stamp px-4 py-2 text-sm font-medium text-surface transition-colors hover:bg-stamp/90 disabled:opacity-50"
       >
         {isSubmitting ? "Signing in…" : "Sign in"}
       </button>
       {registerHref && (
-        <p className="text-center text-sm text-zinc-500">
+        <p className="text-center text-sm text-ink-soft">
           No account?{" "}
-          <a href={registerHref} className="font-medium text-zinc-900 underline">
+          <a href={registerHref} className="font-medium text-ink underline">
             Register
           </a>
         </p>

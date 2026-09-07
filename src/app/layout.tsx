@@ -1,17 +1,24 @@
 import type { Metadata } from "next";
-import { Geist, Geist_Mono } from "next/font/google";
+import { Zilla_Slab, Public_Sans, IBM_Plex_Mono } from "next/font/google";
 import "./globals.css";
 
 import { Providers } from "@/components/shared/Providers";
 
-const geistSans = Geist({
-  variable: "--font-geist-sans",
+const displaySerif = Zilla_Slab({
+  variable: "--font-display",
+  subsets: ["latin"],
+  weight: ["500", "600", "700"],
+});
+
+const bodySans = Public_Sans({
+  variable: "--font-body",
   subsets: ["latin"],
 });
 
-const geistMono = Geist_Mono({
-  variable: "--font-geist-mono",
+const numberMono = IBM_Plex_Mono({
+  variable: "--font-number",
   subsets: ["latin"],
+  weight: ["500", "600"],
 });
 
 export const metadata: Metadata = {
@@ -23,7 +30,7 @@ export default function RootLayout({ children }: LayoutProps<"/">) {
   return (
     <html
       lang="en"
-      className={`${geistSans.variable} ${geistMono.variable} h-full antialiased`}
+      className={`${displaySerif.variable} ${bodySans.variable} ${numberMono.variable} h-full antialiased`}
     >
       <body className="min-h-full flex flex-col">
         <Providers>{children}</Providers>
