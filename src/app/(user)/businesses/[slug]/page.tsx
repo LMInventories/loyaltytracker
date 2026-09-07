@@ -6,6 +6,7 @@ import { prisma } from "@/lib/prisma";
 import { StampProgress, PointsProgress } from "@/components/shared/LoyaltyProgress";
 import { BusinessLogo } from "@/components/shared/BusinessLogo";
 import { MapPinIcon } from "@/components/shared/MapPinIcon";
+import { mapsUrlFor } from "@/lib/maps";
 
 export default async function BusinessDetailPage({
   params,
@@ -52,10 +53,15 @@ export default async function BusinessDetailPage({
               {business.name}
             </h1>
             {business.address && (
-              <p className="mt-1 flex items-center gap-1.5 text-sm text-ink-soft">
+              <a
+                href={mapsUrlFor(business.address)}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="mt-1 flex items-center gap-1.5 text-sm text-ink-soft underline decoration-line underline-offset-4 hover:text-stamp"
+              >
                 <MapPinIcon className="h-3.5 w-3.5 shrink-0" />
                 {business.address}
-              </p>
+              </a>
             )}
           </div>
         </div>

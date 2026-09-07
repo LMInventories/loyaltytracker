@@ -3,6 +3,7 @@ import Link from "next/link";
 import { prisma } from "@/lib/prisma";
 import { BusinessLogo } from "@/components/shared/BusinessLogo";
 import { MapPinIcon } from "@/components/shared/MapPinIcon";
+import { mapsUrlFor } from "@/lib/maps";
 
 export default async function DirectoryPage({
   searchParams,
@@ -67,12 +68,28 @@ export default async function DirectoryPage({
       ) : (
         <ul className="grid grid-cols-1 gap-5 sm:grid-cols-2">
           {businesses.map((business) => (
-            <li key={business.id}>
+            <li
+              key={business.id}
+              className="group relative flex h-full flex-col gap-3 border border-line bg-surface p-5 transition-colors hover:border-stamp"
+            >
+              {business.address && (
+                <a
+                  href={mapsUrlFor(business.address)}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  aria-label={`Open ${business.name}'s address in maps`}
+                  className="absolute right-4 top-4 z-10 flex h-10 w-10 items-center justify-center rounded-full bg-stamp-soft text-stamp transition-colors hover:bg-stamp hover:text-surface"
+                >
+                  <MapPinIcon className="h-5 w-5" />
+                </a>
+              )}
               <Link
                 href={`/businesses/${business.slug}`}
-                className="group flex h-full flex-col gap-3 border border-line bg-surface p-5 transition-colors hover:border-stamp"
-              >
-                <div className="flex items-center gap-3">
+                className="absolute inset-0"
+                aria-label={business.name}
+              />
+              <div className="pointer-events-none flex h-full flex-col gap-3">
+                <div className="flex items-center gap-3 pr-10">
                   <BusinessLogo name={business.name} logoUrl={business.logoUrl} />
                   <div>
                     {business.category && (
@@ -84,10 +101,7 @@ export default async function DirectoryPage({
                   </div>
                 </div>
                 {business.address && (
-                  <p className="flex items-center gap-1.5 text-sm text-ink-soft">
-                    <MapPinIcon className="h-3.5 w-3.5 shrink-0" />
-                    {business.address}
-                  </p>
+                  <p className="text-sm text-ink-soft">{business.address}</p>
                 )}
                 <div className="mt-auto flex flex-col gap-1 pt-2 text-sm">
                   {business.schemes.map((scheme) => (
@@ -101,7 +115,7 @@ export default async function DirectoryPage({
                     </span>
                   ))}
                 </div>
-              </Link>
+              </div>
             </li>
           ))}
         </ul>
