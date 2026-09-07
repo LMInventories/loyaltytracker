@@ -1,15 +1,15 @@
 @import "tailwindcss";
 
 :root {
-  --paper: #f5efe3;
-  --surface: #fffdf8;
-  --ink: #221d15;
-  --ink-soft: #5c5445;
-  --line: #ddd3be;
-  --stamp: #2f4b7c;
-  --stamp-soft: #e8edf5;
-  --awning: #c6862a;
-  --awning-soft: #f6e9d3;
+  --paper: #f6f9fb;
+  --surface: #ffffff;
+  --ink: #0b2f55;
+  --ink-soft: #5c7086;
+  --line: #dfe6ec;
+  --stamp: #12a98d;
+  --stamp-soft: #e1f7f1;
+  --awning: #e8583a;
+  --awning-soft: #fdeae4;
 }
 
 @theme inline {

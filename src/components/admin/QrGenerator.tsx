@@ -106,7 +106,7 @@ export function QrGenerator({ schemes }: { schemes: Scheme[] }) {
       </div>
 
       <p className="text-center text-sm text-zinc-500">
-        Have the customer open HPLoyalty and scan this from the business page.
+        Have the customer open Local Loyalty and scan this from the business page.
         A new code is generated automatically before this one expires.
       </p>
     </div>

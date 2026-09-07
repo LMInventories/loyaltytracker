@@ -3,6 +3,8 @@
 import { useState } from "react";
 import { useRouter } from "next/navigation";
 
+import { BusinessLogo } from "@/components/shared/BusinessLogo";
+
 type Business = {
   name: string;
   slug: string;
@@ -121,14 +123,20 @@ export function BusinessSettingsForm({ business }: { business: Business }) {
         <label htmlFor="logoUrl" className="text-sm font-medium text-zinc-700">
           Logo URL (optional)
         </label>
-        <input
-          id="logoUrl"
-          type="url"
-          value={logoUrl}
-          onChange={(e) => setLogoUrl(e.target.value)}
-          placeholder="https://…"
-          className="rounded-md border border-zinc-300 px-3 py-2 text-sm outline-none focus:border-zinc-500 focus:ring-2 focus:ring-zinc-300"
-        />
+        <div className="flex items-center gap-3">
+          <BusinessLogo name={name || "?"} logoUrl={logoUrl || null} />
+          <input
+            id="logoUrl"
+            type="url"
+            value={logoUrl}
+            onChange={(e) => setLogoUrl(e.target.value)}
+            placeholder="https://…"
+            className="flex-1 rounded-md border border-zinc-300 px-3 py-2 text-sm outline-none focus:border-zinc-500 focus:ring-2 focus:ring-zinc-300"
+          />
+        </div>
+        <p className="text-xs text-zinc-500">
+          Without a logo, customers see a colored initial instead.
+        </p>
       </div>
 
       {error && <p className="text-sm text-red-600">{error}</p>}

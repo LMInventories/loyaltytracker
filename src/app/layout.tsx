@@ -1,14 +1,14 @@
 import type { Metadata, Viewport } from "next";
-import { Zilla_Slab, Public_Sans, IBM_Plex_Mono } from "next/font/google";
+import { Baloo_2, Public_Sans, IBM_Plex_Mono } from "next/font/google";
 import "./globals.css";
 
 import { Providers } from "@/components/shared/Providers";
 import { RegisterServiceWorker } from "@/components/shared/RegisterServiceWorker";
 
-const displaySerif = Zilla_Slab({
+const displayRounded = Baloo_2({
   variable: "--font-display",
   subsets: ["latin"],
-  weight: ["500", "600", "700"],
+  weight: ["600", "700", "800"],
 });
 
 const bodySans = Public_Sans({
@@ -23,11 +23,11 @@ const numberMono = IBM_Plex_Mono({
 });
 
 export const metadata: Metadata = {
-  title: "HPLoyalty",
+  title: "Local Loyalty",
   description: "Loyalty rewards for local businesses",
   manifest: "/manifest.webmanifest",
   appleWebApp: {
-    title: "HPLoyalty",
+    title: "Local Loyalty",
     statusBarStyle: "default",
   },
   icons: {
@@ -36,14 +36,14 @@ export const metadata: Metadata = {
 };
 
 export const viewport: Viewport = {
-  themeColor: "#2f4b7c",
+  themeColor: "#0b2f55",
 };
 
 export default function RootLayout({ children }: LayoutProps<"/">) {
   return (
     <html
       lang="en"
-      className={`${displaySerif.variable} ${bodySans.variable} ${numberMono.variable} h-full antialiased`}
+      className={`${displayRounded.variable} ${bodySans.variable} ${numberMono.variable} h-full antialiased`}
     >
       <body className="min-h-full flex flex-col">
         <Providers>{children}</Providers>

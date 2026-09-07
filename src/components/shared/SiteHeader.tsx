@@ -1,3 +1,4 @@
+import Image from "next/image";
 import Link from "next/link";
 
 import { auth } from "@/lib/auth";
@@ -8,12 +9,9 @@ export async function SiteHeader() {
 
   return (
     <header className="border-b border-line">
-      <div className="mx-auto flex max-w-4xl items-center justify-between px-6 py-5">
-        <Link
-          href="/"
-          className="font-display text-xl font-semibold tracking-tight text-ink"
-        >
-          HPLoyalty
+      <div className="mx-auto flex max-w-4xl items-center justify-between px-6 py-4">
+        <Link href="/" className="flex items-center">
+          <Image src="/logo.png" alt="Local Loyalty" width={124} height={37} priority />
         </Link>
         {session?.user ? (
           <div className="flex items-center gap-4">

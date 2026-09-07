@@ -1,10 +1,7 @@
 import Link from "next/link";
 
 import { prisma } from "@/lib/prisma";
-
-function categoryInitial(category: string | null) {
-  return (category ?? "?").trim().charAt(0).toUpperCase() || "?";
-}
+import { BusinessLogo } from "@/components/shared/BusinessLogo";
 
 export default async function DirectoryPage({
   searchParams,
@@ -72,18 +69,18 @@ export default async function DirectoryPage({
             <li key={business.id}>
               <Link
                 href={`/businesses/${business.slug}`}
-                className="group relative flex h-full flex-col gap-3 border border-line bg-surface p-5 transition-colors hover:border-stamp"
+                className="group flex h-full flex-col gap-3 border border-line bg-surface p-5 transition-colors hover:border-stamp"
               >
-                <span className="absolute right-4 top-4 flex h-9 w-9 items-center justify-center rounded-full border border-dashed border-stamp text-sm font-semibold text-stamp">
-                  {categoryInitial(business.category)}
-                </span>
-                <div className="pr-10">
-                  {business.category && (
-                    <p className="text-sm text-ink-soft">{business.category}</p>
-                  )}
-                  <h2 className="font-display text-lg font-semibold text-ink group-hover:text-stamp">
-                    {business.name}
-                  </h2>
+                <div className="flex items-center gap-3">
+                  <BusinessLogo name={business.name} logoUrl={business.logoUrl} />
+                  <div>
+                    {business.category && (
+                      <p className="text-sm text-ink-soft">{business.category}</p>
+                    )}
+                    <h2 className="font-display text-lg font-semibold text-ink group-hover:text-stamp">
+                      {business.name}
+                    </h2>
+                  </div>
                 </div>
                 {business.description && (
                   <p className="text-sm text-ink-soft">{business.description}</p>

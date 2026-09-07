@@ -4,6 +4,7 @@ import { notFound } from "next/navigation";
 import { auth } from "@/lib/auth";
 import { prisma } from "@/lib/prisma";
 import { StampProgress, PointsProgress } from "@/components/shared/LoyaltyProgress";
+import { BusinessLogo } from "@/components/shared/BusinessLogo";
 
 export default async function BusinessDetailPage({
   params,
@@ -40,16 +41,19 @@ export default async function BusinessDetailPage({
         <Link href="/" className="text-sm text-ink-soft hover:text-ink">
           ← Back to directory
         </Link>
-        <div>
-          {business.category && (
-            <p className="text-sm text-ink-soft">{business.category}</p>
-          )}
-          <h1 className="font-display text-3xl font-semibold tracking-tight text-ink">
-            {business.name}
-          </h1>
-          {business.address && (
-            <p className="mt-1 text-sm text-ink-soft">{business.address}</p>
-          )}
+        <div className="flex items-center gap-4">
+          <BusinessLogo name={business.name} logoUrl={business.logoUrl} size={64} />
+          <div>
+            {business.category && (
+              <p className="text-sm text-ink-soft">{business.category}</p>
+            )}
+            <h1 className="font-display text-3xl font-semibold tracking-tight text-ink">
+              {business.name}
+            </h1>
+            {business.address && (
+              <p className="mt-1 text-sm text-ink-soft">{business.address}</p>
+            )}
+          </div>
         </div>
         {business.description && <p className="text-ink">{business.description}</p>}
         {business.schemes.length > 0 && (
