@@ -17,6 +17,7 @@ async function main() {
       name: "Corner Cafe",
       description: "Independent coffee shop on the high street.",
       category: "Cafe",
+      address: "12 High Street, Anytown",
       admins: {
         create: {
           email: "admin@cornercafe.test",
@@ -54,6 +55,7 @@ async function main() {
       name: "High Street Barbers",
       description: "Traditional barbershop, walk-ins welcome.",
       category: "Barber",
+      address: "45 High Street, Anytown",
       admins: {
         create: {
           email: "admin@highstreetbarbers.test",

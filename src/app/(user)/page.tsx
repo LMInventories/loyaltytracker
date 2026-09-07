@@ -2,6 +2,7 @@ import Link from "next/link";
 
 import { prisma } from "@/lib/prisma";
 import { BusinessLogo } from "@/components/shared/BusinessLogo";
+import { MapPinIcon } from "@/components/shared/MapPinIcon";
 
 export default async function DirectoryPage({
   searchParams,
@@ -82,8 +83,11 @@ export default async function DirectoryPage({
                     </h2>
                   </div>
                 </div>
-                {business.description && (
-                  <p className="text-sm text-ink-soft">{business.description}</p>
+                {business.address && (
+                  <p className="flex items-center gap-1.5 text-sm text-ink-soft">
+                    <MapPinIcon className="h-3.5 w-3.5 shrink-0" />
+                    {business.address}
+                  </p>
                 )}
                 <div className="mt-auto flex flex-col gap-1 pt-2 text-sm">
                   {business.schemes.map((scheme) => (
