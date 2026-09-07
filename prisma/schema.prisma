@@ -1,0 +1,186 @@
+// Prisma schema for HPLoyalty
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+generator client {
+  provider = "prisma-client"
+  output   = "../src/generated/prisma"
+}
+
+datasource db {
+  provider = "postgresql"
+}
+
+enum Role {
+  CUSTOMER
+  BUSINESS_ADMIN
+}
+
+enum SchemeType {
+  POINTS
+  STAMPS
+}
+
+model User {
+  id           String    @id @default(cuid())
+  email        String    @unique
+  passwordHash String
+  name         String?
+  role         Role      @default(CUSTOMER)
+  createdAt    DateTime  @default(now())
+  updatedAt    DateTime  @updatedAt
+
+  // Set only for BUSINESS_ADMIN users (v1: one admin per business)
+  businessId   String?
+  business     Business? @relation("BusinessAdmins", fields: [businessId], references: [id])
+
+  balances     LoyaltyBalance[]
+  transactions LoyaltyTransaction[]
+  redeemedTokens QrToken[]           @relation("RedeemedBy")
+
+  @@index([businessId])
+}
+
+model Business {
+  id          String   @id @default(cuid())
+  slug        String   @unique
+  name        String
+  description String?
+  logoUrl     String?
+  address     String?
+  category    String?
+  isActive    Boolean  @default(true)
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+
+  admins       User[]                @relation("BusinessAdmins")
+  schemes      LoyaltyScheme[]
+  offers       SpecialOffer[]
+  qrTokens     QrToken[]
+  balances     LoyaltyBalance[]
+  transactions LoyaltyTransaction[]
+}
+
+model LoyaltyScheme {
+  id       String     @id @default(cuid())
+  name     String
+  type     SchemeType
+  isActive Boolean    @default(true)
+
+  businessId String
+  business   Business @relation(fields: [businessId], references: [id])
+
+  // POINTS-type config
+  pointsPerScan Int?
+
+  // STAMPS-type config
+  stampsRequired      Int?
+  stampRewardText     String?
+  stampRewardImageUrl String?
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  rewardTiers  RewardTier[]
+  balances     LoyaltyBalance[]
+  transactions LoyaltyTransaction[]
+  qrTokens     QrToken[]
+
+  @@index([businessId])
+}
+
+model RewardTier {
+  id         String        @id @default(cuid())
+  schemeId   String
+  scheme     LoyaltyScheme @relation(fields: [schemeId], references: [id])
+  threshold  Int
+  rewardText String
+  imageUrl   String?
+  sortOrder  Int           @default(0)
+
+  @@index([schemeId])
+}
+
+model SpecialOffer {
+  id          String    @id @default(cuid())
+  businessId  String
+  business    Business  @relation(fields: [businessId], references: [id])
+  title       String
+  description String?
+  imageUrl    String?
+  startsAt    DateTime?
+  endsAt      DateTime?
+  isActive    Boolean   @default(true)
+  createdAt   DateTime  @default(now())
+  updatedAt   DateTime  @updatedAt
+
+  @@index([businessId])
+}
+
+/// Cached balance per user per scheme, updated only inside the redeem transaction.
+model LoyaltyBalance {
+  id     String @id @default(cuid())
+  userId String
+  user   User   @relation(fields: [userId], references: [id])
+
+  businessId String
+  business   Business @relation(fields: [businessId], references: [id])
+
+  schemeId String
+  scheme   LoyaltyScheme @relation(fields: [schemeId], references: [id])
+
+  points    Int      @default(0)
+  stamps    Int      @default(0)
+  updatedAt DateTime @updatedAt
+
+  @@unique([userId, schemeId])
+  @@index([businessId])
+}
+
+/// Immutable audit log of every redeemed scan. Source of truth for balances.
+model LoyaltyTransaction {
+  id     String @id @default(cuid())
+  userId String
+  user   User   @relation(fields: [userId], references: [id])
+
+  businessId String
+  business   Business @relation(fields: [businessId], references: [id])
+
+  schemeId String
+  scheme   LoyaltyScheme @relation(fields: [schemeId], references: [id])
+
+  qrTokenId String?  @unique
+  qrToken   QrToken? @relation(fields: [qrTokenId], references: [id])
+
+  pointsDelta Int      @default(0)
+  stampsDelta Int      @default(0)
+  createdAt   DateTime @default(now())
+
+  @@index([userId, businessId])
+}
+
+/// Short-lived, single-use redemption token displayed by the admin/staff device
+/// and scanned by the customer's app. `code` is a random opaque string — it does
+/// NOT encode business/scheme/points info, which is looked up server-side.
+model QrToken {
+  id     String @id @default(cuid())
+  code   String @unique
+
+  businessId String
+  business   Business @relation(fields: [businessId], references: [id])
+
+  schemeId String
+  scheme   LoyaltyScheme @relation(fields: [schemeId], references: [id])
+
+  pointsValue Int?
+  stampsValue Int? @default(1)
+
+  expiresAt    DateTime
+  redeemedAt   DateTime?
+  redeemedById String?
+  redeemedBy   User?     @relation("RedeemedBy", fields: [redeemedById], references: [id])
+
+  createdAt   DateTime             @default(now())
+  transaction LoyaltyTransaction?
+
+  @@index([businessId, expiresAt])
+}
