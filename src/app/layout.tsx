@@ -1,8 +1,9 @@
-import type { Metadata } from "next";
+import type { Metadata, Viewport } from "next";
 import { Zilla_Slab, Public_Sans, IBM_Plex_Mono } from "next/font/google";
 import "./globals.css";
 
 import { Providers } from "@/components/shared/Providers";
+import { RegisterServiceWorker } from "@/components/shared/RegisterServiceWorker";
 
 const displaySerif = Zilla_Slab({
   variable: "--font-display",
@@ -24,6 +25,18 @@ const numberMono = IBM_Plex_Mono({
 export const metadata: Metadata = {
   title: "HPLoyalty",
   description: "Loyalty rewards for local businesses",
+  manifest: "/manifest.webmanifest",
+  appleWebApp: {
+    title: "HPLoyalty",
+    statusBarStyle: "default",
+  },
+  icons: {
+    apple: "/icons/apple-touch-icon.png",
+  },
+};
+
+export const viewport: Viewport = {
+  themeColor: "#2f4b7c",
 };
 
 export default function RootLayout({ children }: LayoutProps<"/">) {
@@ -34,6 +47,7 @@ export default function RootLayout({ children }: LayoutProps<"/">) {
     >
       <body className="min-h-full flex flex-col">
         <Providers>{children}</Providers>
+        <RegisterServiceWorker />
       </body>
     </html>
   );
