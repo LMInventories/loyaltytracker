@@ -98,7 +98,14 @@ export function RegisterForm({ callbackUrl }: { callbackUrl: string }) {
       </button>
       <p className="text-center text-sm text-ink-soft">
         Already have an account?{" "}
-        <a href="/login" className="font-medium text-ink underline">
+        <a
+          href={
+            callbackUrl !== "/"
+              ? `/login?callbackUrl=${encodeURIComponent(callbackUrl)}`
+              : "/login"
+          }
+          className="font-medium text-ink underline"
+        >
           Sign in
         </a>
       </p>

@@ -51,6 +51,14 @@ export default async function BusinessDetailPage({
           )}
         </div>
         {business.description && <p className="text-ink">{business.description}</p>}
+        {business.schemes.length > 0 && (
+          <Link
+            href={`/businesses/${business.slug}/scan`}
+            className="inline-flex w-fit items-center gap-2 rounded-sm bg-stamp px-5 py-2.5 text-sm font-medium text-surface hover:bg-stamp/90"
+          >
+            Scan QR to earn
+          </Link>
+        )}
       </div>
 
       {business.schemes.length > 0 && (

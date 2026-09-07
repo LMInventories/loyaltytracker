@@ -8,8 +8,9 @@ export default auth((req) => {
 
   const isAdminLogin = pathname === "/admin/login";
   const isAdminRoute = pathname.startsWith("/admin") && !isAdminLogin;
+  const isScanRoute = pathname.endsWith("/scan") && pathname.startsWith("/businesses/");
   const isProtectedUserRoute =
-    pathname.startsWith("/me") || pathname.startsWith("/account");
+    pathname.startsWith("/me") || pathname.startsWith("/account") || isScanRoute;
 
   if (isAdminRoute) {
     if (!session) {
@@ -21,10 +22,12 @@ export default auth((req) => {
   }
 
   if (isProtectedUserRoute && !session) {
-    return NextResponse.redirect(new URL("/login", req.url));
+    const loginUrl = new URL("/login", req.url);
+    loginUrl.searchParams.set("callbackUrl", pathname);
+    return NextResponse.redirect(loginUrl);
   }
 });
 
 export const config = {
-  matcher: ["/admin/:path*", "/me/:path*", "/account/:path*"],
+  matcher: ["/admin/:path*", "/me/:path*", "/account/:path*", "/businesses/:path*/scan"],
 };

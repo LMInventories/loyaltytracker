@@ -1,3 +1,5 @@
+import Link from "next/link";
+
 import { auth } from "@/lib/auth";
 import { prisma } from "@/lib/prisma";
 
@@ -13,9 +15,14 @@ export default async function AdminDashboardPage() {
         {business?.name ?? "Dashboard"}
       </h1>
       <p className="max-w-md text-zinc-600">
-        Scheme, offer, and QR management land here in later milestones. This
-        page confirms the admin login and route guard are working end to end.
+        Scheme and offer management land here in a later milestone.
       </p>
+      <Link
+        href="/admin/qr"
+        className="w-fit rounded-md bg-zinc-900 px-4 py-2 text-sm font-medium text-white hover:bg-zinc-700"
+      >
+        Show QR code to a customer
+      </Link>
     </main>
   );
 }
