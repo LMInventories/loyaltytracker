@@ -3,6 +3,7 @@ import { z } from "zod";
 
 import { auth } from "@/lib/auth";
 import { prisma } from "@/lib/prisma";
+import { isRateLimited } from "@/lib/rate-limit";
 
 const requestSchema = z.object({
   code: z.string().min(1),
@@ -12,6 +13,13 @@ export async function POST(request: Request) {
   const session = await auth();
   if (!session?.user) {
     return NextResponse.json({ error: "You need to sign in first" }, { status: 401 });
+  }
+
+  if (isRateLimited(`redeem:${session.user.id}`, 20, 60_000)) {
+    return NextResponse.json(
+      { error: "Too many attempts. Wait a moment and try again." },
+      { status: 429 },
+    );
   }
 
   const body = await request.json();

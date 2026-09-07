@@ -75,7 +75,7 @@ export function OfferForm({ offer }: { offer?: Offer }) {
           value={title}
           onChange={(e) => setTitle(e.target.value)}
           placeholder="e.g. 20% off pastries this week"
-          className="rounded-md border border-zinc-300 px-3 py-2 text-sm outline-none focus:border-zinc-500"
+          className="rounded-md border border-zinc-300 px-3 py-2 text-sm outline-none focus:border-zinc-500 focus:ring-2 focus:ring-zinc-300"
         />
       </div>
 
@@ -88,7 +88,7 @@ export function OfferForm({ offer }: { offer?: Offer }) {
           value={description}
           onChange={(e) => setDescription(e.target.value)}
           rows={3}
-          className="rounded-md border border-zinc-300 px-3 py-2 text-sm outline-none focus:border-zinc-500"
+          className="rounded-md border border-zinc-300 px-3 py-2 text-sm outline-none focus:border-zinc-500 focus:ring-2 focus:ring-zinc-300"
         />
       </div>
 
@@ -102,7 +102,7 @@ export function OfferForm({ offer }: { offer?: Offer }) {
           value={imageUrl}
           onChange={(e) => setImageUrl(e.target.value)}
           placeholder="https://…"
-          className="rounded-md border border-zinc-300 px-3 py-2 text-sm outline-none focus:border-zinc-500"
+          className="rounded-md border border-zinc-300 px-3 py-2 text-sm outline-none focus:border-zinc-500 focus:ring-2 focus:ring-zinc-300"
         />
       </div>
 
@@ -116,7 +116,7 @@ export function OfferForm({ offer }: { offer?: Offer }) {
             type="date"
             value={startsAt}
             onChange={(e) => setStartsAt(e.target.value)}
-            className="rounded-md border border-zinc-300 px-3 py-2 text-sm outline-none focus:border-zinc-500"
+            className="rounded-md border border-zinc-300 px-3 py-2 text-sm outline-none focus:border-zinc-500 focus:ring-2 focus:ring-zinc-300"
           />
         </div>
         <div className="flex flex-col gap-1">
@@ -128,7 +128,7 @@ export function OfferForm({ offer }: { offer?: Offer }) {
             type="date"
             value={endsAt}
             onChange={(e) => setEndsAt(e.target.value)}
-            className="rounded-md border border-zinc-300 px-3 py-2 text-sm outline-none focus:border-zinc-500"
+            className="rounded-md border border-zinc-300 px-3 py-2 text-sm outline-none focus:border-zinc-500 focus:ring-2 focus:ring-zinc-300"
           />
         </div>
       </div>

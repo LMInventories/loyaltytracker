@@ -4,6 +4,7 @@ import { z } from "zod";
 
 import { auth } from "@/lib/auth";
 import { prisma } from "@/lib/prisma";
+import { isRateLimited } from "@/lib/rate-limit";
 
 const requestSchema = z.object({
   currentPassword: z.string().min(1),
@@ -14,6 +15,13 @@ export async function POST(request: Request) {
   const session = await auth();
   if (!session?.user) {
     return NextResponse.json({ error: "Not authorized" }, { status: 401 });
+  }
+
+  if (isRateLimited(`change-password:${session.user.id}`, 10, 15 * 60_000)) {
+    return NextResponse.json(
+      { error: "Too many attempts. Wait a while and try again." },
+      { status: 429 },
+    );
   }
 
   const body = await request.json();

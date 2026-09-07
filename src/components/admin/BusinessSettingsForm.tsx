@@ -59,7 +59,7 @@ export function BusinessSettingsForm({ business }: { business: Business }) {
           required
           value={name}
           onChange={(e) => setName(e.target.value)}
-          className="rounded-md border border-zinc-300 px-3 py-2 text-sm outline-none focus:border-zinc-500"
+          className="rounded-md border border-zinc-300 px-3 py-2 text-sm outline-none focus:border-zinc-500 focus:ring-2 focus:ring-zinc-300"
         />
       </div>
 
@@ -74,7 +74,7 @@ export function BusinessSettingsForm({ business }: { business: Business }) {
             required
             value={slug}
             onChange={(e) => setSlug(e.target.value)}
-            className="flex-1 rounded-md border border-zinc-300 px-3 py-2 text-sm text-zinc-900 outline-none focus:border-zinc-500"
+            className="flex-1 rounded-md border border-zinc-300 px-3 py-2 text-sm text-zinc-900 outline-none focus:border-zinc-500 focus:ring-2 focus:ring-zinc-300"
           />
         </div>
       </div>
@@ -88,7 +88,7 @@ export function BusinessSettingsForm({ business }: { business: Business }) {
           value={category}
           onChange={(e) => setCategory(e.target.value)}
           placeholder="e.g. Cafe"
-          className="rounded-md border border-zinc-300 px-3 py-2 text-sm outline-none focus:border-zinc-500"
+          className="rounded-md border border-zinc-300 px-3 py-2 text-sm outline-none focus:border-zinc-500 focus:ring-2 focus:ring-zinc-300"
         />
       </div>
 
@@ -100,7 +100,7 @@ export function BusinessSettingsForm({ business }: { business: Business }) {
           id="address"
           value={address}
           onChange={(e) => setAddress(e.target.value)}
-          className="rounded-md border border-zinc-300 px-3 py-2 text-sm outline-none focus:border-zinc-500"
+          className="rounded-md border border-zinc-300 px-3 py-2 text-sm outline-none focus:border-zinc-500 focus:ring-2 focus:ring-zinc-300"
         />
       </div>
 
@@ -113,7 +113,7 @@ export function BusinessSettingsForm({ business }: { business: Business }) {
           value={description}
           onChange={(e) => setDescription(e.target.value)}
           rows={3}
-          className="rounded-md border border-zinc-300 px-3 py-2 text-sm outline-none focus:border-zinc-500"
+          className="rounded-md border border-zinc-300 px-3 py-2 text-sm outline-none focus:border-zinc-500 focus:ring-2 focus:ring-zinc-300"
         />
       </div>
 
@@ -127,7 +127,7 @@ export function BusinessSettingsForm({ business }: { business: Business }) {
           value={logoUrl}
           onChange={(e) => setLogoUrl(e.target.value)}
           placeholder="https://…"
-          className="rounded-md border border-zinc-300 px-3 py-2 text-sm outline-none focus:border-zinc-500"
+          className="rounded-md border border-zinc-300 px-3 py-2 text-sm outline-none focus:border-zinc-500 focus:ring-2 focus:ring-zinc-300"
         />
       </div>
 

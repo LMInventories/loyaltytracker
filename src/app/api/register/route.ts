@@ -3,6 +3,8 @@ import bcrypt from "bcryptjs";
 import { z } from "zod";
 
 import { prisma } from "@/lib/prisma";
+import { isRateLimited } from "@/lib/rate-limit";
+import { getClientIp } from "@/lib/request-ip";
 
 const registerSchema = z.object({
   email: z.string().email(),
@@ -11,6 +13,13 @@ const registerSchema = z.object({
 });
 
 export async function POST(request: Request) {
+  if (isRateLimited(`register:${getClientIp(request)}`, 10, 60_000)) {
+    return NextResponse.json(
+      { error: "Too many attempts. Wait a moment and try again." },
+      { status: 429 },
+    );
+  }
+
   const body = await request.json();
   const parsed = registerSchema.safeParse(body);
 

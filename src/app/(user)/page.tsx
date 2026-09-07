@@ -50,7 +50,7 @@ export default async function DirectoryPage({
           name="q"
           defaultValue={query}
           placeholder="Search by name or category…"
-          className="w-full max-w-sm rounded-sm border border-line bg-surface px-3 py-2 text-sm text-ink outline-none focus:border-stamp"
+          className="w-full max-w-sm rounded-sm border border-line bg-surface px-3 py-2 text-sm text-ink outline-none focus:border-stamp focus:ring-2 focus:ring-stamp/40"
         />
         <button
           type="submit"
