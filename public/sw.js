@@ -1,4 +1,4 @@
-const CACHE_VERSION = "v1";
+const CACHE_VERSION = "v2";
 const SHELL_CACHE = `hployalty-shell-${CACHE_VERSION}`;
 const RUNTIME_CACHE = `hployalty-runtime-${CACHE_VERSION}`;
 
