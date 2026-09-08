@@ -5,6 +5,7 @@ import { auth } from "@/lib/auth";
 import { prisma } from "@/lib/prisma";
 import { isRateLimited } from "@/lib/rate-limit";
 import { expiresAtFor } from "@/lib/rewards";
+import { rewardUnlockedEmailHtml, sendEmailIfOptedIn } from "@/lib/email";
 
 const requestSchema = z.object({
   code: z.string().min(1),
@@ -147,6 +148,14 @@ export async function POST(request: Request) {
 
     return { balance, unlockedRewards };
   });
+
+  // Fire-and-forget: never delay the scan response waiting on an email send.
+  for (const reward of unlockedRewards) {
+    void sendEmailIfOptedIn(userId, {
+      subject: `You've unlocked a reward at ${token.business.name}`,
+      html: rewardUnlockedEmailHtml(token.business.name, reward.rewardText, reward.expiresAt),
+    });
+  }
 
   return NextResponse.json({
     business: { name: token.business.name, slug: token.business.slug },

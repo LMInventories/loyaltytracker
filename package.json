@@ -10,7 +10,8 @@
     "db:seed": "prisma db seed",
     "db:migrate": "prisma migrate dev",
     "onboard:business": "tsx --env-file=.env scripts/create-business.ts",
-    "onboard:platform-admin": "tsx --env-file=.env scripts/create-platform-admin.ts"
+    "onboard:platform-admin": "tsx --env-file=.env scripts/create-platform-admin.ts",
+    "send-expiry-reminders": "tsx --env-file=.env scripts/send-expiry-reminders.ts"
   },
   "dependencies": {
     "@auth/prisma-adapter": "^2.11.3",
@@ -25,6 +26,7 @@
     "qrcode.react": "^4.2.0",
     "react": "19.2.8",
     "react-dom": "19.2.8",
+    "resend": "^6.26.0",
     "zod": "^4.5.4"
   },
   "devDependencies": {

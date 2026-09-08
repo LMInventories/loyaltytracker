@@ -5,6 +5,7 @@ import { z } from "zod";
 import { prisma } from "@/lib/prisma";
 import { isRateLimited } from "@/lib/rate-limit";
 import { getClientIp } from "@/lib/request-ip";
+import { sendEmailIfOptedIn, welcomeEmailHtml } from "@/lib/email";
 
 const registerSchema = z.object({
   email: z.string().email(),
@@ -50,6 +51,11 @@ export async function POST(request: Request) {
       role: "CUSTOMER",
     },
     select: { id: true, email: true, name: true },
+  });
+
+  void sendEmailIfOptedIn(user.id, {
+    subject: "Welcome to Local Loyalty",
+    html: welcomeEmailHtml(user.name),
   });
 
   return NextResponse.json({ user }, { status: 201 });

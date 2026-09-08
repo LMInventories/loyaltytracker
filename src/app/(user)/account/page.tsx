@@ -2,13 +2,14 @@ import { auth } from "@/lib/auth";
 import { prisma } from "@/lib/prisma";
 import { ChangePasswordForm } from "@/components/shared/ChangePasswordForm";
 import { PostcodeForm } from "@/components/shared/PostcodeForm";
+import { EmailNotificationsForm } from "@/components/shared/EmailNotificationsForm";
 
 export default async function AccountPage() {
   const session = await auth();
 
   const user = await prisma.user.findUniqueOrThrow({
     where: { id: session!.user.id },
-    select: { postcode: true },
+    select: { postcode: true, emailNotificationsEnabled: true },
   });
 
   return (
@@ -21,6 +22,11 @@ export default async function AccountPage() {
       <section className="flex flex-col gap-4">
         <h2 className="font-medium text-ink">Your postcode</h2>
         <PostcodeForm currentPostcode={user.postcode} />
+      </section>
+
+      <section className="flex flex-col gap-4">
+        <h2 className="font-medium text-ink">Email notifications</h2>
+        <EmailNotificationsForm currentValue={user.emailNotificationsEnabled} />
       </section>
 
       <section className="flex flex-col gap-4">

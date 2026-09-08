@@ -35,6 +35,7 @@ model User {
   postcode      String?
   latitude      Float?
   longitude     Float?
+  emailNotificationsEnabled Boolean @default(true)
   createdAt     DateTime  @default(now())
   updatedAt     DateTime  @updatedAt
 
@@ -262,7 +263,11 @@ model RewardRedemption {
   unlockedAt DateTime  @default(now())
   expiresAt  DateTime?
   redeemedAt DateTime?
+  // Set once the expiring-soon reminder email has been sent (or would have
+  // been, for an opted-out user) so the daily cron never re-evaluates it.
+  expiryReminderSentAt DateTime?
 
   @@index([userId, businessId])
   @@index([schemeId])
+  @@index([expiresAt, expiryReminderSentAt])
 }

@@ -5,6 +5,7 @@ import { PrismaAdapter } from "@auth/prisma-adapter";
 import bcrypt from "bcryptjs";
 
 import { prisma } from "@/lib/prisma";
+import { sendEmailIfOptedIn, welcomeEmailHtml } from "@/lib/email";
 
 export const { handlers, auth, signIn, signOut } = NextAuth({
   adapter: PrismaAdapter(prisma),
@@ -44,6 +45,19 @@ export const { handlers, auth, signIn, signOut } = NextAuth({
       },
     }),
   ],
+  events: {
+    // Only fires for adapter-provisioned users, i.e. Google sign-in — the
+    // credentials register route bypasses the adapter entirely and sends
+    // its own welcome email, so this never double-fires for the same user.
+    createUser: async ({ user }) => {
+      if (user.id) {
+        void sendEmailIfOptedIn(user.id, {
+          subject: "Welcome to Local Loyalty",
+          html: welcomeEmailHtml(user.name ?? null),
+        });
+      }
+    },
+  },
   callbacks: {
     jwt: async ({ token, user }) => {
       if (user) {
