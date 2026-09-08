@@ -45,5 +45,5 @@ export async function POST(request: Request) {
     },
   });
 
-  return NextResponse.json({ code: token.code, expiresAt: token.expiresAt });
+  return NextResponse.json({ id: token.id, code: token.code, expiresAt: token.expiresAt });
 }

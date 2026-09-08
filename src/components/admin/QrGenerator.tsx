@@ -4,7 +4,9 @@ import { useCallback, useEffect, useRef, useState } from "react";
 import { QRCodeSVG } from "qrcode.react";
 
 type Scheme = { id: string; name: string; type: "POINTS" | "STAMPS" };
-type Token = { code: string; expiresAt: string };
+type Token = { id: string; code: string; expiresAt: string };
+
+const REDEMPTION_POLL_MS = 3_000;
 
 export function QrGenerator({ schemes }: { schemes: Scheme[] }) {
   const [schemeId, setSchemeId] = useState(schemes[0].id);
@@ -65,6 +67,32 @@ export function QrGenerator({ schemes }: { schemes: Scheme[] }) {
     tick();
     const interval = setInterval(tick, 1000);
     return () => clearInterval(interval);
+  }, [token, schemeId, generate]);
+
+  // Polls for redemption so the display swaps to a fresh code the moment a
+  // customer scans it, rather than waiting out the rest of the TTL — the
+  // TTL above is just a safety net for codes nobody scans.
+  useEffect(() => {
+    if (!token) return;
+
+    let cancelled = false;
+    const tokenId = token.id;
+
+    const poll = async () => {
+      const res = await fetch(`/api/admin/qr-token/${tokenId}/status`);
+      if (cancelled || !res.ok) return;
+
+      const data = await res.json();
+      if (data.redeemed && active.current) {
+        generate(schemeId);
+      }
+    };
+
+    const interval = setInterval(poll, REDEMPTION_POLL_MS);
+    return () => {
+      cancelled = true;
+      clearInterval(interval);
+    };
   }, [token, schemeId, generate]);
 
   return (
