@@ -111,6 +111,13 @@ export function RegisterForm({ callbackUrl }: { callbackUrl: string }) {
         >
           {isSubmitting ? "Creating account…" : "Create account"}
         </button>
+        <p className="text-center text-xs text-ink-soft">
+          By creating an account you agree to our{" "}
+          <a href="/privacy" className="underline">
+            Privacy Policy
+          </a>
+          .
+        </p>
         <p className="text-center text-sm text-ink-soft">
           Already have an account?{" "}
           <a
