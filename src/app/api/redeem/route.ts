@@ -64,7 +64,6 @@ export async function POST(request: Request) {
     where: { userId_schemeId: { userId, schemeId: token.schemeId } },
   });
   const previousPoints = previousBalance?.points ?? 0;
-  const previousStampRewardsUnlocked = previousBalance?.stampRewardsUnlocked ?? 0;
 
   const { balance, unlockedRewards } = await prisma.$transaction(async (tx) => {
     const balance = await tx.loyaltyBalance.upsert({
@@ -115,12 +114,18 @@ export async function POST(request: Request) {
     } else if (
       token.scheme.type === "STAMPS" &&
       token.scheme.stampsRequired &&
-      token.scheme.stampRewardText
+      token.scheme.stampRewardText &&
+      balance.stamps >= token.scheme.stampsRequired
     ) {
-      const newRewardsUnlocked = Math.floor(balance.stamps / token.scheme.stampsRequired);
-      const newlyUnlocked = newRewardsUnlocked - previousStampRewardsUnlocked;
+      // The card resets as soon as it's full — a reward is granted and the
+      // stamp count drops back to the leftover (usually 0), so the customer
+      // immediately starts working toward the next one. The reward itself
+      // stays on the account, independent of the reset counter, until it's
+      // redeemed or expires.
+      const rewardsToGrant = Math.floor(balance.stamps / token.scheme.stampsRequired);
+      const remainder = balance.stamps % token.scheme.stampsRequired;
 
-      for (let i = 0; i < newlyUnlocked; i++) {
+      for (let i = 0; i < rewardsToGrant; i++) {
         const redemption = await tx.rewardRedemption.create({
           data: {
             userId,
@@ -133,12 +138,11 @@ export async function POST(request: Request) {
         unlockedRewards.push(redemption);
       }
 
-      if (newlyUnlocked > 0) {
-        await tx.loyaltyBalance.update({
-          where: { userId_schemeId: { userId, schemeId: token.schemeId } },
-          data: { stampRewardsUnlocked: newRewardsUnlocked },
-        });
-      }
+      await tx.loyaltyBalance.update({
+        where: { userId_schemeId: { userId, schemeId: token.schemeId } },
+        data: { stamps: remainder },
+      });
+      balance.stamps = remainder;
     }
 
     return { balance, unlockedRewards };

@@ -165,12 +165,11 @@ model LoyaltyBalance {
   scheme   LoyaltyScheme @relation(fields: [schemeId], references: [id])
 
   points    Int      @default(0)
+  // Resets to the leftover (usually 0) each time it crosses stampsRequired —
+  // the reward that crossing grants is persisted separately as a
+  // RewardRedemption, independent of this counter.
   stamps    Int      @default(0)
-  // How many stamp-reward thresholds have already produced a RewardRedemption.
-  // Stamps never reset, so a STAMPS scheme's reward can be earned repeatedly —
-  // this tracks how many of those repeats have already been granted.
-  stampRewardsUnlocked Int      @default(0)
-  updatedAt            DateTime @updatedAt
+  updatedAt DateTime @updatedAt
 
   @@unique([userId, schemeId])
   @@index([businessId])
