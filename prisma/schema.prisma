@@ -13,6 +13,7 @@ datasource db {
 enum Role {
   CUSTOMER
   BUSINESS_ADMIN
+  PLATFORM_ADMIN
 }
 
 enum SchemeType {

@@ -10,19 +10,20 @@ async function main() {
   const customerPasswordHash = await bcrypt.hash("password123", 12);
 
   const cafe = await prisma.business.upsert({
-    where: { slug: "corner-cafe" },
+    where: { slug: "high-street-cafe" },
     update: {},
     create: {
-      slug: "corner-cafe",
-      name: "Corner Cafe",
+      slug: "high-street-cafe",
+      name: "High Street Cafe",
       description: "Independent coffee shop on the high street.",
       category: "Cafe",
       address: "12 High Street, Anytown",
+      logoUrl: "https://openclipart.org/image/2400px/svg_to_png/22305/pitr-Coffee-cup-icon.png",
       admins: {
         create: {
-          email: "admin@cornercafe.test",
+          email: "admin@highstreetcafe.test",
           passwordHash: adminPasswordHash,
-          name: "Corner Cafe Admin",
+          name: "High Street Cafe Admin",
           role: "BUSINESS_ADMIN",
         },
       },
@@ -93,11 +94,24 @@ async function main() {
     },
   });
 
+  const platformPasswordHash = await bcrypt.hash("password123", 12);
+  await prisma.user.upsert({
+    where: { email: "platform@localloyalty.test" },
+    update: {},
+    create: {
+      email: "platform@localloyalty.test",
+      passwordHash: platformPasswordHash,
+      name: "Platform Admin",
+      role: "PLATFORM_ADMIN",
+    },
+  });
+
   console.log("Seeded businesses:", cafe.name, "/", barber.name);
   console.log("Admin logins (password: password123):");
-  console.log("  admin@cornercafe.test");
+  console.log("  admin@highstreetcafe.test");
   console.log("  admin@highstreetbarbers.test");
   console.log("Customer login (password: password123): customer@example.test");
+  console.log("Platform admin login (password: password123): platform@localloyalty.test");
 }
 
 main()

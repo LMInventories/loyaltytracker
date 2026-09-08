@@ -7,3 +7,11 @@ export async function requireBusinessAdmin() {
   }
   return { businessId: session.user.businessId, userId: session.user.id };
 }
+
+export async function requirePlatformAdmin() {
+  const session = await auth();
+  if (!session?.user || session.user.role !== "PLATFORM_ADMIN") {
+    return null;
+  }
+  return { userId: session.user.id };
+}
