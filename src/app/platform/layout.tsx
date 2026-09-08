@@ -19,6 +19,9 @@ export default async function PlatformLayout({ children }: { children: React.Rea
               <Link href="/platform/analytics" className="text-sm text-zinc-600 hover:text-zinc-900">
                 Analytics
               </Link>
+              <Link href="/platform/settings" className="text-sm text-zinc-600 hover:text-zinc-900">
+                Settings
+              </Link>
               <SignOutButton />
             </div>
           )}
