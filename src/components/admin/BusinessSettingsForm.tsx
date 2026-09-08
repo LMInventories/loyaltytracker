@@ -11,6 +11,7 @@ type Business = {
   description: string | null;
   logoUrl: string | null;
   address: string | null;
+  postcode: string | null;
   category: string | null;
 };
 
@@ -21,6 +22,7 @@ export function BusinessSettingsForm({ business }: { business: Business }) {
   const [description, setDescription] = useState(business.description ?? "");
   const [logoUrl, setLogoUrl] = useState(business.logoUrl ?? "");
   const [address, setAddress] = useState(business.address ?? "");
+  const [postcode, setPostcode] = useState(business.postcode ?? "");
   const [category, setCategory] = useState(business.category ?? "");
   const [error, setError] = useState<string | null>(null);
   const [saved, setSaved] = useState(false);
@@ -35,7 +37,7 @@ export function BusinessSettingsForm({ business }: { business: Business }) {
     const res = await fetch("/api/admin/business", {
       method: "PATCH",
       headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({ name, slug, description, logoUrl, address, category }),
+      body: JSON.stringify({ name, slug, description, logoUrl, address, postcode, category }),
     });
 
     setIsSubmitting(false);
@@ -104,6 +106,22 @@ export function BusinessSettingsForm({ business }: { business: Business }) {
           onChange={(e) => setAddress(e.target.value)}
           className="rounded-md border border-zinc-300 px-3 py-2 text-sm outline-none focus:border-zinc-500 focus:ring-2 focus:ring-zinc-300"
         />
+      </div>
+
+      <div className="flex flex-col gap-1">
+        <label htmlFor="postcode" className="text-sm font-medium text-zinc-700">
+          Postcode
+        </label>
+        <input
+          id="postcode"
+          value={postcode}
+          onChange={(e) => setPostcode(e.target.value)}
+          placeholder="e.g. SW1A 1AA"
+          className="w-32 rounded-md border border-zinc-300 px-3 py-2 text-sm outline-none focus:border-zinc-500 focus:ring-2 focus:ring-zinc-300"
+        />
+        <p className="text-xs text-zinc-500">
+          Needed for customers to sort the directory by distance to your business.
+        </p>
       </div>
 
       <div className="flex flex-col gap-1">

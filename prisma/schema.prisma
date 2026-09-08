@@ -30,6 +30,11 @@ model User {
   image         String?
   name          String?
   role          Role      @default(CUSTOMER)
+  // Geocoded from `postcode` via postcodes.io when the customer sets it —
+  // used to sort the business directory by distance.
+  postcode      String?
+  latitude      Float?
+  longitude     Float?
   createdAt     DateTime  @default(now())
   updatedAt     DateTime  @updatedAt
 
@@ -74,6 +79,12 @@ model Business {
   description String?
   logoUrl     String?
   address     String?
+  // Geocoded via postcodes.io when set — used to sort the directory by
+  // distance from a customer's postcode. Independent of `address`, which
+  // stays free text for display.
+  postcode    String?
+  latitude    Float?
+  longitude   Float?
   category    String?
   isActive    Boolean  @default(true)
   createdAt   DateTime @default(now())

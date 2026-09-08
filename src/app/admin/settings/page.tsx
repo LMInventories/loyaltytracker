@@ -18,6 +18,7 @@ export default async function AdminSettingsPage() {
           description: business.description,
           logoUrl: business.logoUrl,
           address: business.address,
+          postcode: business.postcode,
           category: business.category,
         }}
       />

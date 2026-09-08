@@ -19,6 +19,7 @@ export function BusinessOnboardingForm() {
   const [slugTouched, setSlugTouched] = useState(false);
   const [category, setCategory] = useState("");
   const [address, setAddress] = useState("");
+  const [postcode, setPostcode] = useState("");
 
   const [adminEmail, setAdminEmail] = useState("");
   const [adminPassword, setAdminPassword] = useState("");
@@ -55,6 +56,7 @@ export function BusinessOnboardingForm() {
         slug,
         category,
         address,
+        postcode,
         adminEmail,
         adminPassword,
         scheme,
@@ -129,6 +131,21 @@ export function BusinessOnboardingForm() {
             onChange={(e) => setAddress(e.target.value)}
             className="rounded-md border border-zinc-300 px-3 py-2 text-sm outline-none focus:border-zinc-500 focus:ring-2 focus:ring-zinc-300"
           />
+        </div>
+        <div className="flex flex-col gap-1">
+          <label htmlFor="postcode" className="text-sm font-medium text-zinc-700">
+            Postcode
+          </label>
+          <input
+            id="postcode"
+            value={postcode}
+            onChange={(e) => setPostcode(e.target.value)}
+            placeholder="e.g. SW1A 1AA"
+            className="w-32 rounded-md border border-zinc-300 px-3 py-2 text-sm outline-none focus:border-zinc-500 focus:ring-2 focus:ring-zinc-300"
+          />
+          <p className="text-xs text-zinc-500">
+            Optional, but needed for the business to show up in “closest to me” sorting.
+          </p>
         </div>
       </fieldset>
 

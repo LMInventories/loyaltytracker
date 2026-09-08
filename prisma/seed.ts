@@ -18,6 +18,9 @@ async function main() {
       description: "Independent coffee shop on the high street.",
       category: "Cafe",
       address: "12 High Street, Anytown",
+      postcode: "SW1A 1AA",
+      latitude: 51.501009,
+      longitude: -0.141588,
       logoUrl: "https://openclipart.org/image/2400px/svg_to_png/22305/pitr-Coffee-cup-icon.png",
       admins: {
         create: {
@@ -57,6 +60,9 @@ async function main() {
       description: "Traditional barbershop, walk-ins welcome.",
       category: "Barber",
       address: "45 High Street, Anytown",
+      postcode: "WC2N 5DU",
+      latitude: 51.508112,
+      longitude: -0.128172,
       admins: {
         create: {
           email: "admin@highstreetbarbers.test",

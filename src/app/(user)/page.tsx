@@ -4,23 +4,41 @@ import { auth } from "@/lib/auth";
 import { prisma } from "@/lib/prisma";
 import { BusinessLogo } from "@/components/shared/BusinessLogo";
 import { MapPinIcon } from "@/components/shared/MapPinIcon";
+import { SortSelect } from "@/components/shared/SortSelect";
 import { mapsUrlFor } from "@/lib/maps";
 import { availableRewardWhere } from "@/lib/rewards";
+import { formatMiles, milesBetween } from "@/lib/distance";
+
+const SORT_VALUES = ["name", "distance", "recent"] as const;
+type Sort = (typeof SORT_VALUES)[number];
 
 export default async function DirectoryPage({
   searchParams,
 }: {
-  searchParams: Promise<{ q?: string }>;
+  searchParams: Promise<{ q?: string; sort?: string }>;
 }) {
-  const { q } = await searchParams;
+  const { q, sort: sortParam } = await searchParams;
   const query = q?.trim() ?? "";
+  const sort: Sort = SORT_VALUES.includes(sortParam as Sort) ? (sortParam as Sort) : "name";
 
   const session = await auth();
-  const availableRewardCount = session?.user
-    ? await prisma.rewardRedemption.count({
-        where: { userId: session.user.id, ...availableRewardWhere() },
-      })
-    : 0;
+
+  const [availableRewardCount, customerLocation] = await Promise.all([
+    session?.user
+      ? prisma.rewardRedemption.count({
+          where: { userId: session.user.id, ...availableRewardWhere() },
+        })
+      : Promise.resolve(0),
+    session?.user
+      ? prisma.user.findUnique({
+          where: { id: session.user.id },
+          select: { latitude: true, longitude: true },
+        })
+      : Promise.resolve(null),
+  ]);
+
+  const hasCustomerLocation =
+    customerLocation?.latitude != null && customerLocation?.longitude != null;
 
   const businesses = await prisma.business.findMany({
     where: {
@@ -38,7 +56,28 @@ export default async function DirectoryPage({
       schemes: { where: { isActive: true }, select: { id: true, name: true } },
       offers: { where: { isActive: true }, select: { id: true, title: true } },
     },
-    orderBy: { name: "asc" },
+  });
+
+  const businessesWithDistance = businesses.map((business) => ({
+    ...business,
+    distanceMiles:
+      hasCustomerLocation && business.latitude != null && business.longitude != null
+        ? milesBetween(
+            { latitude: customerLocation!.latitude!, longitude: customerLocation!.longitude! },
+            { latitude: business.latitude, longitude: business.longitude },
+          )
+        : null,
+  }));
+
+  const sorted = [...businessesWithDistance].sort((a, b) => {
+    if (sort === "recent") return b.createdAt.getTime() - a.createdAt.getTime();
+    if (sort === "distance") {
+      if (a.distanceMiles === null && b.distanceMiles === null) return a.name.localeCompare(b.name);
+      if (a.distanceMiles === null) return 1;
+      if (b.distanceMiles === null) return -1;
+      return a.distanceMiles - b.distanceMiles;
+    }
+    return a.name.localeCompare(b.name);
   });
 
   return (
@@ -65,23 +104,36 @@ export default async function DirectoryPage({
         </Link>
       )}
 
-      <form className="flex gap-2">
-        <input
-          type="text"
-          name="q"
-          defaultValue={query}
-          placeholder="Search by name or category…"
-          className="w-full max-w-sm rounded-sm border border-line bg-surface px-3 py-2 text-sm text-ink outline-none focus:border-stamp focus:ring-2 focus:ring-stamp/40"
-        />
-        <button
-          type="submit"
-          className="rounded-sm border border-line bg-surface px-4 py-2 text-sm font-medium text-ink hover:border-stamp"
-        >
-          Search
-        </button>
-      </form>
+      <div className="flex flex-wrap items-center gap-3">
+        <form className="flex gap-2">
+          <input
+            type="text"
+            name="q"
+            defaultValue={query}
+            placeholder="Search by name or category…"
+            className="w-full max-w-sm rounded-sm border border-line bg-surface px-3 py-2 text-sm text-ink outline-none focus:border-stamp focus:ring-2 focus:ring-stamp/40"
+          />
+          <input type="hidden" name="sort" value={sort} />
+          <button
+            type="submit"
+            className="rounded-sm border border-line bg-surface px-4 py-2 text-sm font-medium text-ink hover:border-stamp"
+          >
+            Search
+          </button>
+        </form>
+        <SortSelect value={sort} />
+      </div>
 
-      {businesses.length === 0 ? (
+      {sort === "distance" && !hasCustomerLocation && (
+        <p className="text-sm text-ink-soft">
+          <Link href="/account" className="underline">
+            Set your postcode
+          </Link>{" "}
+          to sort by distance — showing A–Z for now.
+        </p>
+      )}
+
+      {sorted.length === 0 ? (
         <p className="text-ink-soft">
           {query
             ? `No businesses match "${query}".`
@@ -89,7 +141,7 @@ export default async function DirectoryPage({
         </p>
       ) : (
         <ul className="grid grid-cols-1 gap-5 sm:grid-cols-2">
-          {businesses.map((business) => (
+          {sorted.map((business) => (
             <li
               key={business.id}
               className="group relative flex h-full flex-col gap-3 border border-line bg-surface p-5 transition-colors hover:border-stamp"
@@ -124,6 +176,9 @@ export default async function DirectoryPage({
                 </div>
                 {business.address && (
                   <p className="text-sm text-ink-soft">{business.address}</p>
+                )}
+                {business.distanceMiles !== null && (
+                  <p className="text-sm text-ink-soft">{formatMiles(business.distanceMiles)}</p>
                 )}
                 <div className="mt-auto flex flex-col gap-1 pt-2 text-sm">
                   {business.schemes.map((scheme) => (

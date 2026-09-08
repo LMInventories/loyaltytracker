@@ -4,6 +4,7 @@ import bcrypt from "bcryptjs";
 
 import { requirePlatformAdmin } from "@/lib/admin";
 import { prisma } from "@/lib/prisma";
+import { geocodePostcode } from "@/lib/geocode";
 
 const schemeSchema = z.discriminatedUnion("type", [
   z.object({
@@ -27,6 +28,7 @@ const createSchema = z.object({
     .regex(/^[a-z0-9]+(-[a-z0-9]+)*$/, "Use lowercase letters, numbers, and hyphens only"),
   category: z.string().optional(),
   address: z.string().optional(),
+  postcode: z.string().optional(),
   adminEmail: z.string().email(),
   adminPassword: z.string().min(8),
   scheme: schemeSchema,
@@ -52,6 +54,17 @@ export async function POST(request: Request) {
     return NextResponse.json({ error: "That email is already in use" }, { status: 409 });
   }
 
+  let location: { latitude: number; longitude: number } | null = null;
+  if (data.postcode) {
+    location = await geocodePostcode(data.postcode);
+    if (!location) {
+      return NextResponse.json(
+        { error: "We couldn't find that postcode. Check it and try again." },
+        { status: 400 },
+      );
+    }
+  }
+
   const passwordHash = await bcrypt.hash(data.adminPassword, 12);
   const scheme = data.scheme;
 
@@ -61,6 +74,9 @@ export async function POST(request: Request) {
       slug: data.slug,
       category: data.category || null,
       address: data.address || null,
+      postcode: data.postcode ? data.postcode.trim().toUpperCase() : null,
+      latitude: location?.latitude ?? null,
+      longitude: location?.longitude ?? null,
       admins: {
         create: {
           email: data.adminEmail,

@@ -3,6 +3,7 @@ import { z } from "zod";
 
 import { requireBusinessAdmin } from "@/lib/admin";
 import { prisma } from "@/lib/prisma";
+import { geocodePostcode } from "@/lib/geocode";
 
 const updateSchema = z.object({
   name: z.string().min(1).optional(),
@@ -14,6 +15,7 @@ const updateSchema = z.object({
   description: z.string().nullable().optional(),
   logoUrl: z.string().url().nullable().optional().or(z.literal("")),
   address: z.string().nullable().optional(),
+  postcode: z.string().nullable().optional(),
   category: z.string().nullable().optional(),
 });
 
@@ -28,6 +30,30 @@ export async function PATCH(request: Request) {
   }
   const data = parsed.data;
 
+  let locationUpdate:
+    | { postcode: string | null; latitude: number | null; longitude: number | null }
+    | undefined;
+
+  if (data.postcode !== undefined) {
+    const trimmed = (data.postcode ?? "").trim();
+    if (!trimmed) {
+      locationUpdate = { postcode: null, latitude: null, longitude: null };
+    } else {
+      const location = await geocodePostcode(trimmed);
+      if (!location) {
+        return NextResponse.json(
+          { error: "We couldn't find that postcode. Check it and try again." },
+          { status: 400 },
+        );
+      }
+      locationUpdate = {
+        postcode: trimmed.toUpperCase(),
+        latitude: location.latitude,
+        longitude: location.longitude,
+      };
+    }
+  }
+
   try {
     const business = await prisma.business.update({
       where: { id: admin.businessId },
@@ -38,6 +64,7 @@ export async function PATCH(request: Request) {
         ...(data.logoUrl !== undefined ? { logoUrl: data.logoUrl || null } : {}),
         ...(data.address !== undefined ? { address: data.address || null } : {}),
         ...(data.category !== undefined ? { category: data.category || null } : {}),
+        ...(locationUpdate ?? {}),
       },
     });
     return NextResponse.json({ business });
