@@ -5,6 +5,7 @@ import { prisma } from "@/lib/prisma";
 import { BusinessLogo } from "@/components/shared/BusinessLogo";
 import { MapPinIcon } from "@/components/shared/MapPinIcon";
 import { SortSelect } from "@/components/shared/SortSelect";
+import { CategorySelect } from "@/components/shared/CategorySelect";
 import { mapsUrlFor } from "@/lib/maps";
 import { activeOfferWhere, availableRewardWhere } from "@/lib/rewards";
 import { formatMiles, milesBetween } from "@/lib/distance";
@@ -15,15 +16,16 @@ type Sort = (typeof SORT_VALUES)[number];
 export default async function DirectoryPage({
   searchParams,
 }: {
-  searchParams: Promise<{ q?: string; sort?: string }>;
+  searchParams: Promise<{ q?: string; sort?: string; category?: string }>;
 }) {
-  const { q, sort: sortParam } = await searchParams;
+  const { q, sort: sortParam, category: categoryParam } = await searchParams;
   const query = q?.trim() ?? "";
   const sort: Sort = SORT_VALUES.includes(sortParam as Sort) ? (sortParam as Sort) : "name";
+  const category = categoryParam?.trim() ?? "";
 
   const session = await auth();
 
-  const [availableRewardCount, customerLocation] = await Promise.all([
+  const [availableRewardCount, customerLocation, categoryRows] = await Promise.all([
     session?.user
       ? prisma.rewardRedemption.count({
           where: { userId: session.user.id, ...availableRewardWhere() },
@@ -35,7 +37,15 @@ export default async function DirectoryPage({
           select: { latitude: true, longitude: true },
         })
       : Promise.resolve(null),
+    prisma.business.findMany({
+      where: { isActive: true, category: { not: null } },
+      select: { category: true },
+      distinct: ["category"],
+      orderBy: { category: "asc" },
+    }),
   ]);
+
+  const categories = categoryRows.map((row) => row.category!).filter(Boolean);
 
   const hasCustomerLocation =
     customerLocation?.latitude != null && customerLocation?.longitude != null;
@@ -51,6 +61,7 @@ export default async function DirectoryPage({
             ],
           }
         : {}),
+      ...(category ? { category } : {}),
     },
     include: {
       schemes: { where: { isActive: true }, select: { id: true, name: true } },
@@ -114,6 +125,7 @@ export default async function DirectoryPage({
             className="w-full max-w-sm rounded-sm border border-line bg-surface px-3 py-2 text-sm text-ink outline-none focus:border-stamp focus:ring-2 focus:ring-stamp/40"
           />
           <input type="hidden" name="sort" value={sort} />
+          <input type="hidden" name="category" value={category} />
           <button
             type="submit"
             className="rounded-sm border border-line bg-surface px-4 py-2 text-sm font-medium text-ink hover:border-stamp"
@@ -122,6 +134,7 @@ export default async function DirectoryPage({
           </button>
         </form>
         <SortSelect value={sort} />
+        <CategorySelect value={category} categories={categories} />
       </div>
 
       {sort === "distance" && !hasCustomerLocation && (
