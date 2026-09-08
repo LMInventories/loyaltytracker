@@ -1,4 +1,4 @@
-const CACHE_VERSION = "v3";
+const CACHE_VERSION = "v4";
 const SHELL_CACHE = `hployalty-shell-${CACHE_VERSION}`;
 const RUNTIME_CACHE = `hployalty-runtime-${CACHE_VERSION}`;
 
@@ -7,8 +7,8 @@ const RUNTIME_CACHE = `hployalty-runtime-${CACHE_VERSION}`;
 const SHELL_ASSETS = [
   "/offline",
   "/manifest.webmanifest",
-  "/icons/icon-192.png?v=3",
-  "/icons/icon-512.png?v=3",
+  "/icons/icon-192.png?v=4",
+  "/icons/icon-512.png?v=4",
 ];
 
 self.addEventListener("install", (event) => {

@@ -9,8 +9,8 @@ export default function manifest(): MetadataRoute.Manifest {
     description: "Loyalty rewards for local businesses",
     start_url: "/",
     display: "standalone",
-    background_color: "#0b2f55",
-    theme_color: "#0b2f55",
+    background_color: "#022f5a",
+    theme_color: "#022f5a",
     icons: [
       { src: `/icons/icon-192.png?v=${ASSET_VERSION}`, sizes: "192x192", type: "image/png" },
       { src: `/icons/icon-512.png?v=${ASSET_VERSION}`, sizes: "512x512", type: "image/png" },
