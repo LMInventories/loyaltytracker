@@ -39,9 +39,14 @@ export default async function MyCardDetailPage({
           ← My cards
         </Link>
         <h1 className="font-display text-2xl font-semibold text-ink">{business.name}</h1>
-        <Link href={`/businesses/${business.slug}`} className="text-sm text-ink-soft underline">
-          View business page
-        </Link>
+        <div className="flex gap-4">
+          <Link href={`/businesses/${business.slug}`} className="text-sm text-ink-soft underline">
+            View business page
+          </Link>
+          <Link href={`/businesses/${business.slug}/rewards`} className="text-sm text-ink underline">
+            Rewards
+          </Link>
+        </div>
       </div>
 
       <section className="flex flex-col gap-4">

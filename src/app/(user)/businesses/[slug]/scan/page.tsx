@@ -9,7 +9,7 @@ type Result = {
   business: { name: string; slug: string };
   scheme: { name: string; type: "POINTS" | "STAMPS" };
   balance: { points: number; stamps: number };
-  unlockedRewards: string[];
+  unlockedRewards: { id: string; rewardText: string; expiresAt: string | null }[];
 };
 
 export default function ScanPage() {
@@ -61,10 +61,18 @@ export default function ScanPage() {
               : `${result.balance.points} points`}
           </p>
           {result.unlockedRewards.map((reward) => (
-            <p key={reward} className="text-awning">
-              ★ Unlocked: {reward}
+            <p key={reward.id} className="text-awning">
+              ★ Unlocked: {reward.rewardText}
             </p>
           ))}
+          {result.unlockedRewards.length > 0 && (
+            <Link
+              href={`/businesses/${result.business.slug}/rewards`}
+              className="text-sm font-medium text-ink underline"
+            >
+              View rewards to redeem
+            </Link>
+          )}
           <Link
             href={`/businesses/${result.business.slug}`}
             className="mt-2 text-sm text-ink underline"

@@ -11,6 +11,7 @@ const updateSchema = z.object({
   stampsRequired: z.coerce.number().int().min(1).optional(),
   stampRewardText: z.string().min(1).optional(),
   stampRewardImageUrl: z.string().url().nullable().optional(),
+  rewardExpiryDays: z.coerce.number().int().min(1).nullable().optional(),
 });
 
 async function loadOwnedScheme(id: string, businessId: string) {

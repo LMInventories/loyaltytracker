@@ -7,6 +7,7 @@ import { StampProgress, PointsProgress } from "@/components/shared/LoyaltyProgre
 import { BusinessLogo } from "@/components/shared/BusinessLogo";
 import { MapPinIcon } from "@/components/shared/MapPinIcon";
 import { mapsUrlFor } from "@/lib/maps";
+import { availableRewardWhere } from "@/lib/rewards";
 
 export default async function BusinessDetailPage({
   params,
@@ -36,6 +37,12 @@ export default async function BusinessDetailPage({
     : [];
 
   const balanceByScheme = new Map(balances.map((b) => [b.schemeId, b]));
+
+  const availableRewardCount = session?.user
+    ? await prisma.rewardRedemption.count({
+        where: { userId: session.user.id, businessId: business.id, ...availableRewardWhere() },
+      })
+    : 0;
 
   return (
     <main className="mx-auto flex w-full max-w-2xl flex-1 flex-col gap-10 px-6 py-12">
@@ -77,7 +84,17 @@ export default async function BusinessDetailPage({
 
       {business.schemes.length > 0 && (
         <section className="flex flex-col gap-4">
-          <h2 className="font-display text-xl font-semibold text-ink">Loyalty</h2>
+          <div className="flex items-center justify-between">
+            <h2 className="font-display text-xl font-semibold text-ink">Loyalty</h2>
+            {session?.user && (
+              <Link
+                href={`/businesses/${business.slug}/rewards`}
+                className="text-sm font-medium text-ink underline decoration-line underline-offset-4 hover:text-stamp"
+              >
+                Rewards{availableRewardCount > 0 ? ` (${availableRewardCount})` : ""}
+              </Link>
+            )}
+          </div>
           <ul className="flex flex-col gap-4">
             {business.schemes.map((scheme) => {
               const balance = balanceByScheme.get(scheme.id);

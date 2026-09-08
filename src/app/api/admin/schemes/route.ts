@@ -4,17 +4,21 @@ import { z } from "zod";
 import { requireBusinessAdmin } from "@/lib/admin";
 import { prisma } from "@/lib/prisma";
 
+const rewardExpiryDays = z.coerce.number().int().min(1).nullable().optional();
+
 const createSchema = z.discriminatedUnion("type", [
   z.object({
     name: z.string().min(1),
     type: z.literal("POINTS"),
     pointsPerScan: z.coerce.number().int().min(1),
+    rewardExpiryDays,
   }),
   z.object({
     name: z.string().min(1),
     type: z.literal("STAMPS"),
     stampsRequired: z.coerce.number().int().min(1),
     stampRewardText: z.string().min(1),
+    rewardExpiryDays,
   }),
 ]);
 
@@ -37,6 +41,7 @@ export async function POST(request: Request) {
       pointsPerScan: data.type === "POINTS" ? data.pointsPerScan : null,
       stampsRequired: data.type === "STAMPS" ? data.stampsRequired : null,
       stampRewardText: data.type === "STAMPS" ? data.stampRewardText : null,
+      rewardExpiryDays: data.rewardExpiryDays ?? null,
     },
   });
 

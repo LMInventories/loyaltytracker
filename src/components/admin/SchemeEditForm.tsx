@@ -11,6 +11,7 @@ type Scheme = {
   pointsPerScan: number | null;
   stampsRequired: number | null;
   stampRewardText: string | null;
+  rewardExpiryDays: number | null;
 };
 
 type Tier = { threshold: number; rewardText: string };
@@ -22,6 +23,9 @@ export function SchemeEditForm({ scheme, tiers: initialTiers }: { scheme: Scheme
   const [pointsPerScan, setPointsPerScan] = useState(String(scheme.pointsPerScan ?? ""));
   const [stampsRequired, setStampsRequired] = useState(String(scheme.stampsRequired ?? ""));
   const [stampRewardText, setStampRewardText] = useState(scheme.stampRewardText ?? "");
+  const [rewardExpiryDays, setRewardExpiryDays] = useState(
+    String(scheme.rewardExpiryDays ?? ""),
+  );
   const [savingDetails, setSavingDetails] = useState(false);
   const [detailsSaved, setDetailsSaved] = useState(false);
 
@@ -36,8 +40,14 @@ export function SchemeEditForm({ scheme, tiers: initialTiers }: { scheme: Scheme
 
     const body =
       scheme.type === "POINTS"
-        ? { name, isActive, pointsPerScan }
-        : { name, isActive, stampsRequired, stampRewardText };
+        ? { name, isActive, pointsPerScan, rewardExpiryDays: rewardExpiryDays || null }
+        : {
+            name,
+            isActive,
+            stampsRequired,
+            stampRewardText,
+            rewardExpiryDays: rewardExpiryDays || null,
+          };
 
     const res = await fetch(`/api/admin/schemes/${scheme.id}`, {
       method: "PATCH",
@@ -131,6 +141,21 @@ export function SchemeEditForm({ scheme, tiers: initialTiers }: { scheme: Scheme
             </div>
           </>
         )}
+
+        <div className="flex flex-col gap-1">
+          <label htmlFor="rewardExpiryDays" className="text-sm font-medium text-zinc-700">
+            Days to redeem a reward (optional)
+          </label>
+          <input
+            id="rewardExpiryDays"
+            type="number"
+            min={1}
+            value={rewardExpiryDays}
+            onChange={(e) => setRewardExpiryDays(e.target.value)}
+            placeholder="Never expires"
+            className="w-32 rounded-md border border-zinc-300 px-3 py-2 text-sm outline-none focus:border-zinc-500 focus:ring-2 focus:ring-zinc-300"
+          />
+        </div>
 
         <label className="flex items-center gap-2 text-sm text-zinc-700">
           <input

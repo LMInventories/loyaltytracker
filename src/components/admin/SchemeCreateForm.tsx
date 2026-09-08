@@ -10,6 +10,7 @@ export function SchemeCreateForm() {
   const [pointsPerScan, setPointsPerScan] = useState("10");
   const [stampsRequired, setStampsRequired] = useState("10");
   const [stampRewardText, setStampRewardText] = useState("");
+  const [rewardExpiryDays, setRewardExpiryDays] = useState("");
   const [error, setError] = useState<string | null>(null);
   const [isSubmitting, setIsSubmitting] = useState(false);
 
@@ -20,8 +21,8 @@ export function SchemeCreateForm() {
 
     const body =
       type === "POINTS"
-        ? { name, type, pointsPerScan }
-        : { name, type, stampsRequired, stampRewardText };
+        ? { name, type, pointsPerScan, rewardExpiryDays: rewardExpiryDays || null }
+        : { name, type, stampsRequired, stampRewardText, rewardExpiryDays: rewardExpiryDays || null };
 
     const res = await fetch("/api/admin/schemes", {
       method: "POST",
@@ -129,6 +130,25 @@ export function SchemeCreateForm() {
           </div>
         </>
       )}
+
+      <div className="flex flex-col gap-1">
+        <label htmlFor="rewardExpiryDays" className="text-sm font-medium text-zinc-700">
+          Days to redeem a reward (optional)
+        </label>
+        <input
+          id="rewardExpiryDays"
+          type="number"
+          min={1}
+          value={rewardExpiryDays}
+          onChange={(e) => setRewardExpiryDays(e.target.value)}
+          placeholder="Never expires"
+          className="w-32 rounded-md border border-zinc-300 px-3 py-2 text-sm outline-none focus:border-zinc-500 focus:ring-2 focus:ring-zinc-300"
+        />
+        <p className="text-xs text-zinc-500">
+          How long a customer has to redeem a reward after unlocking it. Leave blank for no
+          expiry.
+        </p>
+      </div>
 
       {error && <p className="text-sm text-red-600">{error}</p>}
       <button

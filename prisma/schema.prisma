@@ -41,6 +41,7 @@ model User {
   balances     LoyaltyBalance[]
   transactions LoyaltyTransaction[]
   redeemedTokens QrToken[]           @relation("RedeemedBy")
+  rewardRedemptions RewardRedemption[]
 
   @@index([businessId])
 }
@@ -84,6 +85,7 @@ model Business {
   qrTokens     QrToken[]
   balances     LoyaltyBalance[]
   transactions LoyaltyTransaction[]
+  rewardRedemptions RewardRedemption[]
 }
 
 model LoyaltyScheme {
@@ -103,13 +105,19 @@ model LoyaltyScheme {
   stampRewardText     String?
   stampRewardImageUrl String?
 
+  // Days an unlocked reward stays redeemable before it expires. Null = never
+  // expires. Set per scheme by the business; applies to every reward it unlocks
+  // (a POINTS tier crossing or a STAMPS card completion).
+  rewardExpiryDays Int?
+
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
 
-  rewardTiers  RewardTier[]
-  balances     LoyaltyBalance[]
-  transactions LoyaltyTransaction[]
-  qrTokens     QrToken[]
+  rewardTiers       RewardTier[]
+  balances          LoyaltyBalance[]
+  transactions      LoyaltyTransaction[]
+  qrTokens          QrToken[]
+  rewardRedemptions RewardRedemption[]
 
   @@index([businessId])
 }
@@ -122,6 +130,8 @@ model RewardTier {
   rewardText String
   imageUrl   String?
   sortOrder  Int           @default(0)
+
+  redemptions RewardRedemption[]
 
   @@index([schemeId])
 }
@@ -156,7 +166,11 @@ model LoyaltyBalance {
 
   points    Int      @default(0)
   stamps    Int      @default(0)
-  updatedAt DateTime @updatedAt
+  // How many stamp-reward thresholds have already produced a RewardRedemption.
+  // Stamps never reset, so a STAMPS scheme's reward can be earned repeatedly —
+  // this tracks how many of those repeats have already been granted.
+  stampRewardsUnlocked Int      @default(0)
+  updatedAt            DateTime @updatedAt
 
   @@unique([userId, schemeId])
   @@index([businessId])
@@ -209,4 +223,36 @@ model QrToken {
   transaction LoyaltyTransaction?
 
   @@index([businessId, expiresAt])
+}
+
+/// A specific reward a user has earned (a POINTS tier crossing, or one
+/// completion of a STAMPS card) and can redeem in person. `redeemedAt` is set
+/// atomically the moment the customer slides to redeem it — from then on it's
+/// considered claimed, shown to staff as proof.
+model RewardRedemption {
+  id     String @id @default(cuid())
+  userId String
+  user   User   @relation(fields: [userId], references: [id])
+
+  businessId String
+  business   Business @relation(fields: [businessId], references: [id])
+
+  schemeId String
+  scheme   LoyaltyScheme @relation(fields: [schemeId], references: [id])
+
+  // Set for a POINTS-scheme reward; null for a STAMPS-scheme reward (which has
+  // no tier — it's the scheme's single stampRewardText, granted repeatedly).
+  rewardTierId String?
+  rewardTier   RewardTier? @relation(fields: [rewardTierId], references: [id])
+
+  // Snapshot of the reward's text at unlock time, so editing the scheme/tier
+  // later doesn't change what an already-unlocked reward says.
+  rewardText String
+
+  unlockedAt DateTime  @default(now())
+  expiresAt  DateTime?
+  redeemedAt DateTime?
+
+  @@index([userId, businessId])
+  @@index([schemeId])
 }

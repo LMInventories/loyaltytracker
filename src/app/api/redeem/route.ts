@@ -4,6 +4,7 @@ import { z } from "zod";
 import { auth } from "@/lib/auth";
 import { prisma } from "@/lib/prisma";
 import { isRateLimited } from "@/lib/rate-limit";
+import { expiresAtFor } from "@/lib/rewards";
 
 const requestSchema = z.object({
   code: z.string().min(1),
@@ -63,10 +64,10 @@ export async function POST(request: Request) {
     where: { userId_schemeId: { userId, schemeId: token.schemeId } },
   });
   const previousPoints = previousBalance?.points ?? 0;
-  const previousStamps = previousBalance?.stamps ?? 0;
+  const previousStampRewardsUnlocked = previousBalance?.stampRewardsUnlocked ?? 0;
 
-  const [balance] = await prisma.$transaction([
-    prisma.loyaltyBalance.upsert({
+  const { balance, unlockedRewards } = await prisma.$transaction(async (tx) => {
+    const balance = await tx.loyaltyBalance.upsert({
       where: { userId_schemeId: { userId, schemeId: token.schemeId } },
       create: {
         userId,
@@ -79,8 +80,9 @@ export async function POST(request: Request) {
         points: { increment: pointsDelta },
         stamps: { increment: stampsDelta },
       },
-    }),
-    prisma.loyaltyTransaction.create({
+    });
+
+    await tx.loyaltyTransaction.create({
       data: {
         userId,
         businessId: token.businessId,
@@ -89,31 +91,67 @@ export async function POST(request: Request) {
         pointsDelta,
         stampsDelta,
       },
-    }),
-  ]);
+    });
 
-  const unlockedRewards: string[] = [];
+    const expiresAt = expiresAtFor(token.scheme.rewardExpiryDays);
+    const unlockedRewards: { id: string; rewardText: string; expiresAt: Date | null }[] = [];
 
-  if (token.scheme.type === "POINTS") {
-    for (const tier of token.scheme.rewardTiers) {
-      if (tier.threshold > previousPoints && tier.threshold <= balance.points) {
-        unlockedRewards.push(tier.rewardText);
+    if (token.scheme.type === "POINTS") {
+      for (const tier of token.scheme.rewardTiers) {
+        if (tier.threshold > previousPoints && tier.threshold <= balance.points) {
+          const redemption = await tx.rewardRedemption.create({
+            data: {
+              userId,
+              businessId: token.businessId,
+              schemeId: token.schemeId,
+              rewardTierId: tier.id,
+              rewardText: tier.rewardText,
+              expiresAt,
+            },
+          });
+          unlockedRewards.push(redemption);
+        }
+      }
+    } else if (
+      token.scheme.type === "STAMPS" &&
+      token.scheme.stampsRequired &&
+      token.scheme.stampRewardText
+    ) {
+      const newRewardsUnlocked = Math.floor(balance.stamps / token.scheme.stampsRequired);
+      const newlyUnlocked = newRewardsUnlocked - previousStampRewardsUnlocked;
+
+      for (let i = 0; i < newlyUnlocked; i++) {
+        const redemption = await tx.rewardRedemption.create({
+          data: {
+            userId,
+            businessId: token.businessId,
+            schemeId: token.schemeId,
+            rewardText: token.scheme.stampRewardText,
+            expiresAt,
+          },
+        });
+        unlockedRewards.push(redemption);
+      }
+
+      if (newlyUnlocked > 0) {
+        await tx.loyaltyBalance.update({
+          where: { userId_schemeId: { userId, schemeId: token.schemeId } },
+          data: { stampRewardsUnlocked: newRewardsUnlocked },
+        });
       }
     }
-  } else if (
-    token.scheme.type === "STAMPS" &&
-    token.scheme.stampsRequired &&
-    token.scheme.stampRewardText &&
-    previousStamps < token.scheme.stampsRequired &&
-    balance.stamps >= token.scheme.stampsRequired
-  ) {
-    unlockedRewards.push(token.scheme.stampRewardText);
-  }
+
+    return { balance, unlockedRewards };
+  });
 
   return NextResponse.json({
     business: { name: token.business.name, slug: token.business.slug },
     scheme: { name: token.scheme.name, type: token.scheme.type },
     balance: { points: balance.points, stamps: balance.stamps },
-    unlockedRewards,
+    unlockedRewards: unlockedRewards.map((r) => ({
+      id: r.id,
+      rewardText: r.rewardText,
+      expiresAt: r.expiresAt,
+    })),
   });
 }

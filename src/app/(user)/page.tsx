@@ -1,9 +1,11 @@
 import Link from "next/link";
 
+import { auth } from "@/lib/auth";
 import { prisma } from "@/lib/prisma";
 import { BusinessLogo } from "@/components/shared/BusinessLogo";
 import { MapPinIcon } from "@/components/shared/MapPinIcon";
 import { mapsUrlFor } from "@/lib/maps";
+import { availableRewardWhere } from "@/lib/rewards";
 
 export default async function DirectoryPage({
   searchParams,
@@ -12,6 +14,13 @@ export default async function DirectoryPage({
 }) {
   const { q } = await searchParams;
   const query = q?.trim() ?? "";
+
+  const session = await auth();
+  const availableRewardCount = session?.user
+    ? await prisma.rewardRedemption.count({
+        where: { userId: session.user.id, ...availableRewardWhere() },
+      })
+    : 0;
 
   const businesses = await prisma.business.findMany({
     where: {
@@ -42,6 +51,19 @@ export default async function DirectoryPage({
           Browse the businesses on the scheme and see what you can earn.
         </p>
       </div>
+
+      {availableRewardCount > 0 && (
+        <Link
+          href="/me"
+          className="flex items-center justify-between border border-stamp bg-stamp-soft px-5 py-4 text-sm font-medium text-ink transition-colors hover:border-stamp/70"
+        >
+          <span>
+            ★ You have {availableRewardCount} reward{availableRewardCount === 1 ? "" : "s"} ready
+            to redeem
+          </span>
+          <span className="text-ink-soft">View →</span>
+        </Link>
+      )}
 
       <form className="flex gap-2">
         <input

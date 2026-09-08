@@ -3,6 +3,7 @@ import Link from "next/link";
 import { auth } from "@/lib/auth";
 import { prisma } from "@/lib/prisma";
 import { StampProgress, PointsProgress } from "@/components/shared/LoyaltyProgress";
+import { availableRewardWhere } from "@/lib/rewards";
 
 export default async function MyCardsPage() {
   const session = await auth();
@@ -15,6 +16,13 @@ export default async function MyCardsPage() {
     },
     orderBy: [{ business: { name: "asc" } }, { scheme: { name: "asc" } }],
   });
+
+  const rewardCounts = await prisma.rewardRedemption.groupBy({
+    by: ["businessId"],
+    where: { userId: session!.user.id, ...availableRewardWhere() },
+    _count: { _all: true },
+  });
+  const rewardCountByBusiness = new Map(rewardCounts.map((r) => [r.businessId, r._count._all]));
 
   return (
     <main className="mx-auto flex w-full max-w-2xl flex-1 flex-col gap-6 px-6 py-12">
@@ -32,9 +40,16 @@ export default async function MyCardsPage() {
                 href={`/me/${balance.businessId}`}
                 className="flex flex-col gap-3 border border-line bg-surface p-5 hover:border-stamp"
               >
-                <div>
-                  <p className="text-sm text-ink-soft">{balance.business.name}</p>
-                  <h2 className="font-medium text-ink">{balance.scheme.name}</h2>
+                <div className="flex items-center justify-between">
+                  <div>
+                    <p className="text-sm text-ink-soft">{balance.business.name}</p>
+                    <h2 className="font-medium text-ink">{balance.scheme.name}</h2>
+                  </div>
+                  {(rewardCountByBusiness.get(balance.businessId) ?? 0) > 0 && (
+                    <span className="rounded-full bg-stamp px-2.5 py-1 text-xs font-medium text-surface">
+                      {rewardCountByBusiness.get(balance.businessId)} to redeem
+                    </span>
+                  )}
                 </div>
                 {balance.scheme.type === "STAMPS" && balance.scheme.stampsRequired ? (
                   <StampProgress
