@@ -2,6 +2,7 @@ import Image from "next/image";
 
 import { auth } from "@/lib/auth";
 import { AdminNav } from "@/components/admin/AdminNav";
+import { ASSET_VERSION } from "@/lib/asset-version";
 
 export default async function AdminLayout({ children }: { children: React.ReactNode }) {
   const session = await auth();
@@ -12,7 +13,7 @@ export default async function AdminLayout({ children }: { children: React.ReactN
         <div className="mx-auto flex max-w-4xl items-center justify-between">
           <div className="flex items-center gap-2">
             <Image
-              src="/icons/icon-192.png"
+              src={`/icons/icon-192.png?v=${ASSET_VERSION}`}
               alt=""
               width={28}
               height={28}

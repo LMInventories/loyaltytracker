@@ -4,6 +4,7 @@ import "./globals.css";
 
 import { Providers } from "@/components/shared/Providers";
 import { RegisterServiceWorker } from "@/components/shared/RegisterServiceWorker";
+import { ASSET_VERSION } from "@/lib/asset-version";
 
 const displayRounded = Baloo_2({
   variable: "--font-display",
@@ -31,7 +32,7 @@ export const metadata: Metadata = {
     statusBarStyle: "default",
   },
   icons: {
-    apple: "/icons/apple-touch-icon.png",
+    apple: `/icons/apple-touch-icon.png?v=${ASSET_VERSION}`,
   },
 };
 

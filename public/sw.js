@@ -2,11 +2,13 @@ const CACHE_VERSION = "v3";
 const SHELL_CACHE = `hployalty-shell-${CACHE_VERSION}`;
 const RUNTIME_CACHE = `hployalty-runtime-${CACHE_VERSION}`;
 
+// The ?v= query must match ASSET_VERSION in src/lib/asset-version.ts — this
+// file is served as-is from /public and can't import that constant.
 const SHELL_ASSETS = [
   "/offline",
   "/manifest.webmanifest",
-  "/icons/icon-192.png",
-  "/icons/icon-512.png",
+  "/icons/icon-192.png?v=3",
+  "/icons/icon-512.png?v=3",
 ];
 
 self.addEventListener("install", (event) => {
