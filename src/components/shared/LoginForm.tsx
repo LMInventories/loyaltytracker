@@ -40,49 +40,65 @@ export function LoginForm({
   };
 
   return (
-    <form onSubmit={handleSubmit} className="flex w-full max-w-sm flex-col gap-4">
-      <div className="flex flex-col gap-1">
-        <label htmlFor="email" className="text-sm font-medium text-ink-soft">
-          Email
-        </label>
-        <input
-          id="email"
-          type="email"
-          required
-          value={email}
-          onChange={(e) => setEmail(e.target.value)}
-          className="rounded-sm border border-line bg-surface px-3 py-2 text-sm text-ink outline-none focus:border-stamp focus:ring-2 focus:ring-stamp/40"
-        />
-      </div>
-      <div className="flex flex-col gap-1">
-        <label htmlFor="password" className="text-sm font-medium text-ink-soft">
-          Password
-        </label>
-        <input
-          id="password"
-          type="password"
-          required
-          value={password}
-          onChange={(e) => setPassword(e.target.value)}
-          className="rounded-sm border border-line bg-surface px-3 py-2 text-sm text-ink outline-none focus:border-stamp focus:ring-2 focus:ring-stamp/40"
-        />
-      </div>
-      {error && <p className="text-sm text-red-700">{error}</p>}
+    <div className="flex w-full max-w-sm flex-col gap-4">
       <button
-        type="submit"
-        disabled={isSubmitting}
-        className="rounded-sm bg-stamp px-4 py-2 text-sm font-medium text-surface transition-colors hover:bg-stamp/90 disabled:opacity-50"
+        type="button"
+        onClick={() => signIn("google", { callbackUrl })}
+        className="flex items-center justify-center gap-2 rounded-sm border border-line bg-surface px-4 py-2 text-sm font-medium text-ink transition-colors hover:border-stamp"
       >
-        {isSubmitting ? "Signing in…" : "Sign in"}
+        Continue with Google
       </button>
-      {registerHref && (
-        <p className="text-center text-sm text-ink-soft">
-          No account?{" "}
-          <a href={registerHref} className="font-medium text-ink underline">
-            Register
-          </a>
-        </p>
-      )}
-    </form>
+
+      <div className="flex items-center gap-3 text-xs text-ink-soft">
+        <span className="h-px flex-1 bg-line" />
+        or
+        <span className="h-px flex-1 bg-line" />
+      </div>
+
+      <form onSubmit={handleSubmit} className="flex flex-col gap-4">
+        <div className="flex flex-col gap-1">
+          <label htmlFor="email" className="text-sm font-medium text-ink-soft">
+            Email
+          </label>
+          <input
+            id="email"
+            type="email"
+            required
+            value={email}
+            onChange={(e) => setEmail(e.target.value)}
+            className="rounded-sm border border-line bg-surface px-3 py-2 text-sm text-ink outline-none focus:border-stamp focus:ring-2 focus:ring-stamp/40"
+          />
+        </div>
+        <div className="flex flex-col gap-1">
+          <label htmlFor="password" className="text-sm font-medium text-ink-soft">
+            Password
+          </label>
+          <input
+            id="password"
+            type="password"
+            required
+            value={password}
+            onChange={(e) => setPassword(e.target.value)}
+            className="rounded-sm border border-line bg-surface px-3 py-2 text-sm text-ink outline-none focus:border-stamp focus:ring-2 focus:ring-stamp/40"
+          />
+        </div>
+        {error && <p className="text-sm text-red-700">{error}</p>}
+        <button
+          type="submit"
+          disabled={isSubmitting}
+          className="rounded-sm bg-stamp px-4 py-2 text-sm font-medium text-surface transition-colors hover:bg-stamp/90 disabled:opacity-50"
+        >
+          {isSubmitting ? "Signing in…" : "Sign in"}
+        </button>
+        {registerHref && (
+          <p className="text-center text-sm text-ink-soft">
+            No account?{" "}
+            <a href={registerHref} className="font-medium text-ink underline">
+              Register
+            </a>
+          </p>
+        )}
+      </form>
+    </div>
   );
 }

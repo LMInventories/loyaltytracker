@@ -22,23 +22,48 @@ enum SchemeType {
 }
 
 model User {
-  id           String    @id @default(cuid())
-  email        String    @unique
-  passwordHash String
-  name         String?
-  role         Role      @default(CUSTOMER)
-  createdAt    DateTime  @default(now())
-  updatedAt    DateTime  @updatedAt
+  id            String    @id @default(cuid())
+  email         String    @unique
+  // Null for accounts created via an OAuth provider only (e.g. Google).
+  passwordHash  String?
+  emailVerified DateTime?
+  image         String?
+  name          String?
+  role          Role      @default(CUSTOMER)
+  createdAt     DateTime  @default(now())
+  updatedAt     DateTime  @updatedAt
 
   // Set only for BUSINESS_ADMIN users (v1: one admin per business)
   businessId   String?
   business     Business? @relation("BusinessAdmins", fields: [businessId], references: [id])
 
+  accounts     Account[]
   balances     LoyaltyBalance[]
   transactions LoyaltyTransaction[]
   redeemedTokens QrToken[]           @relation("RedeemedBy")
 
   @@index([businessId])
+}
+
+/// OAuth provider links (e.g. Google), used by the Auth.js Prisma adapter.
+model Account {
+  id                String  @id @default(cuid())
+  userId            String
+  type              String
+  provider          String
+  providerAccountId String
+  refresh_token     String? @db.Text
+  access_token      String? @db.Text
+  expires_at        Int?
+  token_type        String?
+  scope             String?
+  id_token          String? @db.Text
+  session_state     String?
+
+  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@unique([provider, providerAccountId])
+  @@index([userId])
 }
 
 model Business {

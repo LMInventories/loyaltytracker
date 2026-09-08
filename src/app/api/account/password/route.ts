@@ -31,6 +31,13 @@ export async function POST(request: Request) {
   }
 
   const user = await prisma.user.findUniqueOrThrow({ where: { id: session.user.id } });
+  if (!user.passwordHash) {
+    return NextResponse.json(
+      { error: "This account signs in with Google and has no password to change" },
+      { status: 400 },
+    );
+  }
+
   const isValid = await bcrypt.compare(parsed.data.currentPassword, user.passwordHash);
   if (!isValid) {
     return NextResponse.json({ error: "Current password is incorrect" }, { status: 400 });
