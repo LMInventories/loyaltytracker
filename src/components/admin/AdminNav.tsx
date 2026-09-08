@@ -10,6 +10,7 @@ const NAV_LINKS = [
   { href: "/admin/dashboard", label: "Dashboard" },
   { href: "/admin/schemes", label: "Schemes" },
   { href: "/admin/offers", label: "Offers" },
+  { href: "/admin/customers", label: "Customers" },
   { href: "/admin/qr", label: "Scan to earn" },
   { href: "/admin/settings", label: "Settings" },
 ];
