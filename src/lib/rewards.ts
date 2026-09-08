@@ -36,3 +36,18 @@ export function expiresAtFor(rewardExpiryDays: number | null, from: Date = new D
   if (!rewardExpiryDays) return null;
   return new Date(from.getTime() + rewardExpiryDays * 24 * 60 * 60 * 1000);
 }
+
+/**
+ * A SpecialOffer is only customer-visible while active AND inside its own
+ * startsAt/endsAt window (both optional — null on either side means no
+ * bound on that side).
+ */
+export function activeOfferWhere(now: Date = new Date()) {
+  return {
+    isActive: true,
+    AND: [
+      { OR: [{ startsAt: null }, { startsAt: { lte: now } }] },
+      { OR: [{ endsAt: null }, { endsAt: { gte: now } }] },
+    ],
+  };
+}

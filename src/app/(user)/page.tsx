@@ -6,7 +6,7 @@ import { BusinessLogo } from "@/components/shared/BusinessLogo";
 import { MapPinIcon } from "@/components/shared/MapPinIcon";
 import { SortSelect } from "@/components/shared/SortSelect";
 import { mapsUrlFor } from "@/lib/maps";
-import { availableRewardWhere } from "@/lib/rewards";
+import { activeOfferWhere, availableRewardWhere } from "@/lib/rewards";
 import { formatMiles, milesBetween } from "@/lib/distance";
 
 const SORT_VALUES = ["name", "distance", "recent"] as const;
@@ -54,7 +54,7 @@ export default async function DirectoryPage({
     },
     include: {
       schemes: { where: { isActive: true }, select: { id: true, name: true } },
-      offers: { where: { isActive: true }, select: { id: true, title: true } },
+      offers: { where: activeOfferWhere(), select: { id: true, title: true } },
     },
   });
 

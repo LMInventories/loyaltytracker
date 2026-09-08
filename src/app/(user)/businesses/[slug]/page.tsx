@@ -7,7 +7,7 @@ import { StampProgress, PointsProgress } from "@/components/shared/LoyaltyProgre
 import { BusinessLogo } from "@/components/shared/BusinessLogo";
 import { MapPinIcon } from "@/components/shared/MapPinIcon";
 import { mapsUrlFor } from "@/lib/maps";
-import { availableRewardWhere } from "@/lib/rewards";
+import { activeOfferWhere, availableRewardWhere } from "@/lib/rewards";
 
 export default async function BusinessDetailPage({
   params,
@@ -24,7 +24,7 @@ export default async function BusinessDetailPage({
         where: { isActive: true },
         include: { rewardTiers: { orderBy: { threshold: "asc" } } },
       },
-      offers: { where: { isActive: true }, orderBy: { createdAt: "desc" } },
+      offers: { where: activeOfferWhere(), orderBy: { createdAt: "desc" } },
     },
   });
 
