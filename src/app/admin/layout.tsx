@@ -2,7 +2,7 @@ import Image from "next/image";
 
 import { auth } from "@/lib/auth";
 import { AdminNav } from "@/components/admin/AdminNav";
-import { ASSET_VERSION } from "@/lib/asset-version";
+import logo from "@/assets/logo.png";
 
 export default async function AdminLayout({ children }: { children: React.ReactNode }) {
   const session = await auth();
@@ -12,14 +12,8 @@ export default async function AdminLayout({ children }: { children: React.ReactN
       <header className="border-b border-zinc-200 bg-white px-6 py-3">
         <div className="mx-auto flex max-w-4xl items-center justify-between">
           <div className="flex items-center gap-2">
-            <Image
-              src={`/icons/icon-192.png?v=${ASSET_VERSION}`}
-              alt=""
-              width={28}
-              height={28}
-              className="rounded-md"
-            />
-            <span className="text-sm font-semibold text-zinc-900">Local Loyalty Admin</span>
+            <Image src={logo} alt="Local Loyalty" className="h-7 w-auto" priority />
+            <span className="text-sm font-semibold text-zinc-900">Admin</span>
           </div>
           {session?.user && <AdminNav />}
         </div>
