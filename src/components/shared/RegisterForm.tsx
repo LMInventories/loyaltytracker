@@ -49,6 +49,14 @@ export function RegisterForm({ callbackUrl }: { callbackUrl: string }) {
 
   return (
     <div className="flex w-full max-w-sm flex-col gap-4">
+      <p className="text-center text-xs text-ink-soft">
+        By creating an account you agree to our{" "}
+        <a href="/privacy" className="underline">
+          Privacy Policy
+        </a>
+        .
+      </p>
+
       <button
         type="button"
         onClick={() => signIn("google", { callbackUrl })}
@@ -111,13 +119,6 @@ export function RegisterForm({ callbackUrl }: { callbackUrl: string }) {
         >
           {isSubmitting ? "Creating account…" : "Create account"}
         </button>
-        <p className="text-center text-xs text-ink-soft">
-          By creating an account you agree to our{" "}
-          <a href="/privacy" className="underline">
-            Privacy Policy
-          </a>
-          .
-        </p>
         <p className="text-center text-sm text-ink-soft">
           Already have an account?{" "}
           <a

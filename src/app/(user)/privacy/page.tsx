@@ -7,7 +7,7 @@ export default function PrivacyPolicyPage() {
     <main className="mx-auto flex w-full max-w-2xl flex-1 flex-col gap-8 px-6 py-12">
       <div className="flex flex-col gap-2">
         <h1 className="font-display text-2xl font-semibold text-ink">Privacy Policy</h1>
-        <p className="text-sm text-ink-soft">Last updated 8 September 2026</p>
+        <p className="text-sm text-ink-soft">Last updated 9 September 2026</p>
       </div>
 
       <div className="flex flex-col gap-6 text-ink-soft [&_h2]:font-display [&_h2]:text-lg [&_h2]:font-semibold [&_h2]:text-ink [&_p]:leading-relaxed [&_li]:leading-relaxed">
@@ -44,10 +44,27 @@ export default function PrivacyPolicyPage() {
         <section className="flex flex-col gap-2">
           <h2>How we use it</h2>
           <ul className="list-disc pl-5">
-            <li>To create and maintain your account and sign you in.</li>
-            <li>To record and display your loyalty points, stamps, and rewards.</li>
-            <li>To let a business you’ve interacted with see your loyalty activity with them.</li>
-            <li>To keep the service secure — for example, rate-limiting to prevent abuse.</li>
+            <li>
+              To create and maintain your account and sign you in — necessary to provide the
+              service you’ve signed up for.
+            </li>
+            <li>
+              To record and display your loyalty points, stamps, and rewards — necessary to
+              provide the service.
+            </li>
+            <li>
+              To let a business you’ve interacted with see your loyalty activity with them —
+              necessary to provide the service.
+            </li>
+            <li>
+              To send you service emails (a welcome email, a reward-unlocked email, a
+              reward-expiring reminder) — necessary to provide the service. These aren’t marketing
+              and you can still turn them off in Account settings.
+            </li>
+            <li>
+              To keep the service secure — for example, rate-limiting to prevent abuse — based on
+              our legitimate interest in keeping the platform safe and reliable.
+            </li>
           </ul>
         </section>
 
@@ -64,6 +81,15 @@ export default function PrivacyPolicyPage() {
             policy. We use Google sign-in only to authenticate you — we don’t request access to
             your Gmail, Drive, or other Google data.
           </p>
+          <p>
+            We also use a small number of service providers to run Local Loyalty: Railway (hosts
+            our database and servers) and Resend (sends our service emails). These providers only
+            process your data to help us run the service — they don’t use it for their own
+            purposes. Some of these providers may process data outside the UK/EEA (for example, in
+            the US). Where that happens, we rely on legal safeguards such as Standard Contractual
+            Clauses or the provider’s own equivalent UK-approved transfer mechanism to protect your
+            data.
+          </p>
         </section>
 
         <section className="flex flex-col gap-2">
@@ -75,10 +101,39 @@ export default function PrivacyPolicyPage() {
         </section>
 
         <section className="flex flex-col gap-2">
-          <h2>Data retention and deletion</h2>
+          <h2>Data retention</h2>
           <p>
-            We keep your account and loyalty history for as long as your account is active. To
-            request deletion of your account and associated data, contact us at the email below.
+            We keep your account and loyalty history for as long as your account is active. If you
+            ask us to delete your account, we’ll delete or anonymise your personal information
+            (your name, email, and login credentials) without unreasonable delay — we keep a
+            minimal, de-identified record of past scans and redemptions where we need to for fraud
+            prevention or to meet a legal obligation, but it will no longer identify you.
+          </p>
+        </section>
+
+        <section className="flex flex-col gap-2">
+          <h2>Your rights</h2>
+          <p>Under UK data protection law, you have the right to:</p>
+          <ul className="list-disc pl-5">
+            <li>Ask for a copy of the personal data we hold about you (access).</li>
+            <li>Ask us to correct inaccurate or incomplete data (rectification).</li>
+            <li>Ask us to delete your data, subject to the limits above (erasure).</li>
+            <li>Ask us to give you your data in a portable format (portability).</li>
+            <li>Object to, or ask us to restrict, certain processing.</li>
+          </ul>
+          <p>
+            To exercise any of these rights, email us at the address below. If you’re unhappy with
+            how we’ve handled your data, you also have the right to complain to the UK’s data
+            protection regulator, the{" "}
+            <a
+              href="https://ico.org.uk/make-a-complaint/"
+              className="text-ink underline"
+              target="_blank"
+              rel="noopener noreferrer"
+            >
+              Information Commissioner’s Office (ICO)
+            </a>
+            .
           </p>
         </section>
 
