@@ -2,6 +2,7 @@
 
 import { useState } from "react";
 
+import { QrScanner } from "@/components/shared/QrScanner";
 import { SlideToRedeem } from "@/components/shared/SlideToRedeem";
 import { expiryLabel } from "@/lib/rewards";
 
@@ -12,16 +13,20 @@ export function RewardCard({
   reward: { id: string; rewardText: string; expiresAt: string | null };
   businessName: string;
 }) {
-  const [phase, setPhase] = useState<"available" | "redeeming" | "redeemed" | "error">(
-    "available",
-  );
+  const [phase, setPhase] = useState<
+    "available" | "confirming" | "submitting" | "redeemed" | "error"
+  >("available");
   const [error, setError] = useState<string | null>(null);
 
-  const handleConfirm = () => {
-    setPhase("redeeming");
+  const handleScan = (code: string) => {
+    setPhase("submitting");
     setError(null);
 
-    fetch(`/api/rewards/${reward.id}/redeem`, { method: "POST" })
+    fetch(`/api/rewards/${reward.id}/redeem`, {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ code }),
+    })
       .then(async (res) => {
         if (!res.ok) {
           const body = await res.json().catch(() => null);
@@ -34,6 +39,36 @@ export function RewardCard({
         setPhase("error");
       });
   };
+
+  if (phase === "confirming" || phase === "submitting" || phase === "error") {
+    return (
+      <div className="flex flex-col gap-3 border border-line bg-surface p-5">
+        <div>
+          <p className="font-medium text-ink">{reward.rewardText}</p>
+          <p className="text-sm text-ink-soft">{businessName}</p>
+        </div>
+        <QrScanner onScan={handleScan} paused={phase !== "confirming"} />
+        <p className="text-center text-sm text-ink-soft">
+          {phase === "submitting" ? "Checking code…" : "Scan the code on the counter to confirm."}
+        </p>
+        {phase === "error" && (
+          <div className="flex flex-col items-center gap-2 text-center">
+            <p className="text-sm text-red-700">{error}</p>
+            <button
+              type="button"
+              onClick={() => {
+                setPhase("confirming");
+                setError(null);
+              }}
+              className="rounded-sm border border-line px-4 py-2 text-sm text-ink hover:border-stamp"
+            >
+              Scan again
+            </button>
+          </div>
+        )}
+      </div>
+    );
+  }
 
   if (phase === "redeemed") {
     return (
@@ -54,8 +89,7 @@ export function RewardCard({
         <p className="font-medium text-ink">{reward.rewardText}</p>
         <p className="text-sm text-ink-soft">{expiryLabel(reward.expiresAt)}</p>
       </div>
-      <SlideToRedeem onConfirm={handleConfirm} disabled={phase === "redeeming"} />
-      {error && <p className="text-sm text-red-700">{error}</p>}
+      <SlideToRedeem onConfirm={() => setPhase("confirming")} />
     </div>
   );
 }

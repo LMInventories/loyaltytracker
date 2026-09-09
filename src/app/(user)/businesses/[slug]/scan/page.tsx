@@ -3,7 +3,8 @@
 import { useState } from "react";
 import Link from "next/link";
 import { useParams } from "next/navigation";
-import { Scanner } from "@yudiel/react-qr-scanner";
+
+import { QrScanner } from "@/components/shared/QrScanner";
 
 type Result = {
   business: { name: string; slug: string };
@@ -20,9 +21,8 @@ export default function ScanPage() {
   const [error, setError] = useState<string | null>(null);
   const [result, setResult] = useState<Result | null>(null);
 
-  const handleScan = async (codes: { rawValue: string }[]) => {
-    const code = codes[0]?.rawValue;
-    if (!code || status !== "scanning") return;
+  const handleScan = async (code: string) => {
+    if (status !== "scanning") return;
 
     setStatus("submitting");
 
@@ -82,13 +82,7 @@ export default function ScanPage() {
         </div>
       ) : (
         <>
-          <div className="overflow-hidden border border-line">
-            <Scanner
-              onScan={handleScan}
-              formats={["qr_code"]}
-              paused={status !== "scanning"}
-            />
-          </div>
+          <QrScanner onScan={handleScan} paused={status !== "scanning"} />
           <p className="text-center text-sm text-ink-soft">
             {status === "submitting"
               ? "Checking code…"
