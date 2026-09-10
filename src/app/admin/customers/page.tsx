@@ -1,5 +1,6 @@
 import { auth } from "@/lib/auth";
 import { prisma } from "@/lib/prisma";
+import { GrantRewardForm } from "@/components/admin/GrantRewardForm";
 
 export default async function AdminCustomersPage({
   searchParams,
@@ -29,7 +30,7 @@ export default async function AdminCustomersPage({
     orderBy: { updatedAt: "desc" },
   });
 
-  const [lastScans, earnedCounts, redeemedCounts] = await Promise.all([
+  const [lastScans, earnedCounts, redeemedCounts, schemes] = await Promise.all([
     prisma.loyaltyTransaction.groupBy({
       by: ["userId"],
       where: { businessId },
@@ -45,11 +46,23 @@ export default async function AdminCustomersPage({
       where: { businessId, redeemedAt: { not: null } },
       _count: { _all: true },
     }),
+    prisma.loyaltyScheme.findMany({
+      where: { businessId, isActive: true },
+      include: { rewardTiers: { orderBy: { threshold: "asc" } } },
+      orderBy: { name: "asc" },
+    }),
   ]);
 
   const lastScanByUser = new Map(lastScans.map((r) => [r.userId, r._max.createdAt]));
   const earnedByUser = new Map(earnedCounts.map((r) => [r.userId, r._count._all]));
   const redeemedByUser = new Map(redeemedCounts.map((r) => [r.userId, r._count._all]));
+
+  // Only schemes with an actual reward configured can be granted manually —
+  // a POINTS scheme needs at least one tier, a STAMPS scheme needs its
+  // single reward text set.
+  const grantableSchemes = schemes.filter((scheme) =>
+    scheme.type === "POINTS" ? scheme.rewardTiers.length > 0 : Boolean(scheme.stampRewardText),
+  );
 
   // Group balances by customer — one customer can have balances across
   // multiple schemes at this business.
@@ -125,6 +138,9 @@ export default async function AdminCustomersPage({
                   <span>
                     {earned} reward{earned === 1 ? "" : "s"} earned, {redeemed} redeemed
                   </span>
+                </div>
+                <div className="mt-1">
+                  <GrantRewardForm customerId={user.id} schemes={grantableSchemes} />
                 </div>
               </li>
             );
