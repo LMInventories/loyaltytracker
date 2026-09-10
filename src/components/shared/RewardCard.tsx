@@ -17,6 +17,7 @@ export function RewardCard({
     "available" | "confirming" | "submitting" | "redeemed" | "error"
   >("available");
   const [error, setError] = useState<string | null>(null);
+  const [redeemedAt, setRedeemedAt] = useState<Date | null>(null);
 
   const handleScan = (code: string) => {
     setPhase("submitting");
@@ -32,6 +33,8 @@ export function RewardCard({
           const body = await res.json().catch(() => null);
           throw new Error(body?.error ?? "Couldn't redeem this reward. Try again.");
         }
+        const data = await res.json();
+        setRedeemedAt(new Date(data.redeemedAt));
         setPhase("redeemed");
       })
       .catch((err: Error) => {
@@ -79,6 +82,24 @@ export function RewardCard({
         <p className="font-display text-xl font-semibold text-ink">{reward.rewardText}</p>
         <p className="text-sm text-ink-soft">{businessName}</p>
         <p className="mt-1 text-sm font-medium text-stamp">✓ Redeemed</p>
+        {redeemedAt && (
+          <div className="mt-2 w-full rounded-sm border border-stamp/40 bg-surface px-4 py-3">
+            <p className="text-2xl font-semibold tabular-nums text-ink">
+              {redeemedAt.toLocaleTimeString(undefined, {
+                hour: "numeric",
+                minute: "2-digit",
+              })}
+            </p>
+            <p className="text-sm text-ink-soft">
+              {redeemedAt.toLocaleDateString(undefined, {
+                weekday: "long",
+                day: "numeric",
+                month: "long",
+                year: "numeric",
+              })}
+            </p>
+          </div>
+        )}
       </div>
     );
   }
