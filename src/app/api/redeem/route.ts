@@ -6,10 +6,13 @@ import { prisma } from "@/lib/prisma";
 import { isRateLimited } from "@/lib/rate-limit";
 import { expiresAtFor } from "@/lib/rewards";
 import { rewardUnlockedEmailHtml, sendEmailIfOptedIn } from "@/lib/email";
+import { rewardUnlockedPushPayload, sendPushIfSubscribed } from "@/lib/push";
 
 const requestSchema = z.object({
   code: z.string().min(1),
 });
+
+const SCAN_COOLDOWN_MS = 45_000;
 
 export async function POST(request: Request) {
   const session = await auth();
@@ -33,6 +36,27 @@ export async function POST(request: Request) {
   const { code } = parsed.data;
   const userId = session.user.id;
   const now = new Date();
+
+  // Anti-fraud cooldown: a customer can't bank a scan again for 45s after
+  // their last one, regardless of business/scheme. This limits legitimate
+  // multi-item purchases to one stamp per visit, but cuts down on repeated
+  // fraudulent scans of the same counter code.
+  const lastTransaction = await prisma.loyaltyTransaction.findFirst({
+    where: { userId },
+    orderBy: { createdAt: "desc" },
+    select: { createdAt: true },
+  });
+
+  if (lastTransaction) {
+    const elapsedMs = now.getTime() - lastTransaction.createdAt.getTime();
+    if (elapsedMs < SCAN_COOLDOWN_MS) {
+      const waitSeconds = Math.ceil((SCAN_COOLDOWN_MS - elapsedMs) / 1000);
+      return NextResponse.json(
+        { error: `Please wait ${waitSeconds}s before scanning again` },
+        { status: 429 },
+      );
+    }
+  }
 
   // Atomic single-use claim: only one concurrent request can flip
   // redeemedAt from null, so a double-scan is rejected here.
@@ -149,12 +173,16 @@ export async function POST(request: Request) {
     return { balance, unlockedRewards };
   });
 
-  // Fire-and-forget: never delay the scan response waiting on an email send.
+  // Fire-and-forget: never delay the scan response waiting on an email/push send.
   for (const reward of unlockedRewards) {
     void sendEmailIfOptedIn(userId, {
       subject: `You've unlocked a reward at ${token.business.name}`,
       html: rewardUnlockedEmailHtml(token.business.name, reward.rewardText, reward.expiresAt),
     });
+    void sendPushIfSubscribed(
+      userId,
+      rewardUnlockedPushPayload(token.business.name, reward.rewardText),
+    );
   }
 
   return NextResponse.json({

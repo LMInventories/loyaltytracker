@@ -1,35 +1,16 @@
 import { prisma } from "@/lib/prisma";
-
-function daysAgo(days: number) {
-  return new Date(Date.now() - days * 24 * 60 * 60 * 1000);
-}
+import { redemptionCounts, scanCounts, topBusinessesByScans } from "@/lib/analytics";
 
 export default async function PlatformAnalyticsPage() {
-  const [
-    totalBusinesses,
-    activeBusinesses,
-    distinctCustomers,
-    scans7d,
-    scans30d,
-    redemptions7d,
-    redemptions30d,
-    topBusinessGroups,
-  ] = await Promise.all([
-    prisma.business.count(),
-    prisma.business.count({ where: { isActive: true } }),
-    prisma.loyaltyBalance.findMany({ distinct: ["userId"], select: { userId: true } }),
-    prisma.loyaltyTransaction.count({ where: { createdAt: { gte: daysAgo(7) } } }),
-    prisma.loyaltyTransaction.count({ where: { createdAt: { gte: daysAgo(30) } } }),
-    prisma.rewardRedemption.count({ where: { redeemedAt: { gte: daysAgo(7) } } }),
-    prisma.rewardRedemption.count({ where: { redeemedAt: { gte: daysAgo(30) } } }),
-    prisma.loyaltyTransaction.groupBy({
-      by: ["businessId"],
-      where: { createdAt: { gte: daysAgo(7) } },
-      _count: { _all: true },
-      orderBy: { _count: { businessId: "desc" } },
-      take: 10,
-    }),
-  ]);
+  const [totalBusinesses, activeBusinesses, distinctCustomers, scans, redemptions, topBusinessGroups] =
+    await Promise.all([
+      prisma.business.count(),
+      prisma.business.count({ where: { isActive: true } }),
+      prisma.loyaltyBalance.findMany({ distinct: ["userId"], select: { userId: true } }),
+      scanCounts(),
+      redemptionCounts(),
+      topBusinessesByScans({ days: 7, take: 10 }),
+    ]);
 
   const topBusinesses = await prisma.business.findMany({
     where: { id: { in: topBusinessGroups.map((g) => g.businessId) } },
@@ -41,10 +22,10 @@ export default async function PlatformAnalyticsPage() {
     { label: "Total businesses", value: totalBusinesses },
     { label: "Active businesses", value: activeBusinesses },
     { label: "Total customers", value: distinctCustomers.length },
-    { label: "Scans (7d)", value: scans7d },
-    { label: "Scans (30d)", value: scans30d },
-    { label: "Redemptions (7d)", value: redemptions7d },
-    { label: "Redemptions (30d)", value: redemptions30d },
+    { label: "Scans (7d)", value: scans.d7 },
+    { label: "Scans (30d)", value: scans.d30 },
+    { label: "Redemptions (7d)", value: redemptions.d7 },
+    { label: "Redemptions (30d)", value: redemptions.d30 },
   ];
 
   return (

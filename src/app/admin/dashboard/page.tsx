@@ -2,10 +2,7 @@ import Link from "next/link";
 
 import { auth } from "@/lib/auth";
 import { prisma } from "@/lib/prisma";
-
-function sevenDaysAgo() {
-  return new Date(Date.now() - 7 * 24 * 60 * 60 * 1000);
-}
+import { daysAgo } from "@/lib/analytics";
 
 export default async function AdminDashboardPage() {
   const session = await auth();
@@ -17,7 +14,7 @@ export default async function AdminDashboardPage() {
       prisma.loyaltyScheme.count({ where: { businessId, isActive: true } }),
       prisma.specialOffer.count({ where: { businessId, isActive: true } }),
       prisma.loyaltyTransaction.count({
-        where: { businessId, createdAt: { gte: sevenDaysAgo() } },
+        where: { businessId, createdAt: { gte: daysAgo(7) } },
       }),
       prisma.loyaltyTransaction.findMany({
         where: { businessId },

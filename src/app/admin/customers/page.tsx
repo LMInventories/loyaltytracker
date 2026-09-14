@@ -1,16 +1,26 @@
+import Link from "next/link";
+
 import { auth } from "@/lib/auth";
 import { prisma } from "@/lib/prisma";
+import { daysAgo } from "@/lib/analytics";
 import { GrantRewardForm } from "@/components/admin/GrantRewardForm";
+
+const WINBACK_THRESHOLD_DAYS = Number(process.env.WINBACK_THRESHOLD_DAYS ?? 30);
+
+function daysSince(date: Date) {
+  return Math.floor((Date.now() - date.getTime()) / (24 * 60 * 60 * 1000));
+}
 
 export default async function AdminCustomersPage({
   searchParams,
 }: {
-  searchParams: Promise<{ q?: string }>;
+  searchParams: Promise<{ q?: string; view?: string }>;
 }) {
   const session = await auth();
   const businessId = session!.user.businessId!;
-  const { q } = await searchParams;
+  const { q, view } = await searchParams;
   const query = q?.trim() ?? "";
+  const showLapsedOnly = view === "lapsed";
 
   const balances = await prisma.loyaltyBalance.findMany({
     where: {
@@ -78,31 +88,64 @@ export default async function AdminCustomersPage({
       customerMap.set(balance.userId, { user: balance.user, balances: [balance] });
     }
   }
-  const customers = [...customerMap.values()];
+  const allCustomers = [...customerMap.values()];
+
+  const cutoff = daysAgo(WINBACK_THRESHOLD_DAYS);
+  const customers = showLapsedOnly
+    ? allCustomers
+        .filter((c) => {
+          const lastScan = lastScanByUser.get(c.user.id);
+          return !lastScan || lastScan < cutoff;
+        })
+        .sort((a, b) => {
+          const aTime = lastScanByUser.get(a.user.id)?.getTime() ?? 0;
+          const bTime = lastScanByUser.get(b.user.id)?.getTime() ?? 0;
+          return aTime - bTime;
+        })
+    : allCustomers;
 
   return (
     <main className="mx-auto flex w-full max-w-2xl flex-1 flex-col gap-6 px-6 py-10">
       <h1 className="text-xl font-semibold text-zinc-900">Customers</h1>
 
-      <form className="flex gap-2">
-        <input
-          type="text"
-          name="q"
-          defaultValue={query}
-          placeholder="Search by name or email…"
-          className="w-full max-w-sm rounded-md border border-zinc-300 px-3 py-2 text-sm outline-none focus:border-zinc-500 focus:ring-2 focus:ring-zinc-300"
-        />
-        <button
-          type="submit"
-          className="rounded-md border border-zinc-300 px-4 py-2 text-sm font-medium text-zinc-700 hover:bg-zinc-50"
+      <div className="flex flex-wrap items-center justify-between gap-3">
+        <form className="flex gap-2">
+          <input
+            type="text"
+            name="q"
+            defaultValue={query}
+            placeholder="Search by name or email…"
+            className="w-full max-w-sm rounded-md border border-zinc-300 px-3 py-2 text-sm outline-none focus:border-zinc-500 focus:ring-2 focus:ring-zinc-300"
+          />
+          {showLapsedOnly && <input type="hidden" name="view" value="lapsed" />}
+          <button
+            type="submit"
+            className="rounded-md border border-zinc-300 px-4 py-2 text-sm font-medium text-zinc-700 hover:bg-zinc-50"
+          >
+            Search
+          </button>
+        </form>
+
+        <Link
+          href={{
+            pathname: "/admin/customers",
+            query: { ...(query ? { q: query } : {}), ...(showLapsedOnly ? {} : { view: "lapsed" }) },
+          }}
+          className="text-sm font-medium text-zinc-700 underline hover:text-zinc-900"
         >
-          Search
-        </button>
-      </form>
+          {showLapsedOnly
+            ? "Show all customers"
+            : `Show customers lapsed ${WINBACK_THRESHOLD_DAYS}+ days`}
+        </Link>
+      </div>
 
       {customers.length === 0 ? (
         <p className="text-sm text-zinc-500">
-          {query ? `No customers match "${query}".` : "No customers yet."}
+          {query
+            ? `No customers match "${query}".`
+            : showLapsedOnly
+              ? `No customers have gone ${WINBACK_THRESHOLD_DAYS}+ days without a scan.`
+              : "No customers yet."}
         </p>
       ) : (
         <ul className="flex flex-col divide-y divide-zinc-200 border border-zinc-200 bg-white">
@@ -116,13 +159,15 @@ export default async function AdminCustomersPage({
                 <div className="flex items-center justify-between">
                   <p className="font-medium text-zinc-900">{user.name ?? user.email}</p>
                   <p className="text-zinc-500">
-                    {lastScan
-                      ? `Last scan ${lastScan.toLocaleDateString("en-GB", {
-                          day: "numeric",
-                          month: "short",
-                          year: "numeric",
-                        })}`
-                      : "No scans yet"}
+                    {!lastScan
+                      ? "No scans yet"
+                      : showLapsedOnly
+                        ? `${daysSince(lastScan)} days since last scan`
+                        : `Last scan ${lastScan.toLocaleDateString("en-GB", {
+                            day: "numeric",
+                            month: "short",
+                            year: "numeric",
+                          })}`}
                   </p>
                 </div>
                 <p className="text-zinc-500">{user.email}</p>

@@ -3,13 +3,14 @@ import { prisma } from "@/lib/prisma";
 import { ChangePasswordForm } from "@/components/shared/ChangePasswordForm";
 import { PostcodeForm } from "@/components/shared/PostcodeForm";
 import { EmailNotificationsForm } from "@/components/shared/EmailNotificationsForm";
+import { PushNotificationsForm } from "@/components/shared/PushNotificationsForm";
 
 export default async function AccountPage() {
   const session = await auth();
 
   const user = await prisma.user.findUniqueOrThrow({
     where: { id: session!.user.id },
-    select: { postcode: true, emailNotificationsEnabled: true },
+    select: { postcode: true, emailNotificationsEnabled: true, winbackNotificationsEnabled: true },
   });
 
   return (
@@ -27,6 +28,11 @@ export default async function AccountPage() {
       <section className="flex flex-col gap-4">
         <h2 className="font-medium text-ink">Email notifications</h2>
         <EmailNotificationsForm currentValue={user.emailNotificationsEnabled} />
+      </section>
+
+      <section className="flex flex-col gap-4">
+        <h2 className="font-medium text-ink">Push notifications</h2>
+        <PushNotificationsForm winbackNotificationsEnabled={user.winbackNotificationsEnabled} />
       </section>
 
       <section className="flex flex-col gap-4">

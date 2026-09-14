@@ -36,6 +36,10 @@ model User {
   latitude      Float?
   longitude     Float?
   emailNotificationsEnabled Boolean @default(true)
+  // Independent of push subscription existence — lets a customer stay
+  // subscribed to reward/offer pushes while opting out of win-back nudges
+  // specifically. Only meaningful if they also have a PushSubscription.
+  winbackNotificationsEnabled Boolean @default(true)
   createdAt     DateTime  @default(now())
   updatedAt     DateTime  @updatedAt
 
@@ -48,8 +52,37 @@ model User {
   transactions LoyaltyTransaction[]
   redeemedTokens QrToken[]           @relation("RedeemedBy")
   rewardRedemptions RewardRedemption[]
+  pushSubscriptions PushSubscription[]
 
   @@index([businessId])
+}
+
+/// A browser push endpoint the user has subscribed with. Its mere existence
+/// IS the user's push opt-in — there is no separate enabled flag (unlike
+/// email, push consent is inherently per-device/per-subscription).
+model PushSubscription {
+  id        String   @id @default(cuid())
+  userId    String
+  user      User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  endpoint  String   @unique
+  p256dh    String
+  auth      String
+  userAgent String?
+  createdAt DateTime @default(now())
+
+  @@index([userId])
+}
+
+/// Tracks the last time a lapsed customer was sent a win-back push for a
+/// given business, so scripts/send-winback-nudges.ts doesn't re-nudge them
+/// every time it runs inside the same threshold window.
+model WinbackNudge {
+  id         String   @id @default(cuid())
+  userId     String
+  businessId String
+  sentAt     DateTime @default(now())
+
+  @@unique([userId, businessId])
 }
 
 /// OAuth provider links (e.g. Google), used by the Auth.js Prisma adapter.

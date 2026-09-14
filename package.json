@@ -11,7 +11,8 @@
     "db:migrate": "prisma migrate dev",
     "onboard:business": "tsx --env-file=.env scripts/create-business.ts",
     "onboard:platform-admin": "tsx --env-file=.env scripts/create-platform-admin.ts",
-    "send-expiry-reminders": "tsx --env-file=.env scripts/send-expiry-reminders.ts"
+    "send-expiry-reminders": "tsx --env-file=.env scripts/send-expiry-reminders.ts",
+    "send-winback-nudges": "tsx --env-file=.env scripts/send-winback-nudges.ts"
   },
   "dependencies": {
     "@auth/prisma-adapter": "^2.11.3",
@@ -27,6 +28,7 @@
     "react": "19.2.8",
     "react-dom": "19.2.8",
     "resend": "^6.26.0",
+    "web-push": "^3.6.7",
     "zod": "^4.5.4"
   },
   "devDependencies": {
@@ -35,6 +37,7 @@
     "@types/pg": "^8.23.1",
     "@types/react": "^19",
     "@types/react-dom": "^19",
+    "@types/web-push": "^3.6.4",
     "eslint": "^9",
     "eslint-config-next": "16.3.4",
     "tailwindcss": "^4",

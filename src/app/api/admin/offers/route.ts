@@ -3,6 +3,7 @@ import { z } from "zod";
 
 import { requireBusinessAdmin } from "@/lib/admin";
 import { prisma } from "@/lib/prisma";
+import { offerLivePushPayload, sendPushIfSubscribed } from "@/lib/push";
 
 const createSchema = z.object({
   title: z.string().min(1),
@@ -23,16 +24,28 @@ export async function POST(request: Request) {
   }
   const data = parsed.data;
 
-  const offer = await prisma.specialOffer.create({
-    data: {
-      businessId: admin.businessId,
-      title: data.title,
-      description: data.description || null,
-      imageUrl: data.imageUrl || null,
-      startsAt: data.startsAt ? new Date(data.startsAt) : null,
-      endsAt: data.endsAt ? new Date(data.endsAt) : null,
-    },
-  });
+  const [offer, business] = await Promise.all([
+    prisma.specialOffer.create({
+      data: {
+        businessId: admin.businessId,
+        title: data.title,
+        description: data.description || null,
+        imageUrl: data.imageUrl || null,
+        startsAt: data.startsAt ? new Date(data.startsAt) : null,
+        endsAt: data.endsAt ? new Date(data.endsAt) : null,
+      },
+    }),
+    prisma.business.findUniqueOrThrow({ where: { id: admin.businessId }, select: { name: true } }),
+  ]);
+
+  // Fire-and-forget: notify existing customers of this business that a new
+  // offer went live. Fires once, on creation only — not on later edits.
+  void prisma.loyaltyBalance
+    .findMany({ where: { businessId: admin.businessId }, distinct: ["userId"], select: { userId: true } })
+    .then((balances) => {
+      const payload = offerLivePushPayload(business.name, offer.title);
+      return Promise.all(balances.map(({ userId }) => sendPushIfSubscribed(userId, payload)));
+    });
 
   return NextResponse.json({ offer }, { status: 201 });
 }

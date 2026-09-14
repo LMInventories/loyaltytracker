@@ -51,3 +51,17 @@ export function activeOfferWhere(now: Date = new Date()) {
     ],
   };
 }
+
+/**
+ * A SpecialOffer that's active but hasn't started yet (startsAt in the
+ * future). Shown separately from activeOfferWhere so a customer who taps a
+ * "new offer" push before its start date sees it, labeled with when it
+ * starts, rather than finding nothing.
+ */
+export function upcomingOfferWhere(now: Date = new Date()) {
+  return {
+    isActive: true,
+    startsAt: { gt: now },
+    OR: [{ endsAt: null }, { endsAt: { gte: now } }],
+  };
+}

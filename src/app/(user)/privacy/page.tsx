@@ -34,6 +34,12 @@ export default function PrivacyPolicyPage() {
               scanned a code with, your points/stamp balance at each one, and a history of each
               scan and reward you’ve earned or redeemed.
             </li>
+            <li>
+              <strong className="text-ink">Push notification subscription:</strong> only if you
+              explicitly turn push notifications on in Account settings, your browser gives us a
+              subscription endpoint and encryption keys so we can deliver a notification. We don’t
+              receive this unless you opt in, and turning notifications off deletes it.
+            </li>
           </ul>
           <p>
             We don’t collect payment card details, government ID numbers, or precise location
@@ -62,6 +68,13 @@ export default function PrivacyPolicyPage() {
               and you can still turn them off in Account settings.
             </li>
             <li>
+              To send you push notifications (a reward you’ve unlocked, a new offer from a
+              business you’ve visited, or a reminder if you haven’t visited in a while) — only if
+              you’ve explicitly turned this on in Account settings. You can turn off push
+              notifications generally, or just the “haven’t visited in a while” reminder, at any
+              time.
+            </li>
+            <li>
               To keep the service secure — for example, rate-limiting to prevent abuse — based on
               our legitimate interest in keeping the platform safe and reliable.
             </li>
@@ -83,7 +96,10 @@ export default function PrivacyPolicyPage() {
           </p>
           <p>
             We also use a small number of service providers to run Local Loyalty: Railway (hosts
-            our database and servers) and Resend (sends our service emails). These providers only
+            our database and servers), Resend (sends our service emails), and — only if you opt in
+            to push notifications — your browser’s own push service (for example Google’s Firebase
+            Cloud Messaging, Mozilla’s push service, or Apple’s push service, depending on your
+            browser) to deliver the notification. These providers only
             process your data to help us run the service — they don’t use it for their own
             purposes. Some of these providers may process data outside the UK/EEA (for example, in
             the US). Where that happens, we rely on legal safeguards such as Standard Contractual

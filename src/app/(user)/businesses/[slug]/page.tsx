@@ -7,7 +7,7 @@ import { StampProgress, PointsProgress } from "@/components/shared/LoyaltyProgre
 import { BusinessLogo } from "@/components/shared/BusinessLogo";
 import { MapPinIcon } from "@/components/shared/MapPinIcon";
 import { mapsUrlFor } from "@/lib/maps";
-import { activeOfferWhere, availableRewardWhere } from "@/lib/rewards";
+import { activeOfferWhere, availableRewardWhere, upcomingOfferWhere } from "@/lib/rewards";
 
 export default async function BusinessDetailPage({
   params,
@@ -24,7 +24,10 @@ export default async function BusinessDetailPage({
         where: { isActive: true },
         include: { rewardTiers: { orderBy: { threshold: "asc" } } },
       },
-      offers: { where: activeOfferWhere(), orderBy: { createdAt: "desc" } },
+      offers: {
+        where: { OR: [activeOfferWhere(), upcomingOfferWhere()] },
+        orderBy: { createdAt: "desc" },
+      },
     },
   });
 
@@ -133,17 +136,32 @@ export default async function BusinessDetailPage({
             Special offers
           </h2>
           <ul className="flex flex-col gap-4">
-            {business.offers.map((offer) => (
-              <li
-                key={offer.id}
-                className="flex flex-col gap-1 border border-line bg-awning-soft p-5"
-              >
-                <h3 className="font-medium text-ink">{offer.title}</h3>
-                {offer.description && (
-                  <p className="text-sm text-ink-soft">{offer.description}</p>
-                )}
-              </li>
-            ))}
+            {business.offers.map((offer) => {
+              const isUpcoming = offer.startsAt !== null && offer.startsAt > new Date();
+
+              return (
+                <li
+                  key={offer.id}
+                  className="flex flex-col gap-1 border border-line bg-awning-soft p-5"
+                >
+                  <div className="flex items-center justify-between gap-2">
+                    <h3 className="font-medium text-ink">{offer.title}</h3>
+                    {isUpcoming && (
+                      <span className="shrink-0 text-xs font-medium text-ink-soft">
+                        Starts{" "}
+                        {offer.startsAt!.toLocaleDateString("en-GB", {
+                          day: "numeric",
+                          month: "short",
+                        })}
+                      </span>
+                    )}
+                  </div>
+                  {offer.description && (
+                    <p className="text-sm text-ink-soft">{offer.description}</p>
+                  )}
+                </li>
+              );
+            })}
           </ul>
         </section>
       )}
