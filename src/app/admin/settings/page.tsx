@@ -2,6 +2,7 @@ import { auth } from "@/lib/auth";
 import { prisma } from "@/lib/prisma";
 import { BusinessSettingsForm } from "@/components/admin/BusinessSettingsForm";
 import { StaffChangePasswordForm } from "@/components/shared/StaffChangePasswordForm";
+import { ThemeToggle } from "@/components/shared/ThemeToggle";
 
 export default async function AdminSettingsPage() {
   const session = await auth();
@@ -29,6 +30,11 @@ export default async function AdminSettingsPage() {
       <section className="flex flex-col gap-4">
         <h2 className="font-medium text-zinc-900 dark:text-zinc-100">Change password</h2>
         <StaffChangePasswordForm />
+      </section>
+
+      <section className="flex flex-col gap-4">
+        <h2 className="font-medium text-zinc-900 dark:text-zinc-100">Appearance</h2>
+        <ThemeToggle />
       </section>
     </main>
   );

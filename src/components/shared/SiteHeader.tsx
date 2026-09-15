@@ -3,7 +3,6 @@ import Link from "next/link";
 
 import { auth } from "@/lib/auth";
 import { SignOutButton } from "@/components/shared/SignOutButton";
-import { ThemeToggle } from "@/components/shared/ThemeToggle";
 import logo from "@/assets/logo.png";
 
 export async function SiteHeader() {
@@ -17,24 +16,21 @@ export async function SiteHeader() {
             <Image src={logo} alt="Local Loyalty" className="h-9 w-auto" priority />
           </span>
         </Link>
-        <div className="flex items-center gap-4">
-          <ThemeToggle />
-          {session?.user ? (
-            <div className="flex items-center gap-4">
-              <span className="text-sm text-ink-soft">
-                {session.user.name ?? session.user.email}
-              </span>
-              <SignOutButton />
-            </div>
-          ) : (
-            <Link
-              href="/login"
-              className="text-sm text-ink-soft underline decoration-line underline-offset-4 hover:text-ink"
-            >
-              Sign in
-            </Link>
-          )}
-        </div>
+        {session?.user ? (
+          <div className="flex items-center gap-4">
+            <span className="text-sm text-ink-soft">
+              {session.user.name ?? session.user.email}
+            </span>
+            <SignOutButton />
+          </div>
+        ) : (
+          <Link
+            href="/login"
+            className="text-sm text-ink-soft underline decoration-line underline-offset-4 hover:text-ink"
+          >
+            Sign in
+          </Link>
+        )}
       </div>
     </header>
   );

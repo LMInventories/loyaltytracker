@@ -2,7 +2,6 @@ import Image from "next/image";
 
 import { auth } from "@/lib/auth";
 import { AdminNav } from "@/components/admin/AdminNav";
-import { ThemeToggle } from "@/components/shared/ThemeToggle";
 import logo from "@/assets/logo.png";
 
 export default async function AdminLayout({ children }: { children: React.ReactNode }) {
@@ -18,10 +17,7 @@ export default async function AdminLayout({ children }: { children: React.ReactN
             </span>
             <span className="text-sm font-semibold text-zinc-900 dark:text-zinc-100">Admin</span>
           </div>
-          <div className="flex items-center gap-3">
-            <ThemeToggle />
-            {session?.user && <AdminNav />}
-          </div>
+          {session?.user && <AdminNav />}
         </div>
       </header>
       <div className="flex flex-1 flex-col">{children}</div>

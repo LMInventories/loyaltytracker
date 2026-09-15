@@ -4,6 +4,7 @@ import { ChangePasswordForm } from "@/components/shared/ChangePasswordForm";
 import { PostcodeForm } from "@/components/shared/PostcodeForm";
 import { EmailNotificationsForm } from "@/components/shared/EmailNotificationsForm";
 import { PushNotificationsForm } from "@/components/shared/PushNotificationsForm";
+import { ThemeToggle } from "@/components/shared/ThemeToggle";
 
 export default async function AccountPage() {
   const session = await auth();
@@ -19,6 +20,11 @@ export default async function AccountPage() {
         <h1 className="font-display text-2xl font-semibold text-ink">Account</h1>
         <p className="mt-1 text-ink-soft">{session!.user.email}</p>
       </div>
+
+      <section className="flex flex-col gap-4">
+        <h2 className="font-medium text-ink">Appearance</h2>
+        <ThemeToggle />
+      </section>
 
       <section className="flex flex-col gap-4">
         <h2 className="font-medium text-ink">Your postcode</h2>
