@@ -68,7 +68,7 @@ export function GrantRewardForm({
       <button
         type="button"
         onClick={() => setIsOpen(true)}
-        className="w-fit text-sm font-medium text-zinc-700 underline hover:text-zinc-900"
+        className="w-fit text-sm font-medium text-zinc-700 dark:text-zinc-300 underline hover:text-zinc-900 dark:hover:text-zinc-100"
       >
         Grant reward
       </button>
@@ -76,7 +76,7 @@ export function GrantRewardForm({
   }
 
   if (success) {
-    return <p className="text-sm text-zinc-600">Reward granted — {selectedScheme.name}.</p>;
+    return <p className="text-sm text-zinc-600 dark:text-zinc-400">Reward granted — {selectedScheme.name}.</p>;
   }
 
   return (
@@ -84,7 +84,7 @@ export function GrantRewardForm({
       <select
         value={schemeId}
         onChange={(e) => handleSchemeChange(e.target.value)}
-        className="rounded-md border border-zinc-300 px-2 py-1 text-sm outline-none focus:border-zinc-500"
+        className="rounded-md border border-zinc-300 dark:border-zinc-700 bg-white dark:bg-zinc-900 text-zinc-900 dark:text-zinc-100 px-2 py-1 text-sm outline-none focus:border-zinc-500"
       >
         {schemes.map((scheme) => (
           <option key={scheme.id} value={scheme.id}>
@@ -97,7 +97,7 @@ export function GrantRewardForm({
         <select
           value={rewardTierId}
           onChange={(e) => setRewardTierId(e.target.value)}
-          className="rounded-md border border-zinc-300 px-2 py-1 text-sm outline-none focus:border-zinc-500"
+          className="rounded-md border border-zinc-300 dark:border-zinc-700 bg-white dark:bg-zinc-900 text-zinc-900 dark:text-zinc-100 px-2 py-1 text-sm outline-none focus:border-zinc-500"
         >
           {selectedScheme.rewardTiers.map((tier) => (
             <option key={tier.id} value={tier.id}>
@@ -106,20 +106,20 @@ export function GrantRewardForm({
           ))}
         </select>
       ) : (
-        <span className="text-sm text-zinc-600">{selectedScheme.stampRewardText}</span>
+        <span className="text-sm text-zinc-600 dark:text-zinc-400">{selectedScheme.stampRewardText}</span>
       )}
 
       <button
         type="submit"
         disabled={isSubmitting}
-        className="rounded-md bg-zinc-900 px-3 py-1 text-sm font-medium text-white hover:bg-zinc-700 disabled:opacity-50"
+        className="rounded-md bg-zinc-900 px-3 py-1 text-sm font-medium text-white hover:bg-zinc-700 dark:bg-zinc-100 dark:text-zinc-900 dark:hover:bg-zinc-300 disabled:opacity-50"
       >
         {isSubmitting ? "Granting…" : "Confirm"}
       </button>
       <button
         type="button"
         onClick={() => setIsOpen(false)}
-        className="text-sm text-zinc-500 hover:text-zinc-700"
+        className="text-sm text-zinc-500 dark:text-zinc-400 hover:text-zinc-700 dark:text-zinc-300"
       >
         Cancel
       </button>

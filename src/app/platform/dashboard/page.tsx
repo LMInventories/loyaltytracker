@@ -11,26 +11,26 @@ export default async function PlatformDashboardPage() {
   return (
     <main className="mx-auto flex w-full max-w-4xl flex-1 flex-col gap-8 px-6 py-10">
       <div className="flex items-center justify-between">
-        <h1 className="text-xl font-semibold text-zinc-900">Businesses</h1>
+        <h1 className="text-xl font-semibold text-zinc-900 dark:text-zinc-100">Businesses</h1>
         <Link
           href="/platform/businesses/new"
-          className="rounded-md bg-zinc-900 px-4 py-2 text-sm font-medium text-white hover:bg-zinc-700"
+          className="rounded-md bg-zinc-900 px-4 py-2 text-sm font-medium text-white hover:bg-zinc-700 dark:bg-zinc-100 dark:text-zinc-900 dark:hover:bg-zinc-300"
         >
           Add business
         </Link>
       </div>
 
       {businesses.length === 0 ? (
-        <p className="text-sm text-zinc-500">No businesses yet.</p>
+        <p className="text-sm text-zinc-500 dark:text-zinc-400">No businesses yet.</p>
       ) : (
-        <ul className="flex flex-col divide-y divide-zinc-200 border border-zinc-200 bg-white">
+        <ul className="flex flex-col divide-y divide-zinc-200 dark:divide-zinc-800 border border-zinc-200 dark:border-zinc-800 bg-white dark:bg-zinc-900">
           {businesses.map((business) => (
             <li key={business.id} className="flex items-center justify-between px-4 py-3 text-sm">
               <div>
-                <p className="font-medium text-zinc-900">{business.name}</p>
-                <p className="text-zinc-500">/businesses/{business.slug}</p>
+                <p className="font-medium text-zinc-900 dark:text-zinc-100">{business.name}</p>
+                <p className="text-zinc-500 dark:text-zinc-400">/businesses/{business.slug}</p>
               </div>
-              <div className="text-right text-zinc-500">
+              <div className="text-right text-zinc-500 dark:text-zinc-400">
                 <p>{business.admins[0]?.email ?? "No admin login"}</p>
                 <p>
                   {business.schemes.length} scheme{business.schemes.length === 1 ? "" : "s"} ·{" "}

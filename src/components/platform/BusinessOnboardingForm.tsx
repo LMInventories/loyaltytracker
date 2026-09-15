@@ -78,9 +78,9 @@ export function BusinessOnboardingForm() {
   return (
     <form onSubmit={handleSubmit} className="flex max-w-md flex-col gap-6">
       <fieldset className="flex flex-col gap-4">
-        <legend className="text-sm font-medium text-zinc-900">Business</legend>
+        <legend className="text-sm font-medium text-zinc-900 dark:text-zinc-100">Business</legend>
         <div className="flex flex-col gap-1">
-          <label htmlFor="name" className="text-sm font-medium text-zinc-700">
+          <label htmlFor="name" className="text-sm font-medium text-zinc-700 dark:text-zinc-300">
             Business name
           </label>
           <input
@@ -88,14 +88,14 @@ export function BusinessOnboardingForm() {
             required
             value={name}
             onChange={(e) => handleNameChange(e.target.value)}
-            className="rounded-md border border-zinc-300 px-3 py-2 text-sm outline-none focus:border-zinc-500 focus:ring-2 focus:ring-zinc-300"
+            className="rounded-md border border-zinc-300 dark:border-zinc-700 bg-white dark:bg-zinc-900 text-zinc-900 dark:text-zinc-100 px-3 py-2 text-sm outline-none focus:border-zinc-500 focus:ring-2 focus:ring-zinc-300 dark:focus:ring-zinc-700"
           />
         </div>
         <div className="flex flex-col gap-1">
-          <label htmlFor="slug" className="text-sm font-medium text-zinc-700">
+          <label htmlFor="slug" className="text-sm font-medium text-zinc-700 dark:text-zinc-300">
             Page URL
           </label>
-          <div className="flex items-center gap-1 text-sm text-zinc-500">
+          <div className="flex items-center gap-1 text-sm text-zinc-500 dark:text-zinc-400">
             <span>/businesses/</span>
             <input
               id="slug"
@@ -105,12 +105,12 @@ export function BusinessOnboardingForm() {
                 setSlugTouched(true);
                 setSlug(e.target.value);
               }}
-              className="flex-1 rounded-md border border-zinc-300 px-3 py-2 text-sm text-zinc-900 outline-none focus:border-zinc-500 focus:ring-2 focus:ring-zinc-300"
+              className="flex-1 rounded-md border border-zinc-300 dark:border-zinc-700 bg-white dark:bg-zinc-900 text-zinc-900 dark:text-zinc-100 px-3 py-2 text-sm outline-none focus:border-zinc-500 focus:ring-2 focus:ring-zinc-300 dark:focus:ring-zinc-700"
             />
           </div>
         </div>
         <div className="flex flex-col gap-1">
-          <label htmlFor="category" className="text-sm font-medium text-zinc-700">
+          <label htmlFor="category" className="text-sm font-medium text-zinc-700 dark:text-zinc-300">
             Category
           </label>
           <input
@@ -118,22 +118,22 @@ export function BusinessOnboardingForm() {
             value={category}
             onChange={(e) => setCategory(e.target.value)}
             placeholder="e.g. Cafe"
-            className="rounded-md border border-zinc-300 px-3 py-2 text-sm outline-none focus:border-zinc-500 focus:ring-2 focus:ring-zinc-300"
+            className="rounded-md border border-zinc-300 dark:border-zinc-700 bg-white dark:bg-zinc-900 text-zinc-900 dark:text-zinc-100 px-3 py-2 text-sm outline-none focus:border-zinc-500 focus:ring-2 focus:ring-zinc-300 dark:focus:ring-zinc-700"
           />
         </div>
         <div className="flex flex-col gap-1">
-          <label htmlFor="address" className="text-sm font-medium text-zinc-700">
+          <label htmlFor="address" className="text-sm font-medium text-zinc-700 dark:text-zinc-300">
             Address
           </label>
           <input
             id="address"
             value={address}
             onChange={(e) => setAddress(e.target.value)}
-            className="rounded-md border border-zinc-300 px-3 py-2 text-sm outline-none focus:border-zinc-500 focus:ring-2 focus:ring-zinc-300"
+            className="rounded-md border border-zinc-300 dark:border-zinc-700 bg-white dark:bg-zinc-900 text-zinc-900 dark:text-zinc-100 px-3 py-2 text-sm outline-none focus:border-zinc-500 focus:ring-2 focus:ring-zinc-300 dark:focus:ring-zinc-700"
           />
         </div>
         <div className="flex flex-col gap-1">
-          <label htmlFor="postcode" className="text-sm font-medium text-zinc-700">
+          <label htmlFor="postcode" className="text-sm font-medium text-zinc-700 dark:text-zinc-300">
             Postcode
           </label>
           <input
@@ -141,18 +141,18 @@ export function BusinessOnboardingForm() {
             value={postcode}
             onChange={(e) => setPostcode(e.target.value)}
             placeholder="e.g. SW1A 1AA"
-            className="w-32 rounded-md border border-zinc-300 px-3 py-2 text-sm outline-none focus:border-zinc-500 focus:ring-2 focus:ring-zinc-300"
+            className="w-32 rounded-md border border-zinc-300 dark:border-zinc-700 bg-white dark:bg-zinc-900 text-zinc-900 dark:text-zinc-100 px-3 py-2 text-sm outline-none focus:border-zinc-500 focus:ring-2 focus:ring-zinc-300 dark:focus:ring-zinc-700"
           />
-          <p className="text-xs text-zinc-500">
+          <p className="text-xs text-zinc-500 dark:text-zinc-400">
             Optional, but needed for the business to show up in “closest to me” sorting.
           </p>
         </div>
       </fieldset>
 
       <fieldset className="flex flex-col gap-4">
-        <legend className="text-sm font-medium text-zinc-900">Admin login</legend>
+        <legend className="text-sm font-medium text-zinc-900 dark:text-zinc-100">Admin login</legend>
         <div className="flex flex-col gap-1">
-          <label htmlFor="adminEmail" className="text-sm font-medium text-zinc-700">
+          <label htmlFor="adminEmail" className="text-sm font-medium text-zinc-700 dark:text-zinc-300">
             Email
           </label>
           <input
@@ -161,11 +161,11 @@ export function BusinessOnboardingForm() {
             required
             value={adminEmail}
             onChange={(e) => setAdminEmail(e.target.value)}
-            className="rounded-md border border-zinc-300 px-3 py-2 text-sm outline-none focus:border-zinc-500 focus:ring-2 focus:ring-zinc-300"
+            className="rounded-md border border-zinc-300 dark:border-zinc-700 bg-white dark:bg-zinc-900 text-zinc-900 dark:text-zinc-100 px-3 py-2 text-sm outline-none focus:border-zinc-500 focus:ring-2 focus:ring-zinc-300 dark:focus:ring-zinc-700"
           />
         </div>
         <div className="flex flex-col gap-1">
-          <label htmlFor="adminPassword" className="text-sm font-medium text-zinc-700">
+          <label htmlFor="adminPassword" className="text-sm font-medium text-zinc-700 dark:text-zinc-300">
             Password
           </label>
           <input
@@ -175,18 +175,18 @@ export function BusinessOnboardingForm() {
             minLength={8}
             value={adminPassword}
             onChange={(e) => setAdminPassword(e.target.value)}
-            className="rounded-md border border-zinc-300 px-3 py-2 text-sm outline-none focus:border-zinc-500 focus:ring-2 focus:ring-zinc-300"
+            className="rounded-md border border-zinc-300 dark:border-zinc-700 bg-white dark:bg-zinc-900 text-zinc-900 dark:text-zinc-100 px-3 py-2 text-sm outline-none focus:border-zinc-500 focus:ring-2 focus:ring-zinc-300 dark:focus:ring-zinc-700"
           />
-          <p className="text-xs text-zinc-500">
+          <p className="text-xs text-zinc-500 dark:text-zinc-400">
             At least 8 characters. Shown in plain text so you can relay it to the business.
           </p>
         </div>
       </fieldset>
 
       <fieldset className="flex flex-col gap-4">
-        <legend className="text-sm font-medium text-zinc-900">First loyalty scheme</legend>
+        <legend className="text-sm font-medium text-zinc-900 dark:text-zinc-100">First loyalty scheme</legend>
         <div className="flex flex-col gap-1">
-          <label htmlFor="schemeName" className="text-sm font-medium text-zinc-700">
+          <label htmlFor="schemeName" className="text-sm font-medium text-zinc-700 dark:text-zinc-300">
             Name
           </label>
           <input
@@ -195,13 +195,13 @@ export function BusinessOnboardingForm() {
             value={schemeName}
             onChange={(e) => setSchemeName(e.target.value)}
             placeholder="e.g. Coffee Stamps"
-            className="rounded-md border border-zinc-300 px-3 py-2 text-sm outline-none focus:border-zinc-500 focus:ring-2 focus:ring-zinc-300"
+            className="rounded-md border border-zinc-300 dark:border-zinc-700 bg-white dark:bg-zinc-900 text-zinc-900 dark:text-zinc-100 px-3 py-2 text-sm outline-none focus:border-zinc-500 focus:ring-2 focus:ring-zinc-300 dark:focus:ring-zinc-700"
           />
         </div>
 
         <div className="flex flex-col gap-2">
-          <span className="text-sm font-medium text-zinc-700">Type</span>
-          <div className="flex gap-4 text-sm text-zinc-700">
+          <span className="text-sm font-medium text-zinc-700 dark:text-zinc-300">Type</span>
+          <div className="flex gap-4 text-sm text-zinc-700 dark:text-zinc-300">
             <label className="flex items-center gap-2">
               <input
                 type="radio"
@@ -223,7 +223,7 @@ export function BusinessOnboardingForm() {
 
         {schemeType === "POINTS" ? (
           <div className="flex flex-col gap-1">
-            <label htmlFor="pointsPerScan" className="text-sm font-medium text-zinc-700">
+            <label htmlFor="pointsPerScan" className="text-sm font-medium text-zinc-700 dark:text-zinc-300">
               Points per scan
             </label>
             <input
@@ -233,13 +233,13 @@ export function BusinessOnboardingForm() {
               required
               value={pointsPerScan}
               onChange={(e) => setPointsPerScan(e.target.value)}
-              className="w-32 rounded-md border border-zinc-300 px-3 py-2 text-sm outline-none focus:border-zinc-500 focus:ring-2 focus:ring-zinc-300"
+              className="w-32 rounded-md border border-zinc-300 dark:border-zinc-700 bg-white dark:bg-zinc-900 text-zinc-900 dark:text-zinc-100 px-3 py-2 text-sm outline-none focus:border-zinc-500 focus:ring-2 focus:ring-zinc-300 dark:focus:ring-zinc-700"
             />
           </div>
         ) : (
           <>
             <div className="flex flex-col gap-1">
-              <label htmlFor="stampsRequired" className="text-sm font-medium text-zinc-700">
+              <label htmlFor="stampsRequired" className="text-sm font-medium text-zinc-700 dark:text-zinc-300">
                 Stamps required
               </label>
               <input
@@ -249,11 +249,11 @@ export function BusinessOnboardingForm() {
                 required
                 value={stampsRequired}
                 onChange={(e) => setStampsRequired(e.target.value)}
-                className="w-32 rounded-md border border-zinc-300 px-3 py-2 text-sm outline-none focus:border-zinc-500 focus:ring-2 focus:ring-zinc-300"
+                className="w-32 rounded-md border border-zinc-300 dark:border-zinc-700 bg-white dark:bg-zinc-900 text-zinc-900 dark:text-zinc-100 px-3 py-2 text-sm outline-none focus:border-zinc-500 focus:ring-2 focus:ring-zinc-300 dark:focus:ring-zinc-700"
               />
             </div>
             <div className="flex flex-col gap-1">
-              <label htmlFor="stampRewardText" className="text-sm font-medium text-zinc-700">
+              <label htmlFor="stampRewardText" className="text-sm font-medium text-zinc-700 dark:text-zinc-300">
                 Reward
               </label>
               <input
@@ -262,7 +262,7 @@ export function BusinessOnboardingForm() {
                 value={stampRewardText}
                 onChange={(e) => setStampRewardText(e.target.value)}
                 placeholder="e.g. One free coffee"
-                className="rounded-md border border-zinc-300 px-3 py-2 text-sm outline-none focus:border-zinc-500 focus:ring-2 focus:ring-zinc-300"
+                className="rounded-md border border-zinc-300 dark:border-zinc-700 bg-white dark:bg-zinc-900 text-zinc-900 dark:text-zinc-100 px-3 py-2 text-sm outline-none focus:border-zinc-500 focus:ring-2 focus:ring-zinc-300 dark:focus:ring-zinc-700"
               />
             </div>
           </>
@@ -273,7 +273,7 @@ export function BusinessOnboardingForm() {
       <button
         type="submit"
         disabled={isSubmitting}
-        className="w-fit rounded-md bg-zinc-900 px-4 py-2 text-sm font-medium text-white hover:bg-zinc-700 disabled:opacity-50"
+        className="w-fit rounded-md bg-zinc-900 px-4 py-2 text-sm font-medium text-white hover:bg-zinc-700 dark:bg-zinc-100 dark:text-zinc-900 dark:hover:bg-zinc-300 disabled:opacity-50"
       >
         {isSubmitting ? "Creating…" : "Create business"}
       </button>

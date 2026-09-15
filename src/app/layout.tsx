@@ -1,5 +1,6 @@
 import type { Metadata, Viewport } from "next";
 import { Baloo_2, Public_Sans, IBM_Plex_Mono } from "next/font/google";
+import Script from "next/script";
 import "./globals.css";
 
 import { Providers } from "@/components/shared/Providers";
@@ -49,6 +50,19 @@ export default function RootLayout({ children }: LayoutProps<"/">) {
       lang="en"
       className={`${displayRounded.variable} ${bodySans.variable} ${numberMono.variable} h-full antialiased`}
     >
+      <head>
+        <Script id="theme-init" strategy="beforeInteractive">
+          {`(function () {
+            try {
+              var pref = localStorage.getItem("theme-preference");
+              var resolved = pref === "light" || pref === "dark"
+                ? pref
+                : (window.matchMedia("(prefers-color-scheme: dark)").matches ? "dark" : "light");
+              document.documentElement.setAttribute("data-theme", resolved);
+            } catch (e) {}
+          })();`}
+        </Script>
+      </head>
       <body className="min-h-full flex flex-col">
         <Providers>{children}</Providers>
         <RegisterServiceWorker />

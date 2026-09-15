@@ -45,7 +45,7 @@ export function SchemeCreateForm() {
   return (
     <form onSubmit={handleSubmit} className="flex max-w-md flex-col gap-4">
       <div className="flex flex-col gap-1">
-        <label htmlFor="name" className="text-sm font-medium text-zinc-700">
+        <label htmlFor="name" className="text-sm font-medium text-zinc-700 dark:text-zinc-300">
           Name
         </label>
         <input
@@ -54,13 +54,13 @@ export function SchemeCreateForm() {
           value={name}
           onChange={(e) => setName(e.target.value)}
           placeholder="e.g. Coffee Stamps"
-          className="rounded-md border border-zinc-300 px-3 py-2 text-sm outline-none focus:border-zinc-500 focus:ring-2 focus:ring-zinc-300"
+          className="rounded-md border border-zinc-300 dark:border-zinc-700 bg-white dark:bg-zinc-900 text-zinc-900 dark:text-zinc-100 px-3 py-2 text-sm outline-none focus:border-zinc-500 focus:ring-2 focus:ring-zinc-300 dark:focus:ring-zinc-700"
         />
       </div>
 
       <fieldset className="flex flex-col gap-2">
-        <legend className="text-sm font-medium text-zinc-700">Type</legend>
-        <div className="flex gap-4 text-sm text-zinc-700">
+        <legend className="text-sm font-medium text-zinc-700 dark:text-zinc-300">Type</legend>
+        <div className="flex gap-4 text-sm text-zinc-700 dark:text-zinc-300">
           <label className="flex items-center gap-2">
             <input
               type="radio"
@@ -82,7 +82,7 @@ export function SchemeCreateForm() {
 
       {type === "POINTS" ? (
         <div className="flex flex-col gap-1">
-          <label htmlFor="pointsPerScan" className="text-sm font-medium text-zinc-700">
+          <label htmlFor="pointsPerScan" className="text-sm font-medium text-zinc-700 dark:text-zinc-300">
             Points per scan
           </label>
           <input
@@ -92,9 +92,9 @@ export function SchemeCreateForm() {
             required
             value={pointsPerScan}
             onChange={(e) => setPointsPerScan(e.target.value)}
-            className="w-32 rounded-md border border-zinc-300 px-3 py-2 text-sm outline-none focus:border-zinc-500 focus:ring-2 focus:ring-zinc-300"
+            className="w-32 rounded-md border border-zinc-300 dark:border-zinc-700 bg-white dark:bg-zinc-900 text-zinc-900 dark:text-zinc-100 px-3 py-2 text-sm outline-none focus:border-zinc-500 focus:ring-2 focus:ring-zinc-300 dark:focus:ring-zinc-700"
           />
-          <p className="text-xs text-zinc-500">
+          <p className="text-xs text-zinc-500 dark:text-zinc-400">
             You can add reward tiers (e.g. 100 pts = free item) after creating
             the scheme.
           </p>
@@ -102,7 +102,7 @@ export function SchemeCreateForm() {
       ) : (
         <>
           <div className="flex flex-col gap-1">
-            <label htmlFor="stampsRequired" className="text-sm font-medium text-zinc-700">
+            <label htmlFor="stampsRequired" className="text-sm font-medium text-zinc-700 dark:text-zinc-300">
               Stamps required
             </label>
             <input
@@ -112,11 +112,11 @@ export function SchemeCreateForm() {
               required
               value={stampsRequired}
               onChange={(e) => setStampsRequired(e.target.value)}
-              className="w-32 rounded-md border border-zinc-300 px-3 py-2 text-sm outline-none focus:border-zinc-500 focus:ring-2 focus:ring-zinc-300"
+              className="w-32 rounded-md border border-zinc-300 dark:border-zinc-700 bg-white dark:bg-zinc-900 text-zinc-900 dark:text-zinc-100 px-3 py-2 text-sm outline-none focus:border-zinc-500 focus:ring-2 focus:ring-zinc-300 dark:focus:ring-zinc-700"
             />
           </div>
           <div className="flex flex-col gap-1">
-            <label htmlFor="stampRewardText" className="text-sm font-medium text-zinc-700">
+            <label htmlFor="stampRewardText" className="text-sm font-medium text-zinc-700 dark:text-zinc-300">
               Reward
             </label>
             <input
@@ -125,14 +125,14 @@ export function SchemeCreateForm() {
               value={stampRewardText}
               onChange={(e) => setStampRewardText(e.target.value)}
               placeholder="e.g. One free coffee"
-              className="rounded-md border border-zinc-300 px-3 py-2 text-sm outline-none focus:border-zinc-500 focus:ring-2 focus:ring-zinc-300"
+              className="rounded-md border border-zinc-300 dark:border-zinc-700 bg-white dark:bg-zinc-900 text-zinc-900 dark:text-zinc-100 px-3 py-2 text-sm outline-none focus:border-zinc-500 focus:ring-2 focus:ring-zinc-300 dark:focus:ring-zinc-700"
             />
           </div>
         </>
       )}
 
       <div className="flex flex-col gap-1">
-        <label htmlFor="rewardExpiryDays" className="text-sm font-medium text-zinc-700">
+        <label htmlFor="rewardExpiryDays" className="text-sm font-medium text-zinc-700 dark:text-zinc-300">
           Days to redeem a reward (optional)
         </label>
         <input
@@ -142,9 +142,9 @@ export function SchemeCreateForm() {
           value={rewardExpiryDays}
           onChange={(e) => setRewardExpiryDays(e.target.value)}
           placeholder="Never expires"
-          className="w-32 rounded-md border border-zinc-300 px-3 py-2 text-sm outline-none focus:border-zinc-500 focus:ring-2 focus:ring-zinc-300"
+          className="w-32 rounded-md border border-zinc-300 dark:border-zinc-700 bg-white dark:bg-zinc-900 text-zinc-900 dark:text-zinc-100 px-3 py-2 text-sm outline-none focus:border-zinc-500 focus:ring-2 focus:ring-zinc-300 dark:focus:ring-zinc-700"
         />
-        <p className="text-xs text-zinc-500">
+        <p className="text-xs text-zinc-500 dark:text-zinc-400">
           How long a customer has to redeem a reward after unlocking it. Leave blank for no
           expiry.
         </p>
@@ -154,7 +154,7 @@ export function SchemeCreateForm() {
       <button
         type="submit"
         disabled={isSubmitting}
-        className="w-fit rounded-md bg-zinc-900 px-4 py-2 text-sm font-medium text-white hover:bg-zinc-700 disabled:opacity-50"
+        className="w-fit rounded-md bg-zinc-900 px-4 py-2 text-sm font-medium text-white hover:bg-zinc-700 dark:bg-zinc-100 dark:text-zinc-900 dark:hover:bg-zinc-300 disabled:opacity-50"
       >
         {isSubmitting ? "Creating…" : "Create scheme"}
       </button>

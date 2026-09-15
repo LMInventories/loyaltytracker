@@ -66,7 +66,7 @@ export function OfferForm({ offer }: { offer?: Offer }) {
   return (
     <form onSubmit={handleSubmit} className="flex max-w-md flex-col gap-4">
       <div className="flex flex-col gap-1">
-        <label htmlFor="title" className="text-sm font-medium text-zinc-700">
+        <label htmlFor="title" className="text-sm font-medium text-zinc-700 dark:text-zinc-300">
           Title
         </label>
         <input
@@ -75,12 +75,12 @@ export function OfferForm({ offer }: { offer?: Offer }) {
           value={title}
           onChange={(e) => setTitle(e.target.value)}
           placeholder="e.g. 20% off pastries this week"
-          className="rounded-md border border-zinc-300 px-3 py-2 text-sm outline-none focus:border-zinc-500 focus:ring-2 focus:ring-zinc-300"
+          className="rounded-md border border-zinc-300 dark:border-zinc-700 bg-white dark:bg-zinc-900 text-zinc-900 dark:text-zinc-100 px-3 py-2 text-sm outline-none focus:border-zinc-500 focus:ring-2 focus:ring-zinc-300 dark:focus:ring-zinc-700"
         />
       </div>
 
       <div className="flex flex-col gap-1">
-        <label htmlFor="description" className="text-sm font-medium text-zinc-700">
+        <label htmlFor="description" className="text-sm font-medium text-zinc-700 dark:text-zinc-300">
           Description
         </label>
         <textarea
@@ -88,12 +88,12 @@ export function OfferForm({ offer }: { offer?: Offer }) {
           value={description}
           onChange={(e) => setDescription(e.target.value)}
           rows={3}
-          className="rounded-md border border-zinc-300 px-3 py-2 text-sm outline-none focus:border-zinc-500 focus:ring-2 focus:ring-zinc-300"
+          className="rounded-md border border-zinc-300 dark:border-zinc-700 bg-white dark:bg-zinc-900 text-zinc-900 dark:text-zinc-100 px-3 py-2 text-sm outline-none focus:border-zinc-500 focus:ring-2 focus:ring-zinc-300 dark:focus:ring-zinc-700"
         />
       </div>
 
       <div className="flex flex-col gap-1">
-        <label htmlFor="imageUrl" className="text-sm font-medium text-zinc-700">
+        <label htmlFor="imageUrl" className="text-sm font-medium text-zinc-700 dark:text-zinc-300">
           Image URL (optional)
         </label>
         <input
@@ -102,13 +102,13 @@ export function OfferForm({ offer }: { offer?: Offer }) {
           value={imageUrl}
           onChange={(e) => setImageUrl(e.target.value)}
           placeholder="https://…"
-          className="rounded-md border border-zinc-300 px-3 py-2 text-sm outline-none focus:border-zinc-500 focus:ring-2 focus:ring-zinc-300"
+          className="rounded-md border border-zinc-300 dark:border-zinc-700 bg-white dark:bg-zinc-900 text-zinc-900 dark:text-zinc-100 px-3 py-2 text-sm outline-none focus:border-zinc-500 focus:ring-2 focus:ring-zinc-300 dark:focus:ring-zinc-700"
         />
       </div>
 
       <div className="flex gap-4">
         <div className="flex flex-col gap-1">
-          <label htmlFor="startsAt" className="text-sm font-medium text-zinc-700">
+          <label htmlFor="startsAt" className="text-sm font-medium text-zinc-700 dark:text-zinc-300">
             Starts
           </label>
           <input
@@ -116,11 +116,11 @@ export function OfferForm({ offer }: { offer?: Offer }) {
             type="date"
             value={startsAt}
             onChange={(e) => setStartsAt(e.target.value)}
-            className="rounded-md border border-zinc-300 px-3 py-2 text-sm outline-none focus:border-zinc-500 focus:ring-2 focus:ring-zinc-300"
+            className="rounded-md border border-zinc-300 dark:border-zinc-700 bg-white dark:bg-zinc-900 text-zinc-900 dark:text-zinc-100 px-3 py-2 text-sm outline-none focus:border-zinc-500 focus:ring-2 focus:ring-zinc-300 dark:focus:ring-zinc-700"
           />
         </div>
         <div className="flex flex-col gap-1">
-          <label htmlFor="endsAt" className="text-sm font-medium text-zinc-700">
+          <label htmlFor="endsAt" className="text-sm font-medium text-zinc-700 dark:text-zinc-300">
             Ends
           </label>
           <input
@@ -128,13 +128,13 @@ export function OfferForm({ offer }: { offer?: Offer }) {
             type="date"
             value={endsAt}
             onChange={(e) => setEndsAt(e.target.value)}
-            className="rounded-md border border-zinc-300 px-3 py-2 text-sm outline-none focus:border-zinc-500 focus:ring-2 focus:ring-zinc-300"
+            className="rounded-md border border-zinc-300 dark:border-zinc-700 bg-white dark:bg-zinc-900 text-zinc-900 dark:text-zinc-100 px-3 py-2 text-sm outline-none focus:border-zinc-500 focus:ring-2 focus:ring-zinc-300 dark:focus:ring-zinc-700"
           />
         </div>
       </div>
 
       {offer && (
-        <label className="flex items-center gap-2 text-sm text-zinc-700">
+        <label className="flex items-center gap-2 text-sm text-zinc-700 dark:text-zinc-300">
           <input
             type="checkbox"
             checked={isActive}
@@ -148,7 +148,7 @@ export function OfferForm({ offer }: { offer?: Offer }) {
       <button
         type="submit"
         disabled={isSubmitting}
-        className="w-fit rounded-md bg-zinc-900 px-4 py-2 text-sm font-medium text-white hover:bg-zinc-700 disabled:opacity-50"
+        className="w-fit rounded-md bg-zinc-900 px-4 py-2 text-sm font-medium text-white hover:bg-zinc-700 dark:bg-zinc-100 dark:text-zinc-900 dark:hover:bg-zinc-300 disabled:opacity-50"
       >
         {isSubmitting ? "Saving…" : offer ? "Save changes" : "Create offer"}
       </button>

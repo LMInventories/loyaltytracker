@@ -56,32 +56,32 @@ export default async function AdminAnalyticsPage() {
 
   return (
     <main className="mx-auto flex w-full max-w-2xl flex-1 flex-col gap-8 px-6 py-10">
-      <h1 className="text-xl font-semibold text-zinc-900">Analytics</h1>
+      <h1 className="text-xl font-semibold text-zinc-900 dark:text-zinc-100">Analytics</h1>
 
       <dl className="grid grid-cols-2 gap-4 sm:grid-cols-3">
         {stats.map((stat) => (
-          <div key={stat.label} className="border border-zinc-200 bg-white px-4 py-3">
-            <dt className="text-sm text-zinc-500">{stat.label}</dt>
-            <dd className="text-2xl font-semibold text-zinc-900">{stat.value}</dd>
+          <div key={stat.label} className="border border-zinc-200 dark:border-zinc-800 bg-white dark:bg-zinc-900 px-4 py-3">
+            <dt className="text-sm text-zinc-500 dark:text-zinc-400">{stat.label}</dt>
+            <dd className="text-2xl font-semibold text-zinc-900 dark:text-zinc-100">{stat.value}</dd>
           </div>
         ))}
       </dl>
 
       <section className="flex flex-col gap-3">
-        <h2 className="font-medium text-zinc-900">Top schemes this week</h2>
+        <h2 className="font-medium text-zinc-900 dark:text-zinc-100">Top schemes this week</h2>
         {topSchemeGroups.length === 0 ? (
-          <p className="text-sm text-zinc-500">No scans in the last 7 days.</p>
+          <p className="text-sm text-zinc-500 dark:text-zinc-400">No scans in the last 7 days.</p>
         ) : (
-          <ul className="flex flex-col divide-y divide-zinc-200 border border-zinc-200 bg-white">
+          <ul className="flex flex-col divide-y divide-zinc-200 dark:divide-zinc-800 border border-zinc-200 dark:border-zinc-800 bg-white dark:bg-zinc-900">
             {topSchemeGroups.map((group) => (
               <li
                 key={group.schemeId}
                 className="flex items-center justify-between px-4 py-3 text-sm"
               >
-                <span className="text-zinc-900">
+                <span className="text-zinc-900 dark:text-zinc-100">
                   {nameById.get(group.schemeId) ?? "Unknown scheme"}
                 </span>
-                <span className="text-zinc-500">{group._count._all} scans</span>
+                <span className="text-zinc-500 dark:text-zinc-400">{group._count._all} scans</span>
               </li>
             ))}
           </ul>

@@ -37,7 +37,7 @@ export function StaffChangePasswordForm() {
   return (
     <form onSubmit={handleSubmit} className="flex max-w-sm flex-col gap-4">
       <div className="flex flex-col gap-1">
-        <label htmlFor="currentPassword" className="text-sm font-medium text-zinc-700">
+        <label htmlFor="currentPassword" className="text-sm font-medium text-zinc-700 dark:text-zinc-300">
           Current password
         </label>
         <input
@@ -46,11 +46,11 @@ export function StaffChangePasswordForm() {
           required
           value={currentPassword}
           onChange={(e) => setCurrentPassword(e.target.value)}
-          className="rounded-md border border-zinc-300 px-3 py-2 text-sm outline-none focus:border-zinc-500 focus:ring-2 focus:ring-zinc-300"
+          className="rounded-md border border-zinc-300 dark:border-zinc-700 bg-white dark:bg-zinc-900 text-zinc-900 dark:text-zinc-100 px-3 py-2 text-sm outline-none focus:border-zinc-500 focus:ring-2 focus:ring-zinc-300 dark:focus:ring-zinc-700"
         />
       </div>
       <div className="flex flex-col gap-1">
-        <label htmlFor="newPassword" className="text-sm font-medium text-zinc-700">
+        <label htmlFor="newPassword" className="text-sm font-medium text-zinc-700 dark:text-zinc-300">
           New password
         </label>
         <input
@@ -60,7 +60,7 @@ export function StaffChangePasswordForm() {
           minLength={8}
           value={newPassword}
           onChange={(e) => setNewPassword(e.target.value)}
-          className="rounded-md border border-zinc-300 px-3 py-2 text-sm outline-none focus:border-zinc-500 focus:ring-2 focus:ring-zinc-300"
+          className="rounded-md border border-zinc-300 dark:border-zinc-700 bg-white dark:bg-zinc-900 text-zinc-900 dark:text-zinc-100 px-3 py-2 text-sm outline-none focus:border-zinc-500 focus:ring-2 focus:ring-zinc-300 dark:focus:ring-zinc-700"
         />
       </div>
       {error && <p className="text-sm text-red-600">{error}</p>}
@@ -68,7 +68,7 @@ export function StaffChangePasswordForm() {
       <button
         type="submit"
         disabled={isSubmitting}
-        className="w-fit rounded-md bg-zinc-900 px-4 py-2 text-sm font-medium text-white hover:bg-zinc-700 disabled:opacity-50"
+        className="w-fit rounded-md bg-zinc-900 px-4 py-2 text-sm font-medium text-white hover:bg-zinc-700 dark:bg-zinc-100 dark:text-zinc-900 dark:hover:bg-zinc-300 disabled:opacity-50"
       >
         {isSubmitting ? "Saving…" : "Change password"}
       </button>

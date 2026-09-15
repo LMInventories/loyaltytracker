@@ -84,7 +84,7 @@ export function SchemeEditForm({ scheme, tiers: initialTiers }: { scheme: Scheme
     <div className="flex flex-col gap-10">
       <form onSubmit={handleSaveDetails} className="flex max-w-md flex-col gap-4">
         <div className="flex flex-col gap-1">
-          <label htmlFor="name" className="text-sm font-medium text-zinc-700">
+          <label htmlFor="name" className="text-sm font-medium text-zinc-700 dark:text-zinc-300">
             Name
           </label>
           <input
@@ -92,13 +92,13 @@ export function SchemeEditForm({ scheme, tiers: initialTiers }: { scheme: Scheme
             required
             value={name}
             onChange={(e) => setName(e.target.value)}
-            className="rounded-md border border-zinc-300 px-3 py-2 text-sm outline-none focus:border-zinc-500 focus:ring-2 focus:ring-zinc-300"
+            className="rounded-md border border-zinc-300 dark:border-zinc-700 bg-white dark:bg-zinc-900 text-zinc-900 dark:text-zinc-100 px-3 py-2 text-sm outline-none focus:border-zinc-500 focus:ring-2 focus:ring-zinc-300 dark:focus:ring-zinc-700"
           />
         </div>
 
         {scheme.type === "POINTS" ? (
           <div className="flex flex-col gap-1">
-            <label htmlFor="pointsPerScan" className="text-sm font-medium text-zinc-700">
+            <label htmlFor="pointsPerScan" className="text-sm font-medium text-zinc-700 dark:text-zinc-300">
               Points per scan
             </label>
             <input
@@ -108,13 +108,13 @@ export function SchemeEditForm({ scheme, tiers: initialTiers }: { scheme: Scheme
               required
               value={pointsPerScan}
               onChange={(e) => setPointsPerScan(e.target.value)}
-              className="w-32 rounded-md border border-zinc-300 px-3 py-2 text-sm outline-none focus:border-zinc-500 focus:ring-2 focus:ring-zinc-300"
+              className="w-32 rounded-md border border-zinc-300 dark:border-zinc-700 bg-white dark:bg-zinc-900 text-zinc-900 dark:text-zinc-100 px-3 py-2 text-sm outline-none focus:border-zinc-500 focus:ring-2 focus:ring-zinc-300 dark:focus:ring-zinc-700"
             />
           </div>
         ) : (
           <>
             <div className="flex flex-col gap-1">
-              <label htmlFor="stampsRequired" className="text-sm font-medium text-zinc-700">
+              <label htmlFor="stampsRequired" className="text-sm font-medium text-zinc-700 dark:text-zinc-300">
                 Stamps required
               </label>
               <input
@@ -124,11 +124,11 @@ export function SchemeEditForm({ scheme, tiers: initialTiers }: { scheme: Scheme
                 required
                 value={stampsRequired}
                 onChange={(e) => setStampsRequired(e.target.value)}
-                className="w-32 rounded-md border border-zinc-300 px-3 py-2 text-sm outline-none focus:border-zinc-500 focus:ring-2 focus:ring-zinc-300"
+                className="w-32 rounded-md border border-zinc-300 dark:border-zinc-700 bg-white dark:bg-zinc-900 text-zinc-900 dark:text-zinc-100 px-3 py-2 text-sm outline-none focus:border-zinc-500 focus:ring-2 focus:ring-zinc-300 dark:focus:ring-zinc-700"
               />
             </div>
             <div className="flex flex-col gap-1">
-              <label htmlFor="stampRewardText" className="text-sm font-medium text-zinc-700">
+              <label htmlFor="stampRewardText" className="text-sm font-medium text-zinc-700 dark:text-zinc-300">
                 Reward
               </label>
               <input
@@ -136,14 +136,14 @@ export function SchemeEditForm({ scheme, tiers: initialTiers }: { scheme: Scheme
                 required
                 value={stampRewardText}
                 onChange={(e) => setStampRewardText(e.target.value)}
-                className="rounded-md border border-zinc-300 px-3 py-2 text-sm outline-none focus:border-zinc-500 focus:ring-2 focus:ring-zinc-300"
+                className="rounded-md border border-zinc-300 dark:border-zinc-700 bg-white dark:bg-zinc-900 text-zinc-900 dark:text-zinc-100 px-3 py-2 text-sm outline-none focus:border-zinc-500 focus:ring-2 focus:ring-zinc-300 dark:focus:ring-zinc-700"
               />
             </div>
           </>
         )}
 
         <div className="flex flex-col gap-1">
-          <label htmlFor="rewardExpiryDays" className="text-sm font-medium text-zinc-700">
+          <label htmlFor="rewardExpiryDays" className="text-sm font-medium text-zinc-700 dark:text-zinc-300">
             Days to redeem a reward (optional)
           </label>
           <input
@@ -153,11 +153,11 @@ export function SchemeEditForm({ scheme, tiers: initialTiers }: { scheme: Scheme
             value={rewardExpiryDays}
             onChange={(e) => setRewardExpiryDays(e.target.value)}
             placeholder="Never expires"
-            className="w-32 rounded-md border border-zinc-300 px-3 py-2 text-sm outline-none focus:border-zinc-500 focus:ring-2 focus:ring-zinc-300"
+            className="w-32 rounded-md border border-zinc-300 dark:border-zinc-700 bg-white dark:bg-zinc-900 text-zinc-900 dark:text-zinc-100 px-3 py-2 text-sm outline-none focus:border-zinc-500 focus:ring-2 focus:ring-zinc-300 dark:focus:ring-zinc-700"
           />
         </div>
 
-        <label className="flex items-center gap-2 text-sm text-zinc-700">
+        <label className="flex items-center gap-2 text-sm text-zinc-700 dark:text-zinc-300">
           <input
             type="checkbox"
             checked={isActive}
@@ -170,7 +170,7 @@ export function SchemeEditForm({ scheme, tiers: initialTiers }: { scheme: Scheme
           <button
             type="submit"
             disabled={savingDetails}
-            className="w-fit rounded-md bg-zinc-900 px-4 py-2 text-sm font-medium text-white hover:bg-zinc-700 disabled:opacity-50"
+            className="w-fit rounded-md bg-zinc-900 px-4 py-2 text-sm font-medium text-white hover:bg-zinc-700 dark:bg-zinc-100 dark:text-zinc-900 dark:hover:bg-zinc-300 disabled:opacity-50"
           >
             {savingDetails ? "Saving…" : "Save changes"}
           </button>
@@ -180,8 +180,8 @@ export function SchemeEditForm({ scheme, tiers: initialTiers }: { scheme: Scheme
 
       {scheme.type === "POINTS" && (
         <div className="flex max-w-md flex-col gap-4">
-          <h2 className="font-medium text-zinc-900">Reward tiers</h2>
-          <p className="text-sm text-zinc-500">
+          <h2 className="font-medium text-zinc-900 dark:text-zinc-100">Reward tiers</h2>
+          <p className="text-sm text-zinc-500 dark:text-zinc-400">
             Customers unlock a reward the moment their points cross a threshold.
           </p>
           <div className="flex flex-col gap-2">
@@ -196,7 +196,7 @@ export function SchemeEditForm({ scheme, tiers: initialTiers }: { scheme: Scheme
                     next[i] = { ...next[i], threshold: Number(e.target.value) };
                     setTiers(next);
                   }}
-                  className="w-24 rounded-md border border-zinc-300 px-2 py-1.5 text-sm"
+                  className="w-24 rounded-md border border-zinc-300 dark:border-zinc-700 bg-white dark:bg-zinc-900 text-zinc-900 dark:text-zinc-100 px-2 py-1.5 text-sm"
                   placeholder="pts"
                 />
                 <input
@@ -206,13 +206,13 @@ export function SchemeEditForm({ scheme, tiers: initialTiers }: { scheme: Scheme
                     next[i] = { ...next[i], rewardText: e.target.value };
                     setTiers(next);
                   }}
-                  className="flex-1 rounded-md border border-zinc-300 px-2 py-1.5 text-sm"
+                  className="flex-1 rounded-md border border-zinc-300 dark:border-zinc-700 bg-white dark:bg-zinc-900 text-zinc-900 dark:text-zinc-100 px-2 py-1.5 text-sm"
                   placeholder="Reward"
                 />
                 <button
                   type="button"
                   onClick={() => setTiers(tiers.filter((_, idx) => idx !== i))}
-                  className="text-sm text-zinc-400 hover:text-red-600"
+                  className="text-sm text-zinc-400 dark:text-zinc-500 hover:text-red-600"
                 >
                   Remove
                 </button>
@@ -221,7 +221,7 @@ export function SchemeEditForm({ scheme, tiers: initialTiers }: { scheme: Scheme
             <button
               type="button"
               onClick={() => setTiers([...tiers, { threshold: 0, rewardText: "" }])}
-              className="w-fit text-sm text-zinc-600 underline hover:text-zinc-900"
+              className="w-fit text-sm text-zinc-600 dark:text-zinc-400 underline hover:text-zinc-900 dark:hover:text-zinc-100"
             >
               + Add tier
             </button>
@@ -231,7 +231,7 @@ export function SchemeEditForm({ scheme, tiers: initialTiers }: { scheme: Scheme
               type="button"
               onClick={handleSaveTiers}
               disabled={savingTiers}
-              className="w-fit rounded-md bg-zinc-900 px-4 py-2 text-sm font-medium text-white hover:bg-zinc-700 disabled:opacity-50"
+              className="w-fit rounded-md bg-zinc-900 px-4 py-2 text-sm font-medium text-white hover:bg-zinc-700 dark:bg-zinc-100 dark:text-zinc-900 dark:hover:bg-zinc-300 disabled:opacity-50"
             >
               {savingTiers ? "Saving…" : "Save tiers"}
             </button>

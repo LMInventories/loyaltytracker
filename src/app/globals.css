@@ -1,5 +1,7 @@
 @import "tailwindcss";
 
+@custom-variant dark (&:where([data-theme="dark"], [data-theme="dark"] *));
+
 :root {
   --paper: #f6f9fb;
   --surface: #ffffff;
@@ -10,6 +12,18 @@
   --stamp-soft: #e1f7f1;
   --awning: #e8583a;
   --awning-soft: #fdeae4;
+}
+
+:root[data-theme="dark"] {
+  --paper: #0a1522;
+  --surface: #101c2c;
+  --ink: #eaf1f8;
+  --ink-soft: #93a6bc;
+  --line: #253347;
+  --stamp: #2dd4b3;
+  --stamp-soft: #123a32;
+  --awning: #ff8a68;
+  --awning-soft: #3a2018;
 }
 
 @theme inline {

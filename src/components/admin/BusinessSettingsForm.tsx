@@ -55,7 +55,7 @@ export function BusinessSettingsForm({ business }: { business: Business }) {
   return (
     <form onSubmit={handleSubmit} className="flex max-w-md flex-col gap-4">
       <div className="flex flex-col gap-1">
-        <label htmlFor="name" className="text-sm font-medium text-zinc-700">
+        <label htmlFor="name" className="text-sm font-medium text-zinc-700 dark:text-zinc-300">
           Business name
         </label>
         <input
@@ -63,28 +63,28 @@ export function BusinessSettingsForm({ business }: { business: Business }) {
           required
           value={name}
           onChange={(e) => setName(e.target.value)}
-          className="rounded-md border border-zinc-300 px-3 py-2 text-sm outline-none focus:border-zinc-500 focus:ring-2 focus:ring-zinc-300"
+          className="rounded-md border border-zinc-300 dark:border-zinc-700 bg-white dark:bg-zinc-900 text-zinc-900 dark:text-zinc-100 px-3 py-2 text-sm outline-none focus:border-zinc-500 focus:ring-2 focus:ring-zinc-300 dark:focus:ring-zinc-700"
         />
       </div>
 
       <div className="flex flex-col gap-1">
-        <label htmlFor="slug" className="text-sm font-medium text-zinc-700">
+        <label htmlFor="slug" className="text-sm font-medium text-zinc-700 dark:text-zinc-300">
           Page URL
         </label>
-        <div className="flex items-center gap-1 text-sm text-zinc-500">
+        <div className="flex items-center gap-1 text-sm text-zinc-500 dark:text-zinc-400">
           <span>/businesses/</span>
           <input
             id="slug"
             required
             value={slug}
             onChange={(e) => setSlug(e.target.value)}
-            className="flex-1 rounded-md border border-zinc-300 px-3 py-2 text-sm text-zinc-900 outline-none focus:border-zinc-500 focus:ring-2 focus:ring-zinc-300"
+            className="flex-1 rounded-md border border-zinc-300 dark:border-zinc-700 bg-white dark:bg-zinc-900 text-zinc-900 dark:text-zinc-100 px-3 py-2 text-sm outline-none focus:border-zinc-500 focus:ring-2 focus:ring-zinc-300 dark:focus:ring-zinc-700"
           />
         </div>
       </div>
 
       <div className="flex flex-col gap-1">
-        <label htmlFor="category" className="text-sm font-medium text-zinc-700">
+        <label htmlFor="category" className="text-sm font-medium text-zinc-700 dark:text-zinc-300">
           Category
         </label>
         <input
@@ -92,24 +92,24 @@ export function BusinessSettingsForm({ business }: { business: Business }) {
           value={category}
           onChange={(e) => setCategory(e.target.value)}
           placeholder="e.g. Cafe"
-          className="rounded-md border border-zinc-300 px-3 py-2 text-sm outline-none focus:border-zinc-500 focus:ring-2 focus:ring-zinc-300"
+          className="rounded-md border border-zinc-300 dark:border-zinc-700 bg-white dark:bg-zinc-900 text-zinc-900 dark:text-zinc-100 px-3 py-2 text-sm outline-none focus:border-zinc-500 focus:ring-2 focus:ring-zinc-300 dark:focus:ring-zinc-700"
         />
       </div>
 
       <div className="flex flex-col gap-1">
-        <label htmlFor="address" className="text-sm font-medium text-zinc-700">
+        <label htmlFor="address" className="text-sm font-medium text-zinc-700 dark:text-zinc-300">
           Address
         </label>
         <input
           id="address"
           value={address}
           onChange={(e) => setAddress(e.target.value)}
-          className="rounded-md border border-zinc-300 px-3 py-2 text-sm outline-none focus:border-zinc-500 focus:ring-2 focus:ring-zinc-300"
+          className="rounded-md border border-zinc-300 dark:border-zinc-700 bg-white dark:bg-zinc-900 text-zinc-900 dark:text-zinc-100 px-3 py-2 text-sm outline-none focus:border-zinc-500 focus:ring-2 focus:ring-zinc-300 dark:focus:ring-zinc-700"
         />
       </div>
 
       <div className="flex flex-col gap-1">
-        <label htmlFor="postcode" className="text-sm font-medium text-zinc-700">
+        <label htmlFor="postcode" className="text-sm font-medium text-zinc-700 dark:text-zinc-300">
           Postcode
         </label>
         <input
@@ -117,15 +117,15 @@ export function BusinessSettingsForm({ business }: { business: Business }) {
           value={postcode}
           onChange={(e) => setPostcode(e.target.value)}
           placeholder="e.g. SW1A 1AA"
-          className="w-32 rounded-md border border-zinc-300 px-3 py-2 text-sm outline-none focus:border-zinc-500 focus:ring-2 focus:ring-zinc-300"
+          className="w-32 rounded-md border border-zinc-300 dark:border-zinc-700 bg-white dark:bg-zinc-900 text-zinc-900 dark:text-zinc-100 px-3 py-2 text-sm outline-none focus:border-zinc-500 focus:ring-2 focus:ring-zinc-300 dark:focus:ring-zinc-700"
         />
-        <p className="text-xs text-zinc-500">
+        <p className="text-xs text-zinc-500 dark:text-zinc-400">
           Needed for customers to sort the directory by distance to your business.
         </p>
       </div>
 
       <div className="flex flex-col gap-1">
-        <label htmlFor="description" className="text-sm font-medium text-zinc-700">
+        <label htmlFor="description" className="text-sm font-medium text-zinc-700 dark:text-zinc-300">
           Description
         </label>
         <textarea
@@ -133,12 +133,12 @@ export function BusinessSettingsForm({ business }: { business: Business }) {
           value={description}
           onChange={(e) => setDescription(e.target.value)}
           rows={3}
-          className="rounded-md border border-zinc-300 px-3 py-2 text-sm outline-none focus:border-zinc-500 focus:ring-2 focus:ring-zinc-300"
+          className="rounded-md border border-zinc-300 dark:border-zinc-700 bg-white dark:bg-zinc-900 text-zinc-900 dark:text-zinc-100 px-3 py-2 text-sm outline-none focus:border-zinc-500 focus:ring-2 focus:ring-zinc-300 dark:focus:ring-zinc-700"
         />
       </div>
 
       <div className="flex flex-col gap-1">
-        <label htmlFor="logoUrl" className="text-sm font-medium text-zinc-700">
+        <label htmlFor="logoUrl" className="text-sm font-medium text-zinc-700 dark:text-zinc-300">
           Logo URL (optional)
         </label>
         <div className="flex items-center gap-3">
@@ -149,10 +149,10 @@ export function BusinessSettingsForm({ business }: { business: Business }) {
             value={logoUrl}
             onChange={(e) => setLogoUrl(e.target.value)}
             placeholder="https://…"
-            className="flex-1 rounded-md border border-zinc-300 px-3 py-2 text-sm outline-none focus:border-zinc-500 focus:ring-2 focus:ring-zinc-300"
+            className="flex-1 rounded-md border border-zinc-300 dark:border-zinc-700 bg-white dark:bg-zinc-900 text-zinc-900 dark:text-zinc-100 px-3 py-2 text-sm outline-none focus:border-zinc-500 focus:ring-2 focus:ring-zinc-300 dark:focus:ring-zinc-700"
           />
         </div>
-        <p className="text-xs text-zinc-500">
+        <p className="text-xs text-zinc-500 dark:text-zinc-400">
           Without a logo, customers see a colored initial instead.
         </p>
       </div>
@@ -162,7 +162,7 @@ export function BusinessSettingsForm({ business }: { business: Business }) {
         <button
           type="submit"
           disabled={isSubmitting}
-          className="w-fit rounded-md bg-zinc-900 px-4 py-2 text-sm font-medium text-white hover:bg-zinc-700 disabled:opacity-50"
+          className="w-fit rounded-md bg-zinc-900 px-4 py-2 text-sm font-medium text-white hover:bg-zinc-700 dark:bg-zinc-100 dark:text-zinc-900 dark:hover:bg-zinc-300 disabled:opacity-50"
         >
           {isSubmitting ? "Saving…" : "Save changes"}
         </button>

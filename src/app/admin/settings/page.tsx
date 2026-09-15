@@ -12,7 +12,7 @@ export default async function AdminSettingsPage() {
   return (
     <main className="mx-auto flex w-full max-w-2xl flex-1 flex-col gap-10 px-6 py-10">
       <section className="flex flex-col gap-6">
-        <h1 className="text-xl font-semibold text-zinc-900">Business settings</h1>
+        <h1 className="text-xl font-semibold text-zinc-900 dark:text-zinc-100">Business settings</h1>
         <BusinessSettingsForm
           business={{
             name: business.name,
@@ -27,7 +27,7 @@ export default async function AdminSettingsPage() {
       </section>
 
       <section className="flex flex-col gap-4">
-        <h2 className="font-medium text-zinc-900">Change password</h2>
+        <h2 className="font-medium text-zinc-900 dark:text-zinc-100">Change password</h2>
         <StaffChangePasswordForm />
       </section>
     </main>

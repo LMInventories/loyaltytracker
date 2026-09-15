@@ -47,7 +47,7 @@ export function AdminNav() {
         aria-label={isOpen ? "Close menu" : "Open menu"}
         aria-expanded={isOpen}
         onClick={() => setIsOpen((v) => !v)}
-        className="flex h-9 w-9 items-center justify-center rounded-md border border-zinc-200 text-zinc-700 hover:bg-zinc-100"
+        className="flex h-9 w-9 items-center justify-center rounded-md border border-zinc-200 dark:border-zinc-800 text-zinc-700 dark:text-zinc-300 hover:bg-zinc-100 dark:hover:bg-zinc-800"
       >
         <svg width="18" height="18" viewBox="0 0 18 18" fill="none" aria-hidden="true">
           {isOpen ? (
@@ -68,17 +68,17 @@ export function AdminNav() {
       </button>
 
       {isOpen && (
-        <div className="absolute right-0 top-full z-10 mt-2 w-48 border border-zinc-200 bg-white py-1 shadow-lg">
+        <div className="absolute right-0 top-full z-10 mt-2 w-48 border border-zinc-200 dark:border-zinc-800 bg-white dark:bg-zinc-900 py-1 shadow-lg">
           {NAV_LINKS.map((link) => (
             <Link
               key={link.href}
               href={link.href}
-              className="block px-4 py-2 text-sm text-zinc-700 hover:bg-zinc-50"
+              className="block px-4 py-2 text-sm text-zinc-700 dark:text-zinc-300 hover:bg-zinc-50 dark:hover:bg-zinc-800"
             >
               {link.label}
             </Link>
           ))}
-          <div className="mt-1 border-t border-zinc-200 px-4 py-2">
+          <div className="mt-1 border-t border-zinc-200 dark:border-zinc-800 px-4 py-2">
             <SignOutButton />
           </div>
         </div>

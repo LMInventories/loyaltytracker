@@ -106,7 +106,7 @@ export default async function AdminCustomersPage({
 
   return (
     <main className="mx-auto flex w-full max-w-2xl flex-1 flex-col gap-6 px-6 py-10">
-      <h1 className="text-xl font-semibold text-zinc-900">Customers</h1>
+      <h1 className="text-xl font-semibold text-zinc-900 dark:text-zinc-100">Customers</h1>
 
       <div className="flex flex-wrap items-center justify-between gap-3">
         <form className="flex gap-2">
@@ -115,12 +115,12 @@ export default async function AdminCustomersPage({
             name="q"
             defaultValue={query}
             placeholder="Search by name or email…"
-            className="w-full max-w-sm rounded-md border border-zinc-300 px-3 py-2 text-sm outline-none focus:border-zinc-500 focus:ring-2 focus:ring-zinc-300"
+            className="w-full max-w-sm rounded-md border border-zinc-300 dark:border-zinc-700 bg-white dark:bg-zinc-900 text-zinc-900 dark:text-zinc-100 px-3 py-2 text-sm outline-none focus:border-zinc-500 focus:ring-2 focus:ring-zinc-300 dark:focus:ring-zinc-700"
           />
           {showLapsedOnly && <input type="hidden" name="view" value="lapsed" />}
           <button
             type="submit"
-            className="rounded-md border border-zinc-300 px-4 py-2 text-sm font-medium text-zinc-700 hover:bg-zinc-50"
+            className="rounded-md border border-zinc-300 dark:border-zinc-700 bg-white dark:bg-zinc-900 px-4 py-2 text-sm font-medium text-zinc-700 dark:text-zinc-300 hover:bg-zinc-50 dark:hover:bg-zinc-800"
           >
             Search
           </button>
@@ -131,7 +131,7 @@ export default async function AdminCustomersPage({
             pathname: "/admin/customers",
             query: { ...(query ? { q: query } : {}), ...(showLapsedOnly ? {} : { view: "lapsed" }) },
           }}
-          className="text-sm font-medium text-zinc-700 underline hover:text-zinc-900"
+          className="text-sm font-medium text-zinc-700 dark:text-zinc-300 underline hover:text-zinc-900 dark:hover:text-zinc-100"
         >
           {showLapsedOnly
             ? "Show all customers"
@@ -140,7 +140,7 @@ export default async function AdminCustomersPage({
       </div>
 
       {customers.length === 0 ? (
-        <p className="text-sm text-zinc-500">
+        <p className="text-sm text-zinc-500 dark:text-zinc-400">
           {query
             ? `No customers match "${query}".`
             : showLapsedOnly
@@ -148,7 +148,7 @@ export default async function AdminCustomersPage({
               : "No customers yet."}
         </p>
       ) : (
-        <ul className="flex flex-col divide-y divide-zinc-200 border border-zinc-200 bg-white">
+        <ul className="flex flex-col divide-y divide-zinc-200 dark:divide-zinc-800 border border-zinc-200 dark:border-zinc-800 bg-white dark:bg-zinc-900">
           {customers.map(({ user, balances: userBalances }) => {
             const lastScan = lastScanByUser.get(user.id);
             const earned = earnedByUser.get(user.id) ?? 0;
@@ -157,8 +157,8 @@ export default async function AdminCustomersPage({
             return (
               <li key={user.id} className="flex flex-col gap-1 px-4 py-3 text-sm">
                 <div className="flex items-center justify-between">
-                  <p className="font-medium text-zinc-900">{user.name ?? user.email}</p>
-                  <p className="text-zinc-500">
+                  <p className="font-medium text-zinc-900 dark:text-zinc-100">{user.name ?? user.email}</p>
+                  <p className="text-zinc-500 dark:text-zinc-400">
                     {!lastScan
                       ? "No scans yet"
                       : showLapsedOnly
@@ -170,8 +170,8 @@ export default async function AdminCustomersPage({
                           })}`}
                   </p>
                 </div>
-                <p className="text-zinc-500">{user.email}</p>
-                <div className="mt-1 flex flex-wrap gap-x-4 gap-y-1 text-zinc-700">
+                <p className="text-zinc-500 dark:text-zinc-400">{user.email}</p>
+                <div className="mt-1 flex flex-wrap gap-x-4 gap-y-1 text-zinc-700 dark:text-zinc-300">
                   {userBalances.map((balance) => (
                     <span key={balance.id}>
                       {balance.scheme.name}:{" "}
