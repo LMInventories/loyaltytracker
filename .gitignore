@@ -48,3 +48,6 @@ next-env.d.ts
 /.windsurf/
 /.claude/skills/
 /skills-lock.json
+
+# copied from node_modules by scripts/copy-zxing-wasm.mjs
+/public/wasm/

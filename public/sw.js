@@ -1,6 +1,10 @@
-const CACHE_VERSION = "v4";
+// v5: pages are no longer cached at all. Earlier versions kept a runtime cache
+// of every visited page — including signed-in ones (balances, rewards, admin
+// customer lists) — readable offline by the next person on a shared device.
+// The activate handler deletes every cache except SHELL_CACHE, so bumping this
+// purges those old runtime caches on existing installs.
+const CACHE_VERSION = "v5";
 const SHELL_CACHE = `hployalty-shell-${CACHE_VERSION}`;
-const RUNTIME_CACHE = `hployalty-runtime-${CACHE_VERSION}`;
 
 // The ?v= query must match ASSET_VERSION in src/lib/asset-version.ts — this
 // file is served as-is from /public and can't import that constant.
@@ -24,7 +28,7 @@ self.addEventListener("activate", (event) => {
       .then((keys) =>
         Promise.all(
           keys
-            .filter((key) => key !== SHELL_CACHE && key !== RUNTIME_CACHE)
+            .filter((key) => key !== SHELL_CACHE)
             .map((key) => caches.delete(key)),
         ),
       )
@@ -42,17 +46,11 @@ self.addEventListener("fetch", (event) => {
   // Never intercept API or auth routes — data must always be fresh.
   if (url.pathname.startsWith("/api/")) return;
 
-  // Page navigations: network-first, falling back to cache, then the offline page.
+  // Page navigations: network only. Pages are personalised, so they are never
+  // stored; if the network is down, show the generic offline page (which is
+  // precached above and contains no user data).
   if (request.mode === "navigate") {
-    event.respondWith(
-      fetch(request)
-        .then((response) => {
-          const copy = response.clone();
-          caches.open(RUNTIME_CACHE).then((cache) => cache.put(request, copy));
-          return response;
-        })
-        .catch(() => caches.match(request).then((cached) => cached ?? caches.match("/offline"))),
-    );
+    event.respondWith(fetch(request).catch(() => caches.match("/offline")));
     return;
   }
 

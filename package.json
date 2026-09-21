@@ -3,8 +3,9 @@
   "version": "0.1.0",
   "private": true,
   "scripts": {
+    "predev": "node scripts/copy-zxing-wasm.mjs",
     "dev": "next dev",
-    "build": "prisma generate && next build",
+    "build": "node scripts/copy-zxing-wasm.mjs && prisma generate && next build",
     "start": "prisma migrate deploy && next start -p $PORT",
     "lint": "eslint",
     "db:seed": "prisma db seed",
@@ -19,6 +20,7 @@
     "@prisma/adapter-pg": "^7.10.0",
     "@prisma/client": "^7.10.0",
     "@yudiel/react-qr-scanner": "^2.6.0",
+    "barcode-detector": "^3.2.2",
     "bcryptjs": "^3.0.3",
     "next": "16.3.4",
     "next-auth": "^5.0.0-beta.32",
