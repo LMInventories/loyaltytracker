@@ -6,6 +6,8 @@ import bcrypt from "bcryptjs";
 
 import { prisma } from "@/lib/prisma";
 import { sendEmailIfOptedIn, welcomeEmailHtml } from "@/lib/email";
+import { isRateLimited } from "@/lib/rate-limit";
+import { getClientIp } from "@/lib/request-ip";
 
 export const { handlers, auth, signIn, signOut } = NextAuth({
   adapter: PrismaAdapter(prisma),
@@ -20,14 +22,29 @@ export const { handlers, auth, signIn, signOut } = NextAuth({
         email: { label: "Email", type: "email" },
         password: { label: "Password", type: "password" },
       },
-      authorize: async (credentials) => {
+      authorize: async (credentials, request) => {
         const email = credentials?.email;
         const password = credentials?.password;
         if (typeof email !== "string" || typeof password !== "string") {
           return null;
         }
 
-        const user = await prisma.user.findUnique({ where: { email } });
+        // Throttle guessing per IP and per target account. authorize() can
+        // only signal failure by returning null, so a throttled attempt looks
+        // the same as a wrong password.
+        const normalizedEmail = email.trim().toLowerCase();
+        if (
+          isRateLimited(`login-ip:${getClientIp(request)}`, 20, 15 * 60_000) ||
+          isRateLimited(`login-email:${normalizedEmail}`, 10, 15 * 60_000)
+        ) {
+          return null;
+        }
+
+        // Case-insensitive so accounts created before emails were normalised
+        // (or by Google) still match.
+        const user = await prisma.user.findFirst({
+          where: { email: { equals: normalizedEmail, mode: "insensitive" } },
+        });
         // Google-only accounts have no passwordHash — reject credential
         // sign-in for them instead of comparing against nothing.
         if (!user || !user.passwordHash) return null;

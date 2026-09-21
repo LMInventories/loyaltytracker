@@ -1,11 +1,13 @@
 import { LoginForm } from "@/components/shared/LoginForm";
+import { safeCallbackUrl } from "@/lib/safe-redirect";
 
 export default async function LoginPage({
   searchParams,
 }: {
   searchParams: Promise<{ callbackUrl?: string }>;
 }) {
-  const { callbackUrl } = await searchParams;
+  const { callbackUrl: rawCallbackUrl } = await searchParams;
+  const callbackUrl = rawCallbackUrl ? safeCallbackUrl(rawCallbackUrl) : undefined;
   const registerHref = callbackUrl
     ? `/register?callbackUrl=${encodeURIComponent(callbackUrl)}`
     : "/register";

@@ -4,6 +4,8 @@ import { useState } from "react";
 import { signIn } from "next-auth/react";
 import { useRouter } from "next/navigation";
 
+import { safeCallbackUrl } from "@/lib/safe-redirect";
+
 export function LoginForm({
   callbackUrl,
   registerHref,
@@ -35,7 +37,7 @@ export function LoginForm({
       return;
     }
 
-    router.push(callbackUrl);
+    router.push(safeCallbackUrl(callbackUrl));
     router.refresh();
   };
 
@@ -43,7 +45,7 @@ export function LoginForm({
     <div className="flex w-full max-w-sm flex-col gap-4">
       <button
         type="button"
-        onClick={() => signIn("google", { callbackUrl })}
+        onClick={() => signIn("google", { callbackUrl: safeCallbackUrl(callbackUrl) })}
         className="flex items-center justify-center gap-2 rounded-sm border border-line bg-surface px-4 py-2 text-sm font-medium text-ink transition-colors hover:border-stamp"
       >
         Continue with Google

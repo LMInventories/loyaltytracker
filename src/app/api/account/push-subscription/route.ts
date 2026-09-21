@@ -3,9 +3,10 @@ import { z } from "zod";
 
 import { auth } from "@/lib/auth";
 import { prisma } from "@/lib/prisma";
+import { isAllowedPushEndpoint } from "@/lib/push-endpoint";
 
 const subscriptionSchema = z.object({
-  endpoint: z.string().min(1),
+  endpoint: z.string().min(1).max(2048).refine(isAllowedPushEndpoint, "Unsupported push service"),
   keys: z.object({
     p256dh: z.string().min(1),
     auth: z.string().min(1),

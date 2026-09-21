@@ -8,9 +8,10 @@ import { getClientIp } from "@/lib/request-ip";
 import { sendEmailIfOptedIn, welcomeEmailHtml } from "@/lib/email";
 
 const registerSchema = z.object({
-  email: z.string().email(),
-  password: z.string().min(8),
-  name: z.string().min(1).optional(),
+  email: z.string().trim().toLowerCase().email().max(254),
+  // bcrypt only uses the first 72 bytes; the cap also stops huge-body hashing DoS.
+  password: z.string().min(8).max(72),
+  name: z.string().trim().min(1).max(100).optional(),
 });
 
 export async function POST(request: Request) {
@@ -21,7 +22,7 @@ export async function POST(request: Request) {
     );
   }
 
-  const body = await request.json();
+  const body = await request.json().catch(() => null);
   const parsed = registerSchema.safeParse(body);
 
   if (!parsed.success) {
@@ -33,7 +34,10 @@ export async function POST(request: Request) {
 
   const { email, password, name } = parsed.data;
 
-  const existing = await prisma.user.findUnique({ where: { email } });
+  const existing = await prisma.user.findFirst({
+    where: { email: { equals: email, mode: "insensitive" } },
+    select: { id: true },
+  });
   if (existing) {
     return NextResponse.json(
       { error: "An account with that email already exists" },

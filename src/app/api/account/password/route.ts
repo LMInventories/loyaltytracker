@@ -8,7 +8,7 @@ import { isRateLimited } from "@/lib/rate-limit";
 
 const requestSchema = z.object({
   currentPassword: z.string().min(1),
-  newPassword: z.string().min(8),
+  newPassword: z.string().min(8).max(72),
 });
 
 export async function POST(request: Request) {

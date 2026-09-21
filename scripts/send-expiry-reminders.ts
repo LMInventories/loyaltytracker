@@ -2,6 +2,9 @@ import { PrismaClient } from "../src/generated/prisma/client";
 import { PrismaPg } from "@prisma/adapter-pg";
 import { Resend } from "resend";
 
+// Shared with the app so this cron email matches the others (logo, escaping).
+import { expiringRewardEmailHtml } from "../src/lib/email";
+
 const adapter = new PrismaPg({ connectionString: process.env.DATABASE_URL });
 const prisma = new PrismaClient({ adapter });
 const FROM = process.env.EMAIL_FROM ?? "Local Loyalty <notifications@localloyalty.uk>";
@@ -13,20 +16,6 @@ if (!process.env.RESEND_API_KEY) {
 const resend = new Resend(process.env.RESEND_API_KEY);
 
 const REMINDER_WINDOW_DAYS = 3;
-
-function expiringRewardEmailHtml(businessName: string, rewardText: string, expiresAt: Date) {
-  return `<div style="font-family: sans-serif; color: #1a1a1a; max-width: 480px; margin: 0 auto;">
-    <div style="background-color: #022f5a; padding: 20px; text-align: center;">
-      <span style="color: #ffffff; font-size: 18px; font-weight: 700;">Local Loyalty</span>
-    </div>
-    <div style="padding: 24px 20px;">
-      <p>Your reward at <strong>${businessName}</strong> expires soon:</p>
-      <p style="font-size: 18px; font-weight: 700;">${rewardText}</p>
-      <p>Expires ${expiresAt.toLocaleDateString("en-GB", { day: "numeric", month: "long", year: "numeric" })} — don't miss it.</p>
-      <p><a href="https://app.localloyalty.uk/me">View your rewards →</a></p>
-    </div>
-  </div>`;
-}
 
 async function main() {
   const now = new Date();

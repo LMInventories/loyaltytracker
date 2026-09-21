@@ -1,18 +1,20 @@
 import { RegisterForm } from "@/components/shared/RegisterForm";
+import { safeCallbackUrl } from "@/lib/safe-redirect";
 
 export default async function RegisterPage({
   searchParams,
 }: {
   searchParams: Promise<{ callbackUrl?: string }>;
 }) {
-  const { callbackUrl } = await searchParams;
+  const { callbackUrl: rawCallbackUrl } = await searchParams;
+  const callbackUrl = safeCallbackUrl(rawCallbackUrl);
 
   return (
     <main className="flex flex-1 flex-col items-center justify-center gap-6 px-6 py-16">
       <h1 className="font-display text-2xl font-semibold text-ink">
         Create an account
       </h1>
-      <RegisterForm callbackUrl={callbackUrl ?? "/"} />
+      <RegisterForm callbackUrl={callbackUrl} />
     </main>
   );
 }

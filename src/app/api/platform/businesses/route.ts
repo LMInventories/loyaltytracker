@@ -29,8 +29,8 @@ const createSchema = z.object({
   category: z.string().optional(),
   address: z.string().optional(),
   postcode: z.string().optional(),
-  adminEmail: z.string().email(),
-  adminPassword: z.string().min(8),
+  adminEmail: z.string().trim().toLowerCase().email(),
+  adminPassword: z.string().min(8).max(72),
   scheme: schemeSchema,
 });
 
@@ -49,7 +49,10 @@ export async function POST(request: Request) {
   if (existingSlug) {
     return NextResponse.json({ error: "That URL is already taken" }, { status: 409 });
   }
-  const existingEmail = await prisma.user.findUnique({ where: { email: data.adminEmail } });
+  const existingEmail = await prisma.user.findFirst({
+    where: { email: { equals: data.adminEmail, mode: "insensitive" } },
+    select: { id: true },
+  });
   if (existingEmail) {
     return NextResponse.json({ error: "That email is already in use" }, { status: 409 });
   }
