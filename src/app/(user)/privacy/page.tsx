@@ -47,13 +47,6 @@ export default function PrivacyPolicyPage() {
               scan and reward you’ve earned or redeemed.
             </li>
             <li>
-              <strong className="text-ink">Postcode (optional):</strong> if you add a postcode in
-              Account settings, we store it and convert it into approximate coordinates (the
-              centre of that postcode) so we can sort businesses by how close they are to you. It
-              is never shown to businesses or other customers, and you can’t be located more
-              precisely than your postcode area. You can use the app without giving one.
-            </li>
-            <li>
               <strong className="text-ink">Push notification subscription:</strong> only if you
               explicitly turn push notifications on in Account settings, your browser gives us a
               subscription endpoint, encryption keys and your browser’s user-agent string (which
@@ -69,6 +62,31 @@ export default function PrivacyPolicyPage() {
         </section>
 
         <section className="flex flex-col gap-2">
+          <h2>Why we ask for your name and email</h2>
+          <p>We only ask for two things to create an account, and here is exactly why:</p>
+          <ul className="list-disc pl-5">
+            <li>
+              <strong className="text-ink">Email address (required):</strong> it is your login and
+              how we tell your account apart from everyone else’s, so your points and stamps stay
+              yours. We also use it to send the service emails you’d expect — a welcome email, a
+              note when you unlock a reward, and a reminder before a reward expires (you can turn
+              these off in Account settings). A business you’ve collected stamps with can also see
+              it, so it can recognise you and look up your card.
+            </li>
+            <li>
+              <strong className="text-ink">First name (optional):</strong> we use it to greet you
+              in the app and in our emails, and so staff at a business you’ve visited can recognise
+              you when they look up your card or give you a reward. You can leave it blank and
+              still use every feature.
+            </li>
+          </ul>
+          <p>
+            We don’t use either for advertising, we don’t sell them, and we don’t ask for anything
+            else (such as your phone number or date of birth) to sign up.
+          </p>
+        </section>
+
+        <section className="flex flex-col gap-2">
           <h2>How we use it</h2>
           <ul className="list-disc pl-5">
             <li>
@@ -78,10 +96,6 @@ export default function PrivacyPolicyPage() {
             <li>
               To record and display your loyalty points, stamps, and rewards — necessary to
               provide the service.
-            </li>
-            <li>
-              To sort businesses by distance from the postcode you’ve given us — necessary to
-              provide the feature you’ve asked for.
             </li>
             <li>
               To let a business you’ve interacted with see your loyalty activity with them —
@@ -124,8 +138,7 @@ export default function PrivacyPolicyPage() {
           </p>
           <p>
             We also use a small number of service providers to run Local Loyalty: Railway (hosts
-            our database and servers), Resend (sends our service emails), postcodes.io (converts a postcode into coordinates — we
-            send it only the postcode, not your name, email or account details), and — only if you opt in
+            our database and servers), Resend (sends our service emails), and — only if you opt in
             to push notifications — your browser’s own push service (for example Google’s Firebase
             Cloud Messaging, Mozilla’s push service, or Apple’s push service, depending on your
             browser) to deliver the notification. These providers only

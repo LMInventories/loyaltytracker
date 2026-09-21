@@ -4,7 +4,6 @@ import { usePathname, useRouter, useSearchParams } from "next/navigation";
 
 const OPTIONS = [
   { value: "name", label: "Name (A–Z)" },
-  { value: "distance", label: "Closest to me" },
   { value: "recent", label: "Recently added" },
 ];
 

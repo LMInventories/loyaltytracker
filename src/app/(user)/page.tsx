@@ -8,9 +8,8 @@ import { SortSelect } from "@/components/shared/SortSelect";
 import { CategorySelect } from "@/components/shared/CategorySelect";
 import { mapsUrlFor } from "@/lib/maps";
 import { activeOfferWhere, availableRewardWhere } from "@/lib/rewards";
-import { formatMiles, milesBetween } from "@/lib/distance";
 
-const SORT_VALUES = ["name", "distance", "recent"] as const;
+const SORT_VALUES = ["name", "recent"] as const;
 type Sort = (typeof SORT_VALUES)[number];
 
 export default async function DirectoryPage({
@@ -25,18 +24,12 @@ export default async function DirectoryPage({
 
   const session = await auth();
 
-  const [availableRewardCount, customerLocation, categoryRows] = await Promise.all([
+  const [availableRewardCount, categoryRows] = await Promise.all([
     session?.user
       ? prisma.rewardRedemption.count({
           where: { userId: session.user.id, ...availableRewardWhere() },
         })
       : Promise.resolve(0),
-    session?.user
-      ? prisma.user.findUnique({
-          where: { id: session.user.id },
-          select: { latitude: true, longitude: true },
-        })
-      : Promise.resolve(null),
     prisma.business.findMany({
       where: { isActive: true, category: { not: null } },
       select: { category: true },
@@ -46,9 +39,6 @@ export default async function DirectoryPage({
   ]);
 
   const categories = categoryRows.map((row) => row.category!).filter(Boolean);
-
-  const hasCustomerLocation =
-    customerLocation?.latitude != null && customerLocation?.longitude != null;
 
   const businesses = await prisma.business.findMany({
     where: {
@@ -69,25 +59,8 @@ export default async function DirectoryPage({
     },
   });
 
-  const businessesWithDistance = businesses.map((business) => ({
-    ...business,
-    distanceMiles:
-      hasCustomerLocation && business.latitude != null && business.longitude != null
-        ? milesBetween(
-            { latitude: customerLocation!.latitude!, longitude: customerLocation!.longitude! },
-            { latitude: business.latitude, longitude: business.longitude },
-          )
-        : null,
-  }));
-
-  const sorted = [...businessesWithDistance].sort((a, b) => {
+  const sorted = [...businesses].sort((a, b) => {
     if (sort === "recent") return b.createdAt.getTime() - a.createdAt.getTime();
-    if (sort === "distance") {
-      if (a.distanceMiles === null && b.distanceMiles === null) return a.name.localeCompare(b.name);
-      if (a.distanceMiles === null) return 1;
-      if (b.distanceMiles === null) return -1;
-      return a.distanceMiles - b.distanceMiles;
-    }
     return a.name.localeCompare(b.name);
   });
 
@@ -137,15 +110,6 @@ export default async function DirectoryPage({
         <CategorySelect value={category} categories={categories} />
       </div>
 
-      {sort === "distance" && !hasCustomerLocation && (
-        <p className="text-sm text-ink-soft">
-          <Link href="/account" className="underline">
-            Set your postcode
-          </Link>{" "}
-          to sort by distance — showing A–Z for now.
-        </p>
-      )}
-
       {sorted.length === 0 ? (
         <p className="text-ink-soft">
           {query
@@ -189,9 +153,6 @@ export default async function DirectoryPage({
                 </div>
                 {business.address && (
                   <p className="text-sm text-ink-soft">{business.address}</p>
-                )}
-                {business.distanceMiles !== null && (
-                  <p className="text-sm text-ink-soft">{formatMiles(business.distanceMiles)}</p>
                 )}
                 <div className="mt-auto flex flex-col gap-1 pt-2 text-sm">
                   {business.schemes.map((scheme) => (

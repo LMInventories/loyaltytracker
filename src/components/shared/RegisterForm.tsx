@@ -80,7 +80,7 @@ export function RegisterForm({ callbackUrl }: { callbackUrl: string }) {
       <form onSubmit={handleSubmit} className="flex flex-col gap-4">
         <div className="flex flex-col gap-1">
           <label htmlFor="name" className="text-sm font-medium text-ink-soft">
-            Name
+            First name (optional)
           </label>
           <input
             id="name"
@@ -89,6 +89,9 @@ export function RegisterForm({ callbackUrl }: { callbackUrl: string }) {
             onChange={(e) => setName(e.target.value)}
             className="rounded-sm border border-line bg-surface px-3 py-2 text-sm text-ink outline-none focus:border-stamp focus:ring-2 focus:ring-stamp/40"
           />
+          <p className="text-xs text-ink-soft">
+            Used to greet you, and so businesses you visit can recognise you.
+          </p>
         </div>
         <div className="flex flex-col gap-1">
           <label htmlFor="email" className="text-sm font-medium text-ink-soft">
@@ -102,6 +105,10 @@ export function RegisterForm({ callbackUrl }: { callbackUrl: string }) {
             onChange={(e) => setEmail(e.target.value)}
             className="rounded-sm border border-line bg-surface px-3 py-2 text-sm text-ink outline-none focus:border-stamp focus:ring-2 focus:ring-stamp/40"
           />
+          <p className="text-xs text-ink-soft">
+            Your login, and where we send reward emails. Businesses you collect stamps with can
+            see it.
+          </p>
         </div>
         <div className="flex flex-col gap-1">
           <label htmlFor="password" className="text-sm font-medium text-ink-soft">
