@@ -53,6 +53,10 @@ export function RegisterForm({ callbackUrl }: { callbackUrl: string }) {
     <div className="flex w-full max-w-sm flex-col gap-4">
       <p className="text-center text-xs text-ink-soft">
         By creating an account you agree to our{" "}
+        <a href="/terms" className="underline">
+          Terms of Service
+        </a>{" "}
+        and acknowledge our{" "}
         <a href="/privacy" className="underline">
           Privacy Policy
         </a>

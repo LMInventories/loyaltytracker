@@ -1,3 +1,5 @@
+import { LEGAL } from "@/lib/legal";
+
 export const metadata = {
   title: "Privacy Policy — Local Loyalty",
 };
@@ -7,7 +9,7 @@ export default function PrivacyPolicyPage() {
     <main className="mx-auto flex w-full max-w-2xl flex-1 flex-col gap-8 px-6 py-12">
       <div className="flex flex-col gap-2">
         <h1 className="font-display text-2xl font-semibold text-ink">Privacy Policy</h1>
-        <p className="text-sm text-ink-soft">Last updated 9 September 2026</p>
+        <p className="text-sm text-ink-soft">Last updated {LEGAL.privacyLastUpdated}</p>
       </div>
 
       <div className="flex flex-col gap-6 text-ink-soft [&_h2]:font-display [&_h2]:text-lg [&_h2]:font-semibold [&_h2]:text-ink [&_p]:leading-relaxed [&_li]:leading-relaxed">
@@ -16,6 +18,16 @@ export default function PrivacyPolicyPage() {
             Local Loyalty (“we”, “us”) runs a loyalty rewards app that lets participating local
             businesses track points and stamps for their customers. This page explains what
             information we collect, how we use it, and who we share it with.
+          </p>
+        </section>
+
+        <section className="flex flex-col gap-2">
+          <h2>Who we are</h2>
+          <p>
+            Local Loyalty is run by {LEGAL.entityName} ({LEGAL.registrationLine}), of{" "}
+            {LEGAL.address}. We are the “data controller” for the personal information described
+            on this page. We are registered with the Information Commissioner’s Office (ICO)
+            under number {LEGAL.icoRegistrationNumber}.
           </p>
         </section>
 
@@ -35,15 +47,24 @@ export default function PrivacyPolicyPage() {
               scan and reward you’ve earned or redeemed.
             </li>
             <li>
+              <strong className="text-ink">Postcode (optional):</strong> if you add a postcode in
+              Account settings, we store it and convert it into approximate coordinates (the
+              centre of that postcode) so we can sort businesses by how close they are to you. It
+              is never shown to businesses or other customers, and you can’t be located more
+              precisely than your postcode area. You can use the app without giving one.
+            </li>
+            <li>
               <strong className="text-ink">Push notification subscription:</strong> only if you
               explicitly turn push notifications on in Account settings, your browser gives us a
-              subscription endpoint and encryption keys so we can deliver a notification. We don’t
+              subscription endpoint, encryption keys and your browser’s user-agent string (which
+              identifies the browser and device type) so we can deliver a notification. We don’t
               receive this unless you opt in, and turning notifications off deletes it.
             </li>
           </ul>
           <p>
-            We don’t collect payment card details, government ID numbers, or precise location
-            data, and we don’t use advertising or analytics trackers.
+            We don’t collect payment card details, government ID numbers, or precise (GPS) location
+            data, and we don’t use advertising or analytics trackers. We may temporarily see your
+            IP address in server logs and use it for rate-limiting to prevent abuse.
           </p>
         </section>
 
@@ -57,6 +78,10 @@ export default function PrivacyPolicyPage() {
             <li>
               To record and display your loyalty points, stamps, and rewards — necessary to
               provide the service.
+            </li>
+            <li>
+              To sort businesses by distance from the postcode you’ve given us — necessary to
+              provide the feature you’ve asked for.
             </li>
             <li>
               To let a business you’ve interacted with see your loyalty activity with them —
@@ -87,7 +112,10 @@ export default function PrivacyPolicyPage() {
             A business only sees your loyalty activity <em>with that business</em> — your name or
             email, your balance, and your scan/reward history for their schemes. Businesses don’t
             see your activity with other businesses, and we don’t sell or share your information
-            with advertisers or data brokers.
+            with advertisers or data brokers. Once a business has seen your name or email as part of
+            running its own loyalty scheme, it holds that information for its own purposes and is
+            responsible for it under data protection law; you can ask that business directly how it
+            uses it.
           </p>
           <p>
             If you sign in with Google, Google processes your sign-in under its own privacy
@@ -96,7 +124,8 @@ export default function PrivacyPolicyPage() {
           </p>
           <p>
             We also use a small number of service providers to run Local Loyalty: Railway (hosts
-            our database and servers), Resend (sends our service emails), and — only if you opt in
+            our database and servers), Resend (sends our service emails), postcodes.io (converts a postcode into coordinates — we
+            send it only the postcode, not your name, email or account details), and — only if you opt in
             to push notifications — your browser’s own push service (for example Google’s Firebase
             Cloud Messaging, Mozilla’s push service, or Apple’s push service, depending on your
             browser) to deliver the notification. These providers only
@@ -111,7 +140,13 @@ export default function PrivacyPolicyPage() {
         <section className="flex flex-col gap-2">
           <h2>Cookies</h2>
           <p>
-            We use a single essential session cookie to keep you signed in. We don’t use
+            We only use cookies and browser storage that are strictly necessary to run the
+            service, so we don’t show a cookie consent banner. These are: a session cookie that keeps
+            you signed in; short-lived security cookies set by our sign-in system (to prevent
+            cross-site request forgery and to remember where to send you after you sign in); and a
+            small piece of browser storage that remembers your light/dark theme choice and whether
+            you’ve dismissed the “install the app” banner. If you install Local Loyalty on your
+            device, your browser may also cache pages so the app can load offline. We don’t use
             advertising or third-party tracking cookies.
           </p>
         </section>
@@ -138,7 +173,7 @@ export default function PrivacyPolicyPage() {
             <li>Object to, or ask us to restrict, certain processing.</li>
           </ul>
           <p>
-            To exercise any of these rights, email us at the address below. If you’re unhappy with
+            To exercise any of these rights, email us at the address below — we’ll respond within one month. If you’re unhappy with
             how we’ve handled your data, you also have the right to complain to the UK’s data
             protection regulator, the{" "}
             <a
@@ -156,8 +191,10 @@ export default function PrivacyPolicyPage() {
         <section className="flex flex-col gap-2">
           <h2>Security</h2>
           <p>
-            Passwords are hashed before storage, and QR codes used to earn rewards are single-use
-            and expire within a minute of being generated.
+            Passwords are hashed before storage, sign-in and sign-up attempts are rate-limited to
+            prevent guessing, and QR codes used to earn rewards are single-use and expire within a
+            minute of being generated. No system is completely secure, but if a personal data
+            breach is likely to put you at risk we will tell you and the ICO as the law requires.
           </p>
         </section>
 
@@ -173,7 +210,8 @@ export default function PrivacyPolicyPage() {
           <h2>Changes to this policy</h2>
           <p>
             If we make material changes to this policy, we’ll update the date at the top of this
-            page.
+            page and, where the change affects how we use your data, let you know by email or in
+            the app.
           </p>
         </section>
 
@@ -181,8 +219,8 @@ export default function PrivacyPolicyPage() {
           <h2>Contact us</h2>
           <p>
             Questions about this policy or your data? Email{" "}
-            <a href="mailto:localloyaltydev@gmail.com" className="text-ink underline">
-              localloyaltydev@gmail.com
+            <a href={`mailto:${LEGAL.contactEmail}`} className="text-ink underline">
+              {LEGAL.contactEmail}
             </a>
             .
           </p>
